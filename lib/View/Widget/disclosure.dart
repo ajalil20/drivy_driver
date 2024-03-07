@@ -1,5 +1,5 @@
-// import 'package:drivy_user/Component/custom_toast.dart';
-// import 'package:drivy_user/Controller/global_controller.dart';
+// import 'package:drivy_driver/Component/custom_toast.dart';
+// import 'package:drivy_driver/Controller/global_controller.dart';
 // import 'package:flutter/material.dart';
 // import 'package:get/get.dart';
 // import 'package:sizer/sizer.dart';

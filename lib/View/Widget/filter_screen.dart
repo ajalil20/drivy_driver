@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:drivy_user/Component/Appbar/appbar_components.dart';
-import 'package:drivy_user/Component/custom_checkbox.dart';
-import 'package:drivy_user/Component/custom_padding.dart';
-import 'package:drivy_user/Component/custom_text.dart';
-import 'package:drivy_user/Component/custom_textfield.dart';
-import 'package:drivy_user/Service/navigation_service.dart';
-import 'package:drivy_user/Utils/my_colors.dart';
-import 'package:drivy_user/View/Widget/search_tile.dart';
+import 'package:drivy_driver/Component/Appbar/appbar_components.dart';
+import 'package:drivy_driver/Component/custom_checkbox.dart';
+import 'package:drivy_driver/Component/custom_padding.dart';
+import 'package:drivy_driver/Component/custom_text.dart';
+import 'package:drivy_driver/Component/custom_textfield.dart';
+import 'package:drivy_driver/Service/navigation_service.dart';
+import 'package:drivy_driver/Utils/my_colors.dart';
+import 'package:drivy_driver/View/Widget/search_tile.dart';
 import 'package:sizer/sizer.dart';
 
 class FilterScreen extends StatefulWidget {

@@ -1,6 +1,6 @@
-// import 'package:drivy_user/Component/custom_text.dart';
-// import 'package:drivy_user/Utils/image_path.dart';
-// import 'package:drivy_user/View/Token/tokens.dart';
+// import 'package:drivy_driver/Component/custom_text.dart';
+// import 'package:drivy_driver/Utils/image_path.dart';
+// import 'package:drivy_driver/View/Token/tokens.dart';
 // import 'package:flutter/material.dart';
 // import 'package:sizer/sizer.dart';
 // import 'package:get/get.dart';

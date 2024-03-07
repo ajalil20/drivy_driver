@@ -1,5 +1,5 @@
-// import 'package:drivy_user/Controller/home_controller.dart';
-// import 'package:drivy_user/Utils/app_strings.dart';
+// import 'package:drivy_driver/Controller/home_controller.dart';
+// import 'package:drivy_driver/Utils/app_strings.dart';
 // import 'package:flutter/material.dart';
 // import 'package:get/get.dart';
 // import '../../Component/custom_image.dart';

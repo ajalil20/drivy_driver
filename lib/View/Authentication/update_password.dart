@@ -1,8 +1,8 @@
-// import 'package:drivy_user/Controller/auth_controller.dart';
+// import 'package:drivy_driver/Controller/auth_controller.dart';
 // import 'package:flutter/material.dart';
 // import 'package:get/get.dart';
 // import 'package:sizer/sizer.dart';
-// import 'package:drivy_user/View/Widget/appLogo.dart';
+// import 'package:drivy_driver/View/Widget/appLogo.dart';
 // import '../../../Component/custom_buttom.dart';
 // import '../../../Utils/my_colors.dart';
 // import '../../../Utils/image_path.dart';

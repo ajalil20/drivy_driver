@@ -1,7 +1,7 @@
-// import 'package:drivy_user/Component/custom_text.dart';
-// import 'package:drivy_user/Controller/home_controller.dart';
-// import 'package:drivy_user/Model/selected_time.dart';
-// import 'package:drivy_user/View/home_view.dart';
+// import 'package:drivy_driver/Component/custom_text.dart';
+// import 'package:drivy_driver/Controller/home_controller.dart';
+// import 'package:drivy_driver/Model/selected_time.dart';
+// import 'package:drivy_driver/View/home_view.dart';
 // import 'package:flutter/material.dart';
 // import 'package:sizer/sizer.dart';
 // import 'package:get/get.dart';

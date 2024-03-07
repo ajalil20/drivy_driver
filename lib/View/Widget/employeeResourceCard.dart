@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:drivy_user/Utils/responsive.dart';
+import 'package:drivy_driver/Utils/responsive.dart';
 
 import '../../Component/custom_text.dart';
 import '../../Model/imageText_model.dart';

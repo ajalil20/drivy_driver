@@ -5,8 +5,8 @@ import 'package:intl_phone_field/country_picker_dialog.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:intl_phone_field/phone_number.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:drivy_user/Utils/app_strings.dart';
-import 'package:drivy_user/Utils/my_colors.dart';
+import 'package:drivy_driver/Utils/app_strings.dart';
+import 'package:drivy_driver/Utils/my_colors.dart';
 import 'package:sizer/sizer.dart';
 
 class PhoneNumberTextField extends StatelessWidget {

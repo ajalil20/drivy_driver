@@ -2,8 +2,8 @@
 // import 'package:get/get.dart';
 // import 'package:intl/intl.dart';
 // import 'package:animated_horizontal_calendar/animated_horizontal_calendar.dart';
-// import 'package:drivy_user/Controller/home_controller.dart';
-// import 'package:drivy_user/Utils/my_colors.dart';
+// import 'package:drivy_driver/Controller/home_controller.dart';
+// import 'package:drivy_driver/Utils/my_colors.dart';
 //
 // import '../Utils/app_strings.dart';
 //

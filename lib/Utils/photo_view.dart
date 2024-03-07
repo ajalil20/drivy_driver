@@ -1,4 +1,4 @@
-import 'package:drivy_user/Service/api_endpoints.dart';
+import 'package:drivy_driver/Service/api_endpoints.dart';
 import 'package:flutter/material.dart';
 import 'package:photo_view/photo_view.dart';
 

@@ -1,5 +1,5 @@
-import 'package:drivy_user/Model/menu_model.dart';
-import 'package:drivy_user/Service/navigation_service.dart';
+import 'package:drivy_driver/Model/menu_model.dart';
+import 'package:drivy_driver/Service/navigation_service.dart';
 import 'package:flutter/material.dart';
 import '../../../../../Utils/my_colors.dart';
 import 'package:sizer/sizer.dart';

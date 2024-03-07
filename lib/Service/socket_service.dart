@@ -1,5 +1,5 @@
 import 'dart:developer';
-import 'package:drivy_user/Service/socket_navigation_class.dart';
+import 'package:drivy_driver/Service/socket_navigation_class.dart';
 import 'package:socket_io_client/socket_io_client.dart';
 import 'api_endpoints.dart';
 

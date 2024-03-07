@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
-import 'package:drivy_user/Utils/image_path.dart';
+import 'package:drivy_driver/Utils/image_path.dart';
 
 class AppLogo extends StatefulWidget {
   AppLogo({Key? key,this.onTap}) : super(key: key);

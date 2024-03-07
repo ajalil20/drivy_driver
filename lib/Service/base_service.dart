@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
-import 'package:drivy_user/Utils/local_shared_preferences.dart';
+import 'package:drivy_driver/Utils/local_shared_preferences.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';

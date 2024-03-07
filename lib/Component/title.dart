@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:drivy_user/Component/custom_text.dart';
-import 'package:drivy_user/Utils/my_colors.dart';
+import 'package:drivy_driver/Component/custom_text.dart';
+import 'package:drivy_driver/Utils/my_colors.dart';
 
 class ScreenTitle extends StatelessWidget {
   String? title;

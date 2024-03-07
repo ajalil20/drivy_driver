@@ -1,10 +1,10 @@
-import 'package:drivy_user/Arguments/product_arguments.dart';
-import 'package:drivy_user/Component/custom_image.dart';
-import 'package:drivy_user/Model/category_product_model.dart';
-import 'package:drivy_user/Service/navigation_service.dart';
-import 'package:drivy_user/Utils/app_router_name.dart';
-import 'package:drivy_user/Utils/my_colors.dart';
-import 'package:drivy_user/View/Widget/bordered_container.dart';
+import 'package:drivy_driver/Arguments/product_arguments.dart';
+import 'package:drivy_driver/Component/custom_image.dart';
+import 'package:drivy_driver/Model/category_product_model.dart';
+import 'package:drivy_driver/Service/navigation_service.dart';
+import 'package:drivy_driver/Utils/app_router_name.dart';
+import 'package:drivy_driver/Utils/my_colors.dart';
+import 'package:drivy_driver/View/Widget/bordered_container.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../../../Utils/image_path.dart';

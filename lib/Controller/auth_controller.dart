@@ -2,20 +2,19 @@ import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
-import 'package:flutter_zoom_drawer/flutter_zoom_drawer.dart';
-import 'package:drivy_user/Controller/global_controller.dart';
-import 'package:drivy_user/Model/user_model.dart';
-import 'package:drivy_user/Service/base_service.dart';
-import 'package:drivy_user/Service/navigation_service.dart';
-import 'package:drivy_user/Service/social_login.dart';
-import 'package:drivy_user/Utils/app_router_name.dart';
-import 'package:drivy_user/Utils/app_strings.dart';
-import 'package:drivy_user/Utils/enum.dart';
-import 'package:drivy_user/Utils/local_shared_preferences.dart';
+import 'package:drivy_driver/Controller/global_controller.dart';
+import 'package:drivy_driver/Model/user_model.dart';
+import 'package:drivy_driver/Service/base_service.dart';
+import 'package:drivy_driver/Service/navigation_service.dart';
+import 'package:drivy_driver/Service/social_login.dart';
+import 'package:drivy_driver/Utils/app_router_name.dart';
+import 'package:drivy_driver/Utils/app_strings.dart';
+import 'package:drivy_driver/Utils/enum.dart';
+import 'package:drivy_driver/Utils/local_shared_preferences.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:drivy_user/Component/custom_toast.dart';
-import 'package:drivy_user/Utils/utils.dart';
+import 'package:drivy_driver/Component/custom_toast.dart';
+import 'package:drivy_driver/Utils/utils.dart';
 import '../Arguments/screen_arguments.dart';
 import '../Service/api_endpoints.dart';
 
@@ -27,7 +26,6 @@ class AuthController extends GetxController{
   double lat=0,lng=0;
   bool isMerchantSetupDone = false;
   List fileName=[],files =[];
-  final zoom = ZoomDrawerController();
 
   // Rx<File> imageProfile = File("").obs, resume = File("").obs;
 

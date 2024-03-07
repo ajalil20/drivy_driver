@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:get/get.dart';
-import 'package:drivy_user/Component/custom_card.dart';
-import 'package:drivy_user/Component/custom_radio_tile.dart';
-import 'package:drivy_user/Component/custom_text.dart';
-import 'package:drivy_user/Controller/home_controller.dart';
-import 'package:drivy_user/Model/card_model.dart';
-import 'package:drivy_user/Utils/image_path.dart';
-import 'package:drivy_user/Utils/my_colors.dart';
+import 'package:drivy_driver/Component/custom_card.dart';
+import 'package:drivy_driver/Component/custom_radio_tile.dart';
+import 'package:drivy_driver/Component/custom_text.dart';
+import 'package:drivy_driver/Controller/home_controller.dart';
+import 'package:drivy_driver/Model/card_model.dart';
+import 'package:drivy_driver/Utils/image_path.dart';
+import 'package:drivy_driver/Utils/my_colors.dart';
 import 'package:sizer/sizer.dart';
 
 class CardTile extends StatelessWidget {

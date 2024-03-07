@@ -1,9 +1,9 @@
-import 'package:drivy_user/Arguments/screen_arguments.dart';
-import 'package:drivy_user/Component/custom_buttom.dart';
+import 'package:drivy_driver/Arguments/screen_arguments.dart';
+import 'package:drivy_driver/Component/custom_buttom.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:drivy_user/Model/menu_model.dart';
-import 'package:drivy_user/Service/navigation_service.dart';
-import 'package:drivy_user/Utils/app_router_name.dart';
+import 'package:drivy_driver/Model/menu_model.dart';
+import 'package:drivy_driver/Service/navigation_service.dart';
+import 'package:drivy_driver/Utils/app_router_name.dart';
 import 'package:flutter/material.dart';
 import '../../../../../Utils/my_colors.dart';
 import '../../../../../Utils/responsive.dart';

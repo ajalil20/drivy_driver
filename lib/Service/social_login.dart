@@ -1,10 +1,10 @@
 import 'dart:convert';
 import 'dart:developer';
-import 'package:drivy_user/Controller/auth_controller.dart';
+import 'package:drivy_driver/Controller/auth_controller.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:http/http.dart' as http;
-import 'package:drivy_user/Utils/app_strings.dart';
+import 'package:drivy_driver/Utils/app_strings.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 // import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:shared_preferences/shared_preferences.dart';

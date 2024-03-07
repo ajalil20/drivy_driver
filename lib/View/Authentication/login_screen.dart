@@ -1,20 +1,20 @@
-import 'package:drivy_user/Component/Appbar/appbar_components.dart';
-import 'package:drivy_user/Component/custom_background_image.dart';
-import 'package:drivy_user/Component/custom_checkbox.dart';
-import 'package:drivy_user/Component/custom_padding.dart';
-import 'package:drivy_user/Component/custom_textfield.dart';
-import 'package:drivy_user/Component/custom_title_text.dart';
-import 'package:drivy_user/Controller/auth_controller.dart';
+import 'package:drivy_driver/Component/Appbar/appbar_components.dart';
+import 'package:drivy_driver/Component/custom_background_image.dart';
+import 'package:drivy_driver/Component/custom_checkbox.dart';
+import 'package:drivy_driver/Component/custom_padding.dart';
+import 'package:drivy_driver/Component/custom_textfield.dart';
+import 'package:drivy_driver/Component/custom_title_text.dart';
+import 'package:drivy_driver/Controller/auth_controller.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:drivy_user/Service/navigation_service.dart';
-import 'package:drivy_user/Utils/my_colors.dart';
-import 'package:drivy_user/View/Authentication/forgot_password.dart';
-import 'package:drivy_user/View/Authentication/signup_screen.dart';
+import 'package:drivy_driver/Service/navigation_service.dart';
+import 'package:drivy_driver/Utils/my_colors.dart';
+import 'package:drivy_driver/View/Authentication/forgot_password.dart';
+import 'package:drivy_driver/View/Authentication/signup_screen.dart';
 import 'package:sizer/sizer.dart';
-import 'package:drivy_user/View/Widget/appLogo.dart';
+import 'package:drivy_driver/View/Widget/appLogo.dart';
 import '../../Component/custom_buttom.dart';
 import '../../Component/custom_phone_textfield.dart';
 import '../../Component/custom_rectangle_textfield.dart';
@@ -151,65 +151,7 @@ class LoginScreen extends StatelessWidget {
                             ],
                           ),
                         ),
-                        SizedBox(
-                          height: 2.h,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children:[
-                            const Expanded(child: Divider(),),
-                            MyText(title: '    OR    ',clr: MyColors().hintColor),
-                            const Expanded(child: Divider(),),
-                          ],
-                        ),
-                        SizedBox(
-                          height: 2.h,
-                        ),
-                        MyButton(
-                            title: "Continue with ${isEmail.isTrue?'Number':'Email'}",
-                            bgColor: MyColors().whiteColor,
-                            showPrefix: true,
-                            textColor: MyColors().black,
-                            borderColor: MyColors().black,
-                            prefixImage: isEmail.isTrue?ImagePath.phoneIcon:ImagePath.emailIcon,
-                            onTap: () { isEmail.value=!isEmail.value;}
-                        ),
-                        SizedBox(
-                          height: 2.h,
-                        ),
-                        MyButton(
-                            title: "Continue with Facebook",
-                            bgColor: MyColors().fbColor,
-                            showPrefix: true,
-                            prefixScale:3,
-                            prefixImage: ImagePath.facebookIcon,
-                            onTap: () { onSubmit(context);}
-                        ),
-                        SizedBox(
-                          height: 2.h,
-                        ),
-                        MyButton(
-                            title: "Continue with Google",
-                            bgColor: MyColors().whiteColor,
-                            showPrefix: true,
-                            textColor: Color(0xff757575),
-                            prefixImage: ImagePath.googleIcon,
-                            onTap: () { onSubmit(context);}
-                        ),
-                        SizedBox(
-                          height: 2.h,
-                        ),
-                        MyButton(
-                            title: "Continue with Apple",
-                            bgColor: MyColors().black,
-                            showPrefix: true,
-                            prefixScale: 3,
-                            textColor: MyColors().whiteColor,
-                            prefixImage: ImagePath.appleIcon,
-                            onTap: () { onSubmit(context);}
-                        ),
-                        SizedBox(
+                      SizedBox(
                           height: 2.h,
                         ),
                       ],

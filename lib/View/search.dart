@@ -5,17 +5,17 @@
 //
 //
 // import 'package:get/get.dart';
-// import 'package:drivy_user/Component/custom_elevated_button.dart';
-// import 'package:drivy_user/Controller/home_controller.dart';
-// import 'package:drivy_user/Controller/profile_controller.dart';
-// import 'package:drivy_user/Controller/theme_controller.dart';
-// import 'package:drivy_user/View/notification.dart';
-// import 'package:drivy_user/View/widget/image_preview.dart';
-// import 'package:drivy_user/View/widget/job_categories_card.dart';
-// import 'package:drivy_user/View/widget/jobs.dart';
-// import 'package:drivy_user/View/widget/jobs_categories_list.dart';
-// import 'package:drivy_user/View/widget/upload_media.dart';
-// import 'package:drivy_user/constant/strings.dart';
+// import 'package:drivy_driver/Component/custom_elevated_button.dart';
+// import 'package:drivy_driver/Controller/home_controller.dart';
+// import 'package:drivy_driver/Controller/profile_controller.dart';
+// import 'package:drivy_driver/Controller/theme_controller.dart';
+// import 'package:drivy_driver/View/notification.dart';
+// import 'package:drivy_driver/View/widget/image_preview.dart';
+// import 'package:drivy_driver/View/widget/job_categories_card.dart';
+// import 'package:drivy_driver/View/widget/jobs.dart';
+// import 'package:drivy_driver/View/widget/jobs_categories_list.dart';
+// import 'package:drivy_driver/View/widget/upload_media.dart';
+// import 'package:drivy_driver/constant/strings.dart';
 // import '../../Component/custom_buttom.dart';
 // import '../../Component/custom_text.dart';
 // import '../../Component/custom_textfield.dart';

@@ -1,8 +1,8 @@
-// import 'package:drivy_user/Model/category_product_model.dart';
+// import 'package:drivy_driver/Model/category_product_model.dart';
 // import 'package:flutter/material.dart';
-// import 'package:drivy_user/Controller/home_controller.dart';
-// import 'package:drivy_user/View/Products/product_detail.dart';
-// import 'package:drivy_user/View/Widget/patient_tile.dart';
+// import 'package:drivy_driver/Controller/home_controller.dart';
+// import 'package:drivy_driver/View/Products/product_detail.dart';
+// import 'package:drivy_driver/View/Widget/patient_tile.dart';
 // import 'package:flutter/services.dart';
 // import '../../Component/custom_text.dart';
 // import 'package:get/get.dart';

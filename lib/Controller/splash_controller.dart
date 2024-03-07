@@ -1,8 +1,8 @@
 // import 'dart:async';
-// import 'package:drivy_user/Utils/local_shared_preferences.dart';
-// import 'package:drivy_user/Utils/utils.dart';
+// import 'package:drivy_driver/Utils/local_shared_preferences.dart';
+// import 'package:drivy_driver/Utils/utils.dart';
 // import 'package:get/get.dart';
-// import 'package:drivy_user/View/notification_alert.dart';
+// import 'package:drivy_driver/View/notification_alert.dart';
 // import 'auth_controller.dart';
 //
 // class SplashController extends GetxController {

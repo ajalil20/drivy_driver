@@ -1,19 +1,19 @@
-import 'package:drivy_user/Component/Appbar/appbar_components.dart';
-import 'package:drivy_user/Component/custom_background_image.dart';
-import 'package:drivy_user/Component/custom_padding.dart';
-import 'package:drivy_user/Component/custom_phone_textfield.dart';
-import 'package:drivy_user/Component/custom_textfield.dart';
-import 'package:drivy_user/Component/title.dart';
-import 'package:drivy_user/Controller/auth_controller.dart';
-import 'package:drivy_user/Utils/app_router_name.dart';
+import 'package:drivy_driver/Component/Appbar/appbar_components.dart';
+import 'package:drivy_driver/Component/custom_background_image.dart';
+import 'package:drivy_driver/Component/custom_padding.dart';
+import 'package:drivy_driver/Component/custom_phone_textfield.dart';
+import 'package:drivy_driver/Component/custom_textfield.dart';
+import 'package:drivy_driver/Component/title.dart';
+import 'package:drivy_driver/Controller/auth_controller.dart';
+import 'package:drivy_driver/Utils/app_router_name.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:drivy_user/Service/navigation_service.dart';
-import 'package:drivy_user/Utils/my_colors.dart';
-import 'package:drivy_user/Utils/utils.dart';
+import 'package:drivy_driver/Service/navigation_service.dart';
+import 'package:drivy_driver/Utils/my_colors.dart';
+import 'package:drivy_driver/Utils/utils.dart';
 import 'package:sizer/sizer.dart';
 import '../../Component/custom_buttom.dart';
 import '../../Component/custom_rectangle_textfield.dart';
@@ -119,14 +119,6 @@ class SignupScreen extends StatelessWidget {
                         ),
                         SizedBox(height: 1.h,),
                         const MyText(title: 'We’ll email your booking confirmations and receipts.',size: 11,),
-                        SizedBox(height: 3.h,),
-                        MyTextField(
-                          // controller: email,
-                          hintText: 'Referral Code',
-                          maxLength: 10,
-                        ),
-                        SizedBox(height: 1.h,),
-                        const MyText(title: 'Enter referral code and win offers & promo vouchers.',size: 11,),
                         SizedBox(
                           height: 3.h,
                         ),

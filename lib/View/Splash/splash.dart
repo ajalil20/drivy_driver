@@ -1,17 +1,17 @@
 import 'dart:async';
 
-import 'package:drivy_user/Component/custom_text.dart';
-import 'package:drivy_user/Controller/auth_controller.dart';
-import 'package:drivy_user/Controller/global_controller.dart';
+import 'package:drivy_driver/Component/custom_text.dart';
+import 'package:drivy_driver/Controller/auth_controller.dart';
+import 'package:drivy_driver/Controller/global_controller.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:drivy_user/Service/dynamic_links.dart';
-import 'package:drivy_user/Service/navigation_service.dart';
-import 'package:drivy_user/Utils/app_router_name.dart';
-import 'package:drivy_user/View/Authentication/role_selection.dart';
-import 'package:drivy_user/View/base_view.dart';
-import 'package:drivy_user/View/notification_alert.dart';
+import 'package:drivy_driver/Service/dynamic_links.dart';
+import 'package:drivy_driver/Service/navigation_service.dart';
+import 'package:drivy_driver/Utils/app_router_name.dart';
+import 'package:drivy_driver/View/Authentication/role_selection.dart';
+import 'package:drivy_driver/View/base_view.dart';
+import 'package:drivy_driver/View/notification_alert.dart';
 import 'package:sizer/sizer.dart';
 import '../../Controller/splash_controller.dart';
 import '../../Utils/image_path.dart';

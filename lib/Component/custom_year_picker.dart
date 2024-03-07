@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:drivy_user/Component/custom_text.dart';
-import 'package:drivy_user/Component/custom_year_picker_style.dart' as my;
-import 'package:drivy_user/Service/navigation_service.dart';
+import 'package:drivy_driver/Component/custom_text.dart';
+import 'package:drivy_driver/Component/custom_year_picker_style.dart' as my;
+import 'package:drivy_driver/Service/navigation_service.dart';
 import 'package:sizer/sizer.dart';
 
 class CustomYearPickerDialog extends StatefulWidget {

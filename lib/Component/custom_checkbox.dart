@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:drivy_user/Utils/my_colors.dart';
+import 'package:drivy_driver/Utils/my_colors.dart';
 
 class CheckBoxWidget extends StatefulWidget {
   CheckBoxWidget({Key? key,required this.onChange,required this.defaultVal,this.disableCheck}) : super(key: key);

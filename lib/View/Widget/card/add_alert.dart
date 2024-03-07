@@ -1,7 +1,7 @@
-// import 'package:drivy_user/Component/custom_switch.dart';
-// import 'package:drivy_user/Component/custom_toast.dart';
-// import 'package:drivy_user/Controller/home_controller.dart';
-// import 'package:drivy_user/Utils/utils.dart';
+// import 'package:drivy_driver/Component/custom_switch.dart';
+// import 'package:drivy_driver/Component/custom_toast.dart';
+// import 'package:drivy_driver/Controller/home_controller.dart';
+// import 'package:drivy_driver/Utils/utils.dart';
 // import 'package:flutter/material.dart';
 // import 'package:get/get.dart';
 // import 'package:sizer/sizer.dart';

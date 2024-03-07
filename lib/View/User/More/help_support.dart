@@ -1,11 +1,11 @@
-import 'package:drivy_user/Service/navigation_service.dart';
+import 'package:drivy_driver/Service/navigation_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter/painting.dart';
-import 'package:drivy_user/Component/custom_buttom.dart';
-import 'package:drivy_user/Component/custom_textfield.dart';
-import 'package:drivy_user/Utils/my_colors.dart';
+import 'package:drivy_driver/Component/custom_buttom.dart';
+import 'package:drivy_driver/Component/custom_textfield.dart';
+import 'package:drivy_driver/Utils/my_colors.dart';
 import 'package:sizer/sizer.dart';
 import 'package:get/get.dart';
 

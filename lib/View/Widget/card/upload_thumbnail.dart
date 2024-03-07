@@ -4,16 +4,16 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
-import 'package:drivy_user/Component/custom_buttom.dart';
-import 'package:drivy_user/Component/custom_text.dart';
-import 'package:drivy_user/Component/custom_toast.dart';
-import 'package:drivy_user/Controller/home_controller.dart';
-import 'package:drivy_user/Service/navigation_service.dart';
-import 'package:drivy_user/Utils/app_router_name.dart';
-import 'package:drivy_user/Utils/image_path.dart';
-import 'package:drivy_user/Utils/my_colors.dart';
-import 'package:drivy_user/View/Products/add_product.dart';
-import 'package:drivy_user/View/Widget/upload_media.dart';
+import 'package:drivy_driver/Component/custom_buttom.dart';
+import 'package:drivy_driver/Component/custom_text.dart';
+import 'package:drivy_driver/Component/custom_toast.dart';
+import 'package:drivy_driver/Controller/home_controller.dart';
+import 'package:drivy_driver/Service/navigation_service.dart';
+import 'package:drivy_driver/Utils/app_router_name.dart';
+import 'package:drivy_driver/Utils/image_path.dart';
+import 'package:drivy_driver/Utils/my_colors.dart';
+import 'package:drivy_driver/View/Products/add_product.dart';
+import 'package:drivy_driver/View/Widget/upload_media.dart';
 import 'package:sizer/sizer.dart';
 
 class UploadThumbnailDialog extends StatelessWidget {

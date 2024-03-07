@@ -2,23 +2,23 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:drivy_user/Arguments/content_argument.dart';
-import 'package:drivy_user/Component/custom_card.dart';
-import 'package:drivy_user/Component/custom_image.dart';
-import 'package:drivy_user/Component/custom_text.dart';
-import 'package:drivy_user/Controller/auth_controller.dart';
-import 'package:drivy_user/Controller/global_controller.dart';
-import 'package:drivy_user/Model/menu_model.dart';
-import 'package:drivy_user/Service/navigation_service.dart';
-import 'package:drivy_user/Utils/app_router_name.dart';
-import 'package:drivy_user/Utils/app_strings.dart';
-import 'package:drivy_user/Utils/enum.dart';
-import 'package:drivy_user/Utils/image_path.dart';
-import 'package:drivy_user/Utils/my_colors.dart';
-import 'package:drivy_user/Utils/utils.dart';
-import 'package:drivy_user/View/Widget/Dialog/logout.dart';
+import 'package:drivy_driver/Arguments/content_argument.dart';
+import 'package:drivy_driver/Component/custom_card.dart';
+import 'package:drivy_driver/Component/custom_image.dart';
+import 'package:drivy_driver/Component/custom_text.dart';
+import 'package:drivy_driver/Controller/auth_controller.dart';
+import 'package:drivy_driver/Controller/global_controller.dart';
+import 'package:drivy_driver/Model/menu_model.dart';
+import 'package:drivy_driver/Service/navigation_service.dart';
+import 'package:drivy_driver/Utils/app_router_name.dart';
+import 'package:drivy_driver/Utils/app_strings.dart';
+import 'package:drivy_driver/Utils/enum.dart';
+import 'package:drivy_driver/Utils/image_path.dart';
+import 'package:drivy_driver/Utils/my_colors.dart';
+import 'package:drivy_driver/Utils/utils.dart';
+import 'package:drivy_driver/View/Widget/Dialog/logout.dart';
 import 'package:sizer/sizer.dart';
-import 'package:drivy_user/View/home_view.dart';
+import 'package:drivy_driver/View/home_view.dart';
 
 class CustomDrawer extends StatelessWidget {
   CustomDrawer({Key? key}) : super(key: key);
@@ -100,7 +100,6 @@ class CustomDrawer extends StatelessWidget {
             return InkWell(
                 onTap: (){l[index].onTap!(context);
                 FocusManager.instance.primaryFocus?.unfocus();
-                AuthController.i.zoom.toggle?.call();
                   },
                 child: Row(children: [
                   Image.asset(l[index].image!,width: 5.w,height: 5.w,color: MyColors().purpleColor,),

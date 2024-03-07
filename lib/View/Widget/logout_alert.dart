@@ -1,9 +1,9 @@
-// import 'package:drivy_user/Controller/global_controller.dart';
-// import 'package:drivy_user/Utils/my_colors.dart';
-// import 'package:drivy_user/Utils/utils.dart';
+// import 'package:drivy_driver/Controller/global_controller.dart';
+// import 'package:drivy_driver/Utils/my_colors.dart';
+// import 'package:drivy_driver/Utils/utils.dart';
 // import 'package:flutter/material.dart';
 // import 'package:get/get.dart';
-// import 'package:drivy_user/Component/custom_toast.dart';
+// import 'package:drivy_driver/Component/custom_toast.dart';
 // import 'package:sizer/sizer.dart';
 // import '../../Component/custom_text.dart';
 // import '../../Utils/enum.dart';

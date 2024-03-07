@@ -1,4 +1,4 @@
-import 'package:drivy_user/Model/user_model.dart';
+import 'package:drivy_driver/Model/user_model.dart';
 
 class ScreenArguments {
   bool? fromEdit,fromRental,fromForgetPassword,fromRide ,fromLiveStream,hasInfluencer, isFirebase,contractPending,contractSigned,isMe,showSellerProfileOnly;

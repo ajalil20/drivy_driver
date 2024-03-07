@@ -1,7 +1,7 @@
-// import 'package:drivy_user/View/Hire/my_hire.dart';
+// import 'package:drivy_driver/View/Hire/my_hire.dart';
 // import 'package:flutter/material.dart';
 // import 'package:get/get.dart';
-// import 'package:drivy_user/Component/custom_toast.dart';
+// import 'package:drivy_driver/Component/custom_toast.dart';
 // import 'package:sizer/sizer.dart';
 // import '../../Component/custom_text.dart';
 //

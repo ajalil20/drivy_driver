@@ -1,5 +1,5 @@
-import 'package:drivy_user/Model/stream_model.dart';
-import 'package:drivy_user/Model/user_model.dart';
+import 'package:drivy_driver/Model/stream_model.dart';
+import 'package:drivy_driver/Model/user_model.dart';
 
 class ProductsModel {
   String id='';

@@ -1,6 +1,6 @@
-import 'package:drivy_user/Component/custom_buttom.dart';
-import 'package:drivy_user/Component/custom_text.dart';
-import 'package:drivy_user/View/Widget/theme_button.dart';
+import 'package:drivy_driver/Component/custom_buttom.dart';
+import 'package:drivy_driver/Component/custom_text.dart';
+import 'package:drivy_driver/View/Widget/theme_button.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';

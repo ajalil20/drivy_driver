@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:drivy_user/Arguments/screen_arguments.dart';
-import 'package:drivy_user/Component/custom_image.dart';
-import 'package:drivy_user/Controller/global_controller.dart';
-import 'package:drivy_user/Controller/home_controller.dart';
-import 'package:drivy_user/Model/user_model.dart';
-import 'package:drivy_user/Service/navigation_service.dart';
-import 'package:drivy_user/Utils/app_router_name.dart';
-import 'package:drivy_user/Utils/enum.dart';
-import 'package:drivy_user/Utils/my_colors.dart';
+import 'package:drivy_driver/Arguments/screen_arguments.dart';
+import 'package:drivy_driver/Component/custom_image.dart';
+import 'package:drivy_driver/Controller/global_controller.dart';
+import 'package:drivy_driver/Controller/home_controller.dart';
+import 'package:drivy_driver/Model/user_model.dart';
+import 'package:drivy_driver/Service/navigation_service.dart';
+import 'package:drivy_driver/Utils/app_router_name.dart';
+import 'package:drivy_driver/Utils/enum.dart';
+import 'package:drivy_driver/Utils/my_colors.dart';
 import 'package:sizer/sizer.dart';
 
 class StackedImage extends StatelessWidget {

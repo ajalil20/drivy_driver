@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:drivy_user/Component/custom_card.dart';
-import 'package:drivy_user/Component/custom_text.dart';
-import 'package:drivy_user/Controller/home_controller.dart';
-import 'package:drivy_user/Model/schedule_model.dart';
-import 'package:drivy_user/Utils/image_path.dart';
-import 'package:drivy_user/Utils/my_colors.dart';
-import 'package:drivy_user/Utils/utils.dart';
+import 'package:drivy_driver/Component/custom_card.dart';
+import 'package:drivy_driver/Component/custom_text.dart';
+import 'package:drivy_driver/Controller/home_controller.dart';
+import 'package:drivy_driver/Model/schedule_model.dart';
+import 'package:drivy_driver/Utils/image_path.dart';
+import 'package:drivy_driver/Utils/my_colors.dart';
+import 'package:drivy_driver/Utils/utils.dart';
 import 'package:timeline_tile/timeline_tile.dart';
 import 'package:sizer/sizer.dart';
 

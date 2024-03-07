@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:drivy_user/Utils/decimal_formatter.dart';
+import 'package:drivy_driver/Utils/decimal_formatter.dart';
 import 'package:sizer/sizer.dart';
 import '../Utils/responsive.dart';
 import '../Utils/my_colors.dart';

@@ -2,17 +2,17 @@ import 'dart:developer';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:drivy_user/Arguments/screen_arguments.dart';
-import 'package:drivy_user/Component/custom_text.dart';
-import 'package:drivy_user/Controller/auth_controller.dart';
-import 'package:drivy_user/Service/navigation_service.dart';
-import 'package:drivy_user/Utils/app_router_name.dart';
-import 'package:drivy_user/Utils/my_colors.dart';
-import 'package:drivy_user/Utils/utils.dart';
-import 'package:drivy_user/View/Widget/Dialog/profile_update_dialog.dart';
-import 'package:drivy_user/Component/custom_icon_container.dart';
-import 'package:drivy_user/Utils/image_path.dart';
-import 'package:drivy_user/View/Widget/search_tile.dart';
+import 'package:drivy_driver/Arguments/screen_arguments.dart';
+import 'package:drivy_driver/Component/custom_text.dart';
+import 'package:drivy_driver/Controller/auth_controller.dart';
+import 'package:drivy_driver/Service/navigation_service.dart';
+import 'package:drivy_driver/Utils/app_router_name.dart';
+import 'package:drivy_driver/Utils/my_colors.dart';
+import 'package:drivy_driver/Utils/utils.dart';
+import 'package:drivy_driver/View/Widget/Dialog/profile_update_dialog.dart';
+import 'package:drivy_driver/Component/custom_icon_container.dart';
+import 'package:drivy_driver/Utils/image_path.dart';
+import 'package:drivy_driver/View/Widget/search_tile.dart';
 import 'package:sizer/sizer.dart';
 
 class MenuIcon extends StatelessWidget {
@@ -21,7 +21,7 @@ class MenuIcon extends StatelessWidget {
   Widget build(BuildContext context) {
     // return Padding(padding: EdgeInsets.only(top: 1.h, bottom: 1.h,left: 4.w,right: 0.h), child: Container(decoration: BoxDecoration( borderRadius: BorderRadius.circular(6),), child: IconContainer(image: ImagePath.menuIcon, onTap: (){AuthController.i.zoom.toggle?.call();},size: 6.w,padding: 1.8.w,)),);
     return IconContainer(image: ImagePath.menuIcon, onTap: (){
-      FocusManager.instance.primaryFocus?.unfocus();AuthController.i.zoom.toggle?.call();});
+    });
   }
 }
 

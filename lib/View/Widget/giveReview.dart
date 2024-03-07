@@ -1,5 +1,5 @@
-// import 'package:drivy_user/Component/custom_text.dart';
-// import 'package:drivy_user/View/Widget/rating.dart';
+// import 'package:drivy_driver/Component/custom_text.dart';
+// import 'package:drivy_driver/View/Widget/rating.dart';
 // import 'package:flutter/material.dart';
 //
 // class GiveReview extends StatelessWidget {

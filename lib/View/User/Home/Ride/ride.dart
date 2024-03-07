@@ -1,10 +1,10 @@
 import 'dart:ui';
-import 'package:drivy_user/Component/custom_buttom.dart';
-import 'package:drivy_user/Component/custom_textfield.dart';
-import 'package:drivy_user/Service/navigation_service.dart';
-import 'package:drivy_user/Utils/image_path.dart';
-import 'package:drivy_user/Utils/my_colors.dart';
-import 'package:drivy_user/View/base_view.dart';
+import 'package:drivy_driver/Component/custom_buttom.dart';
+import 'package:drivy_driver/Component/custom_textfield.dart';
+import 'package:drivy_driver/Service/navigation_service.dart';
+import 'package:drivy_driver/Utils/image_path.dart';
+import 'package:drivy_driver/Utils/my_colors.dart';
+import 'package:drivy_driver/View/base_view.dart';
 import 'package:flutter/material.dart';
 import '../../../../Component/custom_bottomsheet_indicator.dart';
 import '../../../../Component/custom_image.dart';

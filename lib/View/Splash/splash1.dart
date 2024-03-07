@@ -1,11 +1,11 @@
 import 'dart:async';
-import 'package:drivy_user/Controller/auth_controller.dart';
-import 'package:drivy_user/Controller/global_controller.dart';
+import 'package:drivy_driver/Controller/auth_controller.dart';
+import 'package:drivy_driver/Controller/global_controller.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:drivy_user/Service/dynamic_links.dart';
-import 'package:drivy_user/View/notification_alert.dart';
+import 'package:drivy_driver/Service/dynamic_links.dart';
+import 'package:drivy_driver/View/notification_alert.dart';
 import '../../Utils/image_path.dart';
 import '../../Utils/local_shared_preferences.dart';
 import '../../Utils/utils.dart';

@@ -1,4 +1,4 @@
-import 'package:drivy_user/Component/custom_text.dart';
+import 'package:drivy_driver/Component/custom_text.dart';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 

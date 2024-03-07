@@ -5,7 +5,7 @@ import 'package:flutter/services.dart';
 // import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:get/get.dart';
 // import 'package:month_year_picker/month_year_picker.dart';
-import 'package:drivy_user/Utils/app_router.dart';
+import 'package:drivy_driver/Utils/app_router.dart';
 import 'package:sizer/sizer.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'Utils/my_colors.dart';
@@ -53,7 +53,7 @@ class MyApp extends StatelessWidget {
           // localizationsDelegates: [
           //   MonthYearPickerLocalizations.delegate,
           // ],
-          title: 'Raive App',
+          title: 'Drivy',
           locale: const Locale('en', 'US'),
           builder: EasyLoading.init(),
           // home: HomePage(),

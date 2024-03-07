@@ -1,5 +1,5 @@
 // import 'package:flutter_stripe/flutter_stripe.dart';
-// import 'package:drivy_user/Component/custom_toast.dart';
+// import 'package:drivy_driver/Component/custom_toast.dart';
 //
 // class StripeService {
 //   static CardDetails? _cardDetails;

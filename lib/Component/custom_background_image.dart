@@ -1,8 +1,8 @@
 import 'dart:ui';
-import 'package:drivy_user/Utils/my_colors.dart';
+import 'package:drivy_driver/Utils/my_colors.dart';
 import 'package:flutter/material.dart';
-import 'package:drivy_user/Component/custom_blur.dart';
-import 'package:drivy_user/Utils/image_path.dart';
+import 'package:drivy_driver/Component/custom_blur.dart';
+import 'package:drivy_driver/Utils/image_path.dart';
 import 'package:sizer/sizer.dart';
 
 class CustomBackgroundImage extends StatelessWidget {

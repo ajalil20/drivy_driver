@@ -1,7 +1,7 @@
 import 'package:place_picker/place_picker.dart';
-import 'package:drivy_user/Service/navigation_service.dart';
-import 'package:drivy_user/Utils/app_router_name.dart';
-import 'package:drivy_user/Utils/utils.dart';
+import 'package:drivy_driver/Service/navigation_service.dart';
+import 'package:drivy_driver/Utils/app_router_name.dart';
+import 'package:drivy_driver/Utils/utils.dart';
 import 'package:flutter/material.dart';
 import '../../../../../Utils/my_colors.dart';
 import 'package:sizer/sizer.dart';

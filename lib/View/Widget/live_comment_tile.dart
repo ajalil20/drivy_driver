@@ -1,16 +1,16 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:drivy_user/Component/custom_bottomsheet_indicator.dart';
-import 'package:drivy_user/Component/custom_image.dart';
-import 'package:drivy_user/Component/custom_text.dart';
-import 'package:drivy_user/Controller/auth_controller.dart';
-import 'package:drivy_user/Controller/home_controller.dart';
-import 'package:drivy_user/Model/chat_model.dart';
-import 'package:drivy_user/Service/navigation_service.dart';
-import 'package:drivy_user/Utils/app_size.dart';
-import 'package:drivy_user/Utils/my_colors.dart';
-import 'package:drivy_user/View/Widget/Dialog/delete_account.dart';
+import 'package:drivy_driver/Component/custom_bottomsheet_indicator.dart';
+import 'package:drivy_driver/Component/custom_image.dart';
+import 'package:drivy_driver/Component/custom_text.dart';
+import 'package:drivy_driver/Controller/auth_controller.dart';
+import 'package:drivy_driver/Controller/home_controller.dart';
+import 'package:drivy_driver/Model/chat_model.dart';
+import 'package:drivy_driver/Service/navigation_service.dart';
+import 'package:drivy_driver/Utils/app_size.dart';
+import 'package:drivy_driver/Utils/my_colors.dart';
+import 'package:drivy_driver/View/Widget/Dialog/delete_account.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../Utils/image_path.dart';

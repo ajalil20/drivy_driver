@@ -1,4 +1,4 @@
-import 'package:drivy_user/Utils/local_db_keys.dart';
+import 'package:drivy_driver/Utils/local_db_keys.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SharedPreference {

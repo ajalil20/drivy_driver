@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_switch/flutter_switch.dart';
 import 'package:get/get.dart';
-import 'package:drivy_user/Controller/home_controller.dart';
-import 'package:drivy_user/Utils/my_colors.dart';
-import 'package:drivy_user/Utils/responsive.dart';
+import 'package:drivy_driver/Controller/home_controller.dart';
+import 'package:drivy_driver/Utils/my_colors.dart';
+import 'package:drivy_driver/Utils/responsive.dart';
 
 
 class CustomSwitch extends StatelessWidget {

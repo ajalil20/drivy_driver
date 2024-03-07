@@ -1,7 +1,7 @@
-// import 'package:drivy_user/Component/custom_empty_data.dart';
-// import 'package:drivy_user/Component/custom_text.dart';
-// import 'package:drivy_user/Controller/home_controller.dart';
-// import 'package:drivy_user/Utils/image_path.dart';
+// import 'package:drivy_driver/Component/custom_empty_data.dart';
+// import 'package:drivy_driver/Component/custom_text.dart';
+// import 'package:drivy_driver/Controller/home_controller.dart';
+// import 'package:drivy_driver/Utils/image_path.dart';
 // import 'package:flutter/material.dart';
 // import 'package:get/get.dart';
 // import 'package:sizer/sizer.dart';

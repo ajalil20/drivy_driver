@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:drivy_user/Component/custom_card.dart';
-import 'package:drivy_user/Controller/home_controller.dart';
-import 'package:drivy_user/Utils/my_colors.dart';
+import 'package:drivy_driver/Component/custom_card.dart';
+import 'package:drivy_driver/Controller/home_controller.dart';
+import 'package:drivy_driver/Utils/my_colors.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:intl/intl.dart';
 import 'package:sizer/sizer.dart';

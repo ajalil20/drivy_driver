@@ -1,8 +1,8 @@
-import 'package:drivy_user/Arguments/screen_arguments.dart';
-import 'package:drivy_user/Component/custom_padding.dart';
-import 'package:drivy_user/Controller/auth_controller.dart';
-import 'package:drivy_user/Service/navigation_service.dart';
-import 'package:drivy_user/Utils/app_router_name.dart';
+import 'package:drivy_driver/Arguments/screen_arguments.dart';
+import 'package:drivy_driver/Component/custom_padding.dart';
+import 'package:drivy_driver/Controller/auth_controller.dart';
+import 'package:drivy_driver/Service/navigation_service.dart';
+import 'package:drivy_driver/Utils/app_router_name.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';

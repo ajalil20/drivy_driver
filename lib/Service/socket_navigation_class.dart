@@ -1,8 +1,8 @@
 import 'dart:developer';
 import 'package:get/get.dart';
-import 'package:drivy_user/Controller/home_controller.dart';
-import 'package:drivy_user/Utils/app_strings.dart';
-import 'package:drivy_user/Utils/utils.dart';
+import 'package:drivy_driver/Controller/home_controller.dart';
+import 'package:drivy_driver/Utils/app_strings.dart';
+import 'package:drivy_driver/Utils/utils.dart';
 
 class SocketNavigationClass {
   static SocketNavigationClass? _instance;

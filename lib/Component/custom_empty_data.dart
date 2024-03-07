@@ -1,5 +1,5 @@
-import 'package:drivy_user/Utils/image_path.dart';
-import 'package:drivy_user/Utils/my_colors.dart';
+import 'package:drivy_driver/Utils/image_path.dart';
+import 'package:drivy_driver/Utils/my_colors.dart';
 import 'package:flutter/material.dart';
 import 'custom_text.dart';
 import 'package:sizer/sizer.dart';

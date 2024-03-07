@@ -1,8 +1,8 @@
 import 'dart:developer';
 
-import 'package:drivy_user/Component/custom_padding.dart';
+import 'package:drivy_driver/Component/custom_padding.dart';
 import 'package:flutter/material.dart';
-import 'package:drivy_user/Component/custom_buttom.dart';
+import 'package:drivy_driver/Component/custom_buttom.dart';
 import '../../../../../../Utils/my_colors.dart';
 import '../../../../../Component/custom_text.dart';
 import 'package:get/get.dart';

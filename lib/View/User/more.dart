@@ -1,22 +1,22 @@
 import 'dart:ui';
 
-import 'package:drivy_user/Arguments/content_argument.dart';
-import 'package:drivy_user/Arguments/screen_arguments.dart';
-import 'package:drivy_user/Component/Appbar/appbar_components.dart';
-import 'package:drivy_user/Component/custom_buttom.dart';
-import 'package:drivy_user/Component/custom_empty_data.dart';
-import 'package:drivy_user/Component/custom_icon_container.dart';
-import 'package:drivy_user/Component/custom_image.dart';
-import 'package:drivy_user/Component/custom_padding.dart';
-import 'package:drivy_user/Component/custom_refresh.dart';
-import 'package:drivy_user/Controller/auth_controller.dart';
-import 'package:drivy_user/Controller/home_controller.dart';
-import 'package:drivy_user/Model/menu_model.dart';
-import 'package:drivy_user/Service/navigation_service.dart';
-import 'package:drivy_user/Utils/my_colors.dart';
+import 'package:drivy_driver/Arguments/content_argument.dart';
+import 'package:drivy_driver/Arguments/screen_arguments.dart';
+import 'package:drivy_driver/Component/Appbar/appbar_components.dart';
+import 'package:drivy_driver/Component/custom_buttom.dart';
+import 'package:drivy_driver/Component/custom_empty_data.dart';
+import 'package:drivy_driver/Component/custom_icon_container.dart';
+import 'package:drivy_driver/Component/custom_image.dart';
+import 'package:drivy_driver/Component/custom_padding.dart';
+import 'package:drivy_driver/Component/custom_refresh.dart';
+import 'package:drivy_driver/Controller/auth_controller.dart';
+import 'package:drivy_driver/Controller/home_controller.dart';
+import 'package:drivy_driver/Model/menu_model.dart';
+import 'package:drivy_driver/Service/navigation_service.dart';
+import 'package:drivy_driver/Utils/my_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:drivy_user/View/base_view.dart';
+import 'package:drivy_driver/View/base_view.dart';
 import '../../../Utils/image_path.dart';
 import '../../Component/custom_bottomsheet_indicator.dart';
 import '../../Component/custom_text.dart';
@@ -150,7 +150,6 @@ class _MoreState extends State<More> {
             return InkWell(
                 onTap: (){l[index].onTap!(context);
                 FocusManager.instance.primaryFocus?.unfocus();
-                AuthController.i.zoom.toggle?.call();
                 },
                 child: Row(children: [
                   Image.asset(l[index].image!,width: 5.w,height: 5.w,),

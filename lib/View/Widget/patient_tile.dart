@@ -1,4 +1,4 @@
-import 'package:drivy_user/Component/custom_image.dart';
+import 'package:drivy_driver/Component/custom_image.dart';
 import 'package:sizer/sizer.dart';
 import 'package:flutter/material.dart';
 

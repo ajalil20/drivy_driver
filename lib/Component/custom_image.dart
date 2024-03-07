@@ -1,7 +1,7 @@
-import 'package:drivy_user/Utils/image_path.dart';
-import 'package:drivy_user/Utils/loader.dart';
-import 'package:drivy_user/Utils/my_colors.dart';
-import 'package:drivy_user/Utils/photo_view.dart';
+import 'package:drivy_driver/Utils/image_path.dart';
+import 'package:drivy_driver/Utils/loader.dart';
+import 'package:drivy_driver/Utils/my_colors.dart';
+import 'package:drivy_driver/Utils/photo_view.dart';
 import 'package:flutter/material.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:sizer/sizer.dart';

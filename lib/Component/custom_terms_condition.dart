@@ -1,11 +1,11 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:drivy_user/Arguments/content_argument.dart';
-import 'package:drivy_user/Service/navigation_service.dart';
-import 'package:drivy_user/Utils/app_router_name.dart';
-import 'package:drivy_user/Utils/app_strings.dart';
-import 'package:drivy_user/Utils/my_colors.dart';
+import 'package:drivy_driver/Arguments/content_argument.dart';
+import 'package:drivy_driver/Service/navigation_service.dart';
+import 'package:drivy_driver/Utils/app_router_name.dart';
+import 'package:drivy_driver/Utils/app_strings.dart';
+import 'package:drivy_driver/Utils/my_colors.dart';
 
 class CustomTermsCondition extends StatelessWidget {
   const CustomTermsCondition({super.key});

@@ -1,6 +1,6 @@
-import 'package:drivy_user/Model/category_product_model.dart';
-import 'package:drivy_user/Model/chat_model.dart';
-import 'package:drivy_user/Model/user_model.dart';
+import 'package:drivy_driver/Model/category_product_model.dart';
+import 'package:drivy_driver/Model/chat_model.dart';
+import 'package:drivy_driver/Model/user_model.dart';
 
 class StreamModel {
   String id='';
