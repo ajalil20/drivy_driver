@@ -80,6 +80,8 @@ class ImagePath{
   static const String bgImage = "${imagePath}bg_image.png";
   static const String delivery = "${iconPath}delivery.png";
   static const String driver2 = "${iconPath}driver2.png";
+  static const String triangle = "${iconPath}triangle.png";
+  static const String tick = "${iconPath}tick.png";
 
 
 

@@ -17,11 +17,14 @@ import 'package:drivy_driver/View/Widget/view_all_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:drivy_driver/View/base_view.dart';
+import 'package:google_fonts/google_fonts.dart';
 import '../../../../Utils/image_path.dart';
+import '../../../Component/custom_switch.dart';
 import '../../../Component/custom_text.dart';
 import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
+import 'package:percent_indicator/percent_indicator.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -32,7 +35,7 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   TextEditingController s = TextEditingController();
-  // RxBool searchOn = false.obs;
+  bool night = false;
   final controller = PageController(viewportFraction: 0.8, keepPage: true);
   List pages = [ImagePath.random1,ImagePath.random1,ImagePath.random1];
   List<MenuModel> rides =[
@@ -95,31 +98,229 @@ class _HomeState extends State<Home> {
                         NotificationIcon(),
                       ],
                     ),bottom: 2.h,),
-                    Container(
-                      height: 16.h,
-                      child: PageView.builder(
-                        controller: controller,
-                        // itemCount: pages.length,
-                        itemBuilder: (_, index) {
-                          return Image.asset(ImagePath.random1,scale: 2,);
-                        },
-                      ),
-                    ),
-                    Center(
-                      child: SmoothPageIndicator(
-                        controller: controller,
-                        count: pages.length,
-                        effect: WormEffect(
-                          dotHeight: 8,
-                          dotWidth: 8,
-                          type: WormType.thinUnderground,
-                          activeDotColor: MyColors().primaryColor
+                    SizedBox(height: 2.h),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              MyText(title: 'Welcome Back',size: 15,),
+                              MyText(title: 'Mary Jane',size: 25,clr: MyColors().black,fontWeight: FontWeight.w700,),
+                            ],
+                          ),
                         ),
-                      ),
+                        MyText(title: 'Availability   ',size: 15),
+                        CustomSwitch(switchValue: night.obs,onChange: (v){},),
+                      ],
                     ),
                     SizedBox(height: 2.h),
-                    MyText(title: 'Welcome Back Mary Jane',size: 15,),
-                    MyText(title: 'Explore Rides',size: 25,clr: MyColors().black,fontWeight: FontWeight.w700,),
+                    Container(
+                      decoration: BoxDecoration(
+                        border: Border.all(
+                          color: Color(0xffDAE1F1),
+                        ),
+                        borderRadius: BorderRadius.circular(8),
+                        color: MyColors().whiteColor,
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.1),
+                            spreadRadius: 5,
+                            blurRadius: 7,
+                            offset: Offset(0, 3), // changes position of shadow
+                          ),
+                        ],
+                      ),
+                      padding: EdgeInsets.all(12),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          MyText(title: 'Your Total Earning is',size: 15,),
+                          SizedBox(height: 1.h),
+                          MyText(title: 'AED 699,996',size: 28,clr: MyColors().black,fontWeight: FontWeight.w600,),
+                          SizedBox(height: 1.h),
+                          Row(
+                            children: [
+                              Image.asset(ImagePath.triangle),
+                              RichText(
+                                textAlign: TextAlign.center,
+                                textScaleFactor: 1.03,
+                                text: TextSpan(
+                                  text: "  0.4%  ",
+                                  style: GoogleFonts.inter(
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 13,
+                                      color: MyColors().greenColor
+                                  ),
+                                  children: [
+                                    TextSpan(
+                                      text: 'AED 78.21',
+                                      style: GoogleFonts.inter(
+                                          fontWeight: FontWeight.w500,
+                                          fontSize: 13,
+                                          color: MyColors().greyColor
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],),
+                    ),
+                    SizedBox(height: 2.h),
+                    Container(
+                      decoration: BoxDecoration(
+                        border: Border.all(
+                          color: Color(0xffDAE1F1),
+                        ),
+                        borderRadius: BorderRadius.circular(8),
+                        color: MyColors().whiteColor,
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.1),
+                            spreadRadius: 5,
+                            blurRadius: 7,
+                            offset: Offset(0, 3), // changes position of shadow
+                          ),
+                        ],
+                      ),
+                      padding: EdgeInsets.all(12),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          MyText(title: 'Rides Completed',size: 15,),
+                          SizedBox(height: 1.h),
+                          MyText(title: '75 Rides ',size: 28,clr: MyColors().black,fontWeight: FontWeight.w600,),
+                          SizedBox(height: 1.h),
+                          Row(
+                            children: [
+                              Image.asset(ImagePath.triangle),
+                              RichText(
+                                textAlign: TextAlign.center,
+                                textScaleFactor: 1.03,
+                                text: TextSpan(
+                                  text: "  0.4%  ",
+                                  style: GoogleFonts.inter(
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 13,
+                                      color: MyColors().greenColor
+                                  ),
+                                  children: [
+                                    TextSpan(
+                                      text: '4 Rides',
+                                      style: GoogleFonts.inter(
+                                          fontWeight: FontWeight.w500,
+                                          fontSize: 13,
+                                          color: MyColors().greyColor
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],),
+                    ),
+                    SizedBox(height: 2.h),
+                    MyText(title: 'Requests',size: 18,fontWeight: FontWeight.w600,clr: MyColors().textColor),
+                    SizedBox(height: 2.h),
+                    Container(
+                      decoration: BoxDecoration(
+                        border: Border.all(
+                          color: Color(0xffDAE1F1),
+                        ),
+                        borderRadius: BorderRadius.circular(8),
+                        color: MyColors().whiteColor,
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.1),
+                            spreadRadius: 5,
+                            blurRadius: 7,
+                            offset: Offset(0, 3), // changes position of shadow
+                          ),
+                        ],
+                      ),
+                      padding: EdgeInsets.all(12)+EdgeInsets.symmetric(vertical: 6),
+                      child:Column(
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              MyText(title: 'Ride Now ',size: 15,),
+                              MyText(title: '4.5 km',size: 13,clr: MyColors().primaryColor,),
+
+                            ],
+                          ),
+                          SizedBox(height: 1.h,),
+                          Container(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 0.w, vertical:0.w),
+                            alignment: Alignment.centerLeft,
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(20),
+                                border: Border.all(color: Color(0xffE6EBEF))),
+                            child: LinearPercentIndicator(
+                              width: 80.7.w,
+                              animation: true,
+                              lineHeight: 5,
+                              padding: EdgeInsets.all(0),
+                              animationDuration: 2000,
+                              percent: .6,
+                              backgroundColor: Colors.transparent,
+                              animateFromLastPercent: true,
+                              barRadius: Radius.circular(12),
+                              progressColor: MyColors().primaryColor,
+                              // maskFilter: MaskFilter.blur(BlurStyle.solid, 3),
+                            ),
+                          ),
+                          SizedBox(height: 1.h,),
+                          Row(
+                            children: [
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Row(
+                                      children: [
+                                        MyText(title: 'Booking ID  ',size: 15,clr: MyColors().greyColor,fontWeight: FontWeight.w600,),
+                                        MyText(title: '#587456',size: 15,clr: MyColors().black,fontWeight: FontWeight.w600,),
+                                      ],
+                                    ),
+                                    SizedBox(height: .5.h,),
+                                    MyText(title: 'Standard Car ',size: 15,clr: MyColors().greyColor,),
+                                    SizedBox(height: 1.h,),
+
+                                    Row(children: [
+                                      Image.asset(ImagePath.source,scale: 2,),
+                                      SizedBox(width: 2.w,),
+                                      Expanded(
+                                        child: Column(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: [
+                                            MyText(title: 'Soft Bank Buildings',fontWeight: FontWeight.w600,size: 15,),
+                                            MyText(title: '25 State St. Daphne, Al 3456',clr: MyColors().greyColor,),
+                                          ],
+                                        ),
+                                      ),
+                                    ],),
+                                  ],
+                                ),
+                              ),
+                              SizedBox(width: 2.w,),
+                              Column(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                Image.asset(ImagePath.tick,width: 10.w,),
+                                SizedBox(height: 1.h,),
+                                Image.asset(ImagePath.cancel,width: 10.w,),
+                              ],)
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+
                     SizedBox(height: 2.h),
                     ridesList(r:rides),
                     SizedBox(height: 2.h),
