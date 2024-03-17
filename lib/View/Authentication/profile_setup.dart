@@ -177,8 +177,7 @@ class _ProfileSetupState extends State<ProfileSetup> {
                                     )
                                 ),
                               ),
-                            )),
-                      ),
+                            )),),
                       SizedBox(height: 3.h),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,

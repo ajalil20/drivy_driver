@@ -24,6 +24,7 @@ class AppRouteName {
   static const String AdditionalService = "/AdditionalService";
   static const String SelectCarCategory = "/SelectCarCategory";
   static const String AddCar = "/AddCar";
+  static const String DriverRegister = "/DriverRegister";
   static const String SelectCar = "/SelectCar";
   static const String CarRentals = "/CarRentals";
   static const String CityToCity = "/CityToCity";

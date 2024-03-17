@@ -44,6 +44,7 @@ import 'package:drivy_driver/View/notifications.dart';
 import 'package:drivy_driver/View/Splash/splash.dart';
 
 import '../View/Authentication/create_password.dart';
+import '../View/Authentication/driver_register.dart';
 import '../View/Authentication/enter_phone.dart';
 import '../View/Payment/add_card.dart';
 import '../View/Products/cart.dart';
@@ -160,7 +161,10 @@ class AppRouter {
           case AppRouteName.SelectCar:
             return SelectCar();
           case AppRouteName.AddCar:
-            return AddCar();
+            ScreenArguments? arg = routeSettings.arguments as ScreenArguments?;
+            return AddCar(fromSignup:arg?.fromSignup??false,);
+          case AppRouteName.DriverRegister:
+            return DriverRegister();
           case AppRouteName.CarRentals:
             return CarRentals();
           case AppRouteName.CityToCity:

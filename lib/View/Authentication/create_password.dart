@@ -121,7 +121,8 @@ class CreatePassword extends StatelessWidget {
   }
 
   onSubmit(context){
-    AppNavigation.navigateToRemovingAll(context, AppRouteName.HOME_SCREEN_ROUTE);
+    AppNavigation.navigateTo(context, AppRouteName.DriverRegister);
+    // AppNavigation.navigateToRemovingAll(context, AppRouteName.HOME_SCREEN_ROUTE);
     // AuthController.i.otp=otp.text;
     // AuthController.i.otpValidation(context,firebase:widget.isFirebase??false);
   }

@@ -11,13 +11,15 @@ import '../../../../Component/custom_buttom.dart';
 import '../../../../Component/custom_text.dart';
 import '../../../../Component/custom_textfield.dart';
 import '../../../../Component/custom_toast.dart';
+import '../../../../Utils/app_router_name.dart';
 import '../../../../Utils/image_path.dart';
 import '../../../../Utils/my_colors.dart';
 import '../../../base_view.dart';
 
 class AddCar extends StatefulWidget {
-  AddCar({this.editCar = false, this.id});
+  AddCar({this.editCar = false,this.fromSignup, this.id});
   bool? editCar;
+  bool? fromSignup;
   int? id;
 
   @override
@@ -936,13 +938,19 @@ class _AddCarState extends State<AddCar> {
                           MyButton(
                             title: "Submit",
                             onTap: () async {
-                              AppNavigation.navigatorPop(context);
-                              CustomToast().showToast('Success', 'Car Added Successfully', false);
-                              if (widget.editCar == true) {
+                              if(widget.fromSignup==true){
+                                CustomToast().showToast('Success', 'Car Added Successfully', false);
+                                AppNavigation.navigateToRemovingAll(context, AppRouteName.HOME_SCREEN_ROUTE);
+                              }
+                              else{
+                                AppNavigation.navigatorPop(context);
+                                CustomToast().showToast('Success', 'Car Added Successfully', false);
+                                if (widget.editCar == true) {
 
-                                // await i.value.updateCar(widget.id);
-                              } else {
-                                // await i.value.addCar();
+                                  // await i.value.updateCar(widget.id);
+                                } else {
+                                  // await i.value.addCar();
+                                }
                               }
 
                               // Get.back();
