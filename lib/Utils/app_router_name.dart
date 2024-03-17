@@ -2,7 +2,6 @@ class AppRouteName {
   AppRouteName._();
   static const String SPLASH_SCREEN_ROUTE = "/";
   static const String PRE_LOGIN_SCREEN_ROUTE = "/pre_login_screen";
-  static const String ROLE_SELECTION = "/role_selection";
 
 
 
@@ -14,7 +13,7 @@ class AppRouteName {
   static const String ENTER_OTP_SCREEN_ROUTE = "/enter-otp";
   static const String CreatePassword = "/CreatePassword";
   static const String MyDrivers = "/my-drivers";
-  static const String PromoCodes = "/PromoCodes";
+  static const String AccountDetails = "/AccountDetails";
   static const String PaymentSettings = "/PaymentSettings";
   static const String SavedAddress = "/SavedAddress";
   static const String HelpSupport = "/HelpSupport";
@@ -34,8 +33,9 @@ class AppRouteName {
   static const String CarDetail = "/CarDetail";
   static const String CityCarBooking = "/CityCarBooking";
   static const String RentalCarCheckout = "/RentalCarCheckout";
-  static const String BookingDetail = "/BookingDetail";
-
+  static const String RideBookingDetail = "/RideBookingDetail";
+  static const String RentalBookingDetail = "/RentalBookingDetail";
+  static const String CityBookingDetail = "/CityBookingDetail";
 
 
   static const String COMPLETE_PROFILE_SCREEN_ROUTE = "/complete-profile";

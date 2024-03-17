@@ -27,6 +27,7 @@ import '../../Controller/global_controller.dart';
 import '../../Model/user_model.dart';
 import '../../Utils/app_router_name.dart';
 import '../../Utils/utils.dart';
+import '../Widget/Dialog/logout.dart';
 
 class More extends StatefulWidget {
   More({super.key,this.isMe=true,this.u});
@@ -70,7 +71,7 @@ class _MoreState extends State<More> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              CustomAppBar(screenTitle: "Menu",leading: MenuIcon(),bottom: 2.h,),
+              CustomAppBar(screenTitle: "Menu",bottom: 5.h,a: Alignment.centerLeft,),
               profileCard(),
               showList(l:userList),
             ],
@@ -166,13 +167,24 @@ class _MoreState extends State<More> {
     );
   }
   List<MenuModel> userList = [
-    MenuModel(name: 'My Drivers',image: ImagePath.driver,onTap: (context){AppNavigation.navigateTo(context, AppRouteName.MyDrivers,);}),
-    MenuModel(name: 'Promo Codes',image: ImagePath.promo,onTap: (context){AppNavigation.navigateTo(context, AppRouteName.PromoCodes);}),
-    MenuModel(name: 'Payment Method',image: ImagePath.card,onTap: (context){AppNavigation.navigateTo(context, AppRouteName.PaymentSettings);}),
-    MenuModel(name: 'Saved Addresses',image: ImagePath.location,onTap: (context){AppNavigation.navigateTo(context, AppRouteName.SavedAddress);}),
+    MenuModel(name: 'Account Details',image: ImagePath.document,onTap: (context){AppNavigation.navigateTo(context, AppRouteName.AccountDetails,);}),
     MenuModel(name: 'Help & Support',image: ImagePath.help,onTap: (context){AppNavigation.navigateTo(context, AppRouteName.HelpSupport);}),
     MenuModel(name: 'Settings',image: ImagePath.settings,onTap: (context){AppNavigation.navigateTo(context, AppRouteName.SETTINGS_ROUTE);}),
-    MenuModel(name: 'Logout',image: ImagePath.logout,onTap: (context){AppNavigation.navigateTo(context, AppRouteName.SETTINGS_ROUTE);}),
+    MenuModel(name: 'Logout',image: ImagePath.logout,onTap: (context){ showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return BackdropFilter(
+            filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+            child: AlertDialog(
+              backgroundColor: Colors.transparent,
+              contentPadding: const EdgeInsets.fromLTRB(
+                  0, 0, 0, 0),
+              content: LogoutAlert(),
+            ),
+          );
+        }
+    );}),
     // MenuModel(name: 'Terms & Conditions',image: ImagePath.terms,onTap: (context){
     // AppNavigation.navigateTo(context, AppRouteName.CONTENT_SCREEN,
     //     arguments: ContentRoutingArgument(
@@ -180,5 +192,5 @@ class _MoreState extends State<More> {
     //         contentType: AppStrings.TERMS_AND_CONDITION_TYPE,
     //         url: 'https://www.google.com/'));}),
   ];
-
 }
+

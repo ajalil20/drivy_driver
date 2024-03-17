@@ -47,7 +47,9 @@ import '../View/Authentication/create_password.dart';
 import '../View/Authentication/enter_phone.dart';
 import '../View/Payment/add_card.dart';
 import '../View/Products/cart.dart';
-import '../View/User/Booking/booking_detail.dart';
+import '../View/User/Booking/city_booking_detail.dart';
+import '../View/User/Booking/rental_booking_detail.dart';
+import '../View/User/Booking/ride_booking_detail.dart';
 import '../View/User/Home/City/check_out_city.dart';
 import '../View/User/Home/City/city_detail.dart';
 import '../View/User/Home/City/city_to_city.dart';
@@ -63,7 +65,7 @@ import '../View/User/Home/Ride/select_car.dart';
 import '../View/User/More/Driver/my_drivers.dart';
 import '../View/User/More/change_password.dart';
 import '../View/User/More/payment_settings.dart';
-import '../View/User/More/promo_codes.dart';
+import '../View/User/More/account_details.dart';
 import '../View/User/More/saved_address.dart';
 import 'app_router_name.dart';
 
@@ -76,8 +78,6 @@ class AppRouter {
           case AppRouteName.SPLASH_SCREEN_ROUTE:
             return SplashScreen();
             // return CustomBottomNavigationBar();
-          case AppRouteName.ROLE_SELECTION:
-            return RoleSelection();
           case AppRouteName.PRE_LOGIN_SCREEN_ROUTE:
             return PreLoginScreen();
           case AppRouteName.LOGIN_SCREEN_ROUTE:
@@ -133,8 +133,8 @@ class AppRouter {
             );
           case AppRouteName.MyDrivers:
             return MyDrivers();
-          case AppRouteName.PromoCodes:
-            return PromoCodes();
+          case AppRouteName.AccountDetails:
+            return AccountDetails();
           case AppRouteName.PaymentSettings:
             ScreenArguments? arg = routeSettings.arguments as ScreenArguments?;
             return PaymentSettings(
@@ -177,9 +177,13 @@ class AppRouter {
             return CityCarBooking();
           case AppRouteName.RentalCarCheckout:
             return RentalCarCheckout();
-          case AppRouteName.BookingDetail:
-            return BookingDetail();
-
+          case AppRouteName.RideBookingDetail:
+            ScreenArguments? arg = routeSettings.arguments as ScreenArguments?;
+            return RideBookingDetail(fromRide: arg?.fromRide??false,);
+          case AppRouteName.RentalBookingDetail:
+            return RentalBookingDetail();
+          case AppRouteName.CityBookingDetail:
+            return CityBookingDetail();
 
 
           case AppRouteName.SETTINGS_ROUTE:

@@ -312,7 +312,7 @@ class _HomeState extends State<Home> {
                                 Column(
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
-                                  Image.asset(ImagePath.tick,width: 10.w,),
+                                  GestureDetector(onTap: (){AppNavigation.navigateTo(context, AppRouteName.Ride);}, child: Image.asset(ImagePath.tick,width: 10.w,)),
                                   SizedBox(height: 1.h,),
                                   Image.asset(ImagePath.cancel,width: 10.w,),
                                 ],)
@@ -408,7 +408,7 @@ class _HomeState extends State<Home> {
                                 Column(
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
-                                    Image.asset(ImagePath.tick,width: 10.w,),
+                                    GestureDetector(onTap: (){AppNavigation.navigateTo(context, AppRouteName.Ride);}, child: Image.asset(ImagePath.tick,width: 10.w,)),
                                     SizedBox(height: 1.h,),
                                     Image.asset(ImagePath.cancel,width: 10.w,),
                                   ],)

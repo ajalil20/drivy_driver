@@ -90,7 +90,7 @@ class _RentalCarCheckoutState extends State<RentalCarCheckout> {
                                 Row(
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
-                                    Expanded(child: MyText(title: 'Daniel Austin',fontWeight: FontWeight.w700,line: 1,)),
+                                    Expanded(child: MyText(title: 'Marilyn Lipshutz',fontWeight: FontWeight.w700,line: 1,)),
                                     SizedBox(width: 3.w),
                                     Icon(Icons.star_rounded,color: Color(0xffFBC400),),
                                     SizedBox(width: 3.w),

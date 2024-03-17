@@ -115,8 +115,9 @@ class CartIcon extends StatelessWidget {
 
 
 class CustomAppBar extends StatelessWidget {
-  CustomAppBar({super.key,this.horizontal=0,this.top=0,this.bottom=0,this.screenTitle='',this.leading,this.trailing});
+  CustomAppBar({super.key,this.horizontal=0,this.top=0,this.bottom=0,this.screenTitle='',this.leading,this.trailing,this.a});
   double horizontal,top,bottom;
+  Alignment?a;
   String screenTitle;
   Widget? leading,trailing;
   @override
@@ -135,7 +136,7 @@ class CustomAppBar extends StatelessWidget {
             ],),
           Positioned.fill(
               child: Align(
-                alignment: Alignment.center,
+                alignment: a??Alignment.center,
                 child: MyText(title:  screenTitle,
                 center: true,
                 line: 1,

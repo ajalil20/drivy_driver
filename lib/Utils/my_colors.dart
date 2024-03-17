@@ -130,11 +130,11 @@ class MyColors {
   Color textColor = const Color(0xff1C1A1A);
   Color textColor2 = const Color(0xff465061);
   Color pinkColor = const Color(0xffF2951F);
-  Color purpleColor = const Color(0xff540163);
+  Color purpleColor = const Color(0xffF2951F);
   Color rateColor = const Color(0xffFF8800);
   Color fbColor = const Color(0xff1877F2);
   Color twitterColor = const Color(0xff03A4F5);
-  Color purpleLight = const Color(0xff8120A5);
+  Color purpleLight = const Color(0xffF2951F);
   Color blueColor = const Color(0xff171257);
   Color titleColor = const Color(0xff0A0942);
   Color stripeColor = const Color(0xff2C97DE);

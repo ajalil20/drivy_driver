@@ -299,7 +299,7 @@ class FirebaseMessagingService {
       Utils().goToRoute(context: context, user:AuthController.i.user.value,isLogin: false);
     }
     else{
-      AppNavigation.navigateToRemovingAll(context, AppRouteName.ROLE_SELECTION);
+      AppNavigation.navigateToRemovingAll(context, AppRouteName.LOGIN_SCREEN_ROUTE);
     }
   }
   void onNotificationReceived({required BuildContext c,required NotificationModel n}) async {

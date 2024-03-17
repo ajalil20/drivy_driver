@@ -141,7 +141,7 @@ class EnterPhone extends StatelessWidget {
                                 decoration:  TextDecoration.underline,
                                 fontWeight: FontWeight.w700,
                                 fontSize: 12,
-                                color: MyColors().linkColor
+                                color: MyColors().primaryColor
                             ),
                             recognizer: TapGestureRecognizer()
                               ..onTap = () {

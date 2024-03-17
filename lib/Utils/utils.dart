@@ -180,7 +180,7 @@ class Utils {
       await AuthController.i.userLogout(context: c);
     }
     Utils().disposeSocket();
-    AppNavigation.navigateTo(globalkey.currentState!.context , AppRouteName.ROLE_SELECTION);
+    AppNavigation.navigateTo(globalkey.currentState!.context , AppRouteName.LOGIN_SCREEN_ROUTE);
     saveRememberInfo();
     Get.delete<HomeController>();
   }
@@ -305,7 +305,7 @@ class Utils {
       connectSocket(onConnect: (){});
       AppNavigation.navigateTo(context, AppRouteName.HOME_SCREEN_ROUTE,);
     }  else {
-      AppNavigation.navigateReplacementNamed(context, AppRouteName.ROLE_SELECTION,);
+      AppNavigation.navigateReplacementNamed(context, AppRouteName.LOGIN_SCREEN_ROUTE,);
     }
   }
   // if(user.value.userIsProfileComplete==1){

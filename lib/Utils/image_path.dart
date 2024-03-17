@@ -82,6 +82,19 @@ class ImagePath{
   static const String driver2 = "${iconPath}driver2.png";
   static const String triangle = "${iconPath}triangle.png";
   static const String tick = "${iconPath}tick.png";
+  static const String document = "${iconPath}document.png";
+  static const String graph = "${iconPath}graph.png";
+  static const String transfer = "${iconPath}transfer.png";
+  static const String receive = "${iconPath}receive.png";
+
+
+  static const String marker = "${imagePath}user1.png";
+  static const String car = "${randomImagePath}car2.jpg";
+  static const String dotLine = "${iconPath}dot_line.png";
+  static const String chat3 = "${iconPath}chat3.png";
+  static const String call = "${iconPath}call.png";
+  static const String location2 = "${iconPath}location2.png";
+
 
 
 
@@ -119,7 +132,7 @@ class ImagePath{
   static const String stripe = "${iconPath}stripe.png";
   static const String send = "${iconPath}send.png";
   static const String thumb = "${iconPath}thumb.png";
-  static const String earning = "${iconPath}earning.png";
+  static const String earning = "${iconPath}earnings.png";
   static const String contractHistory = "${iconPath}contract-history.png";
   static const String heart = "${iconPath}heart.png";
   static const String checked = "${iconPath}checked.png";

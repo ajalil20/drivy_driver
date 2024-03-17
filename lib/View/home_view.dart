@@ -10,7 +10,8 @@ import 'package:drivy_driver/Utils/my_colors.dart';
 import 'package:drivy_driver/View/User/Home/home.dart';
 import 'package:drivy_driver/View/User/more.dart';
 import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.dart';
-import 'User/bookings.dart';
+import 'User/Booking/bookings.dart';
+import 'User/Earnings/earnings.dart';
 import 'User/chat.dart';
 
 class HomeView extends StatelessWidget{
@@ -108,11 +109,11 @@ class _MainScreensState extends State<MainScreens> {
     );
   }
 
-  List<Widget> userPages = <Widget>[const Home(), const Bookings(), const ChatScreen(), More(),];
+  List<Widget> userPages = <Widget>[const Home(), Earnings(), const Bookings(), More(),];
   List<TabItem> userTab = <TabItem>[
     TabItem(icon: Image.asset(ImagePath.homeIcon,scale: 2,),activeIcon: Image.asset(ImagePath.homeIcon,scale: 2,color: MyColors().primaryColor,),  title: 'Home'),
+    TabItem(icon: Image.asset(ImagePath.earning,scale: 2,),activeIcon: Image.asset(ImagePath.calendarIcon,scale: 2,color: MyColors().primaryColor,),  title: 'Earnings'),
     TabItem(icon: Image.asset(ImagePath.calendarIcon,scale: 2,),activeIcon: Image.asset(ImagePath.calendarIcon,scale: 2,color: MyColors().primaryColor,),  title: 'Bookings'),
-    TabItem(icon: Image.asset(ImagePath.chatIcon,scale: 2,),activeIcon: Image.asset(ImagePath.chatIcon,scale: 2,color: MyColors().primaryColor,),  title: 'Chat'),
     TabItem(icon: Image.asset(ImagePath.menuIcon,scale: 2,),activeIcon: Image.asset(ImagePath.menuIcon,scale: 2,color: MyColors().primaryColor,),  title: 'More'),
   ];
 }

@@ -64,20 +64,9 @@ class _LogoutAlertState extends State<LogoutAlert> {
                   SizedBox(height: 2.h,),
                   Row(
                     children: [
-                      Flexible(
-                        child: MyButton(
-                          onTap: (){AppNavigation.navigatorPop(c);},
-                          title: "No",bgColor: MyColors().purpleColor,
-                        ),
-                      ),
+                      Flexible(child: MyButton(height: 5.h,title: 'No',radius: 25,bgColor: MyColors().whiteColor,textColor: MyColors().greyColor,borderColor: MyColors().greyColor,onTap: (){AppNavigation.navigatorPop(c);},)),
                       SizedBox(width: 5.w,),
-                      Flexible(
-                        child: MyButton(
-                            onTap: (){AppNavigation.navigatorPop(c);
-                            Utils.logout(fromLogout: true,c: context);},
-                            title: "Yes"
-                        ),
-                      ),
+                      Flexible(child: MyButton(height: 5.h,title: 'Yes',radius: 25,onTap: (){AppNavigation.navigatorPop(c);Utils.logout(fromLogout: true,c: context);})),
                     ],
                   ),
                   SizedBox(

@@ -1,3 +1,5 @@
+import 'package:drivy_driver/Component/custom_dropdown.dart';
+import 'package:drivy_driver/Model/category_product_model.dart';
 import 'package:drivy_driver/Service/navigation_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -23,6 +25,8 @@ class _HelpSupportState extends State<HelpSupport> with SingleTickerProviderStat
   TextEditingController name = TextEditingController();
   TextEditingController email= TextEditingController();
   TextEditingController message= TextEditingController();
+  List<Category> items = [Category(id: '1',categoryName: 'Toyota')];
+  Category? category;
 
   RxInt selectedIndex = 0.obs;
   List ques = [
@@ -299,6 +303,28 @@ class _HelpSupportState extends State<HelpSupport> with SingleTickerProviderStat
                               FocusManager.instance.primaryFocus?.unfocus();
                             },
                           ),
+                          SizedBox(
+                            height: 2.h,
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(left: 2.w, bottom: 1.h),
+                            child: Align(
+                                alignment: Alignment.centerLeft,
+                                child: MyText(title: "Concern type",
+                                  size: 13,
+                                  fontWeight: FontWeight.w600,)),
+                          ),
+                          Container(
+                            decoration: BoxDecoration(
+                                border: Border.all(
+                                  color: Color(0xffB8BAC6),
+                                ),
+                                borderRadius: BorderRadius.circular(12)
+                            ),
+                            child: CustomDropDown2(dropDownData: items,hintText: 'Select Concern type',dropdownValue:category,validator: (v){print(v);
+                            return null;},onChanged: (v){category=v;print(v);print(v.id);print(v.categoryName); },),
+                          ),
+
                           SizedBox(
                             height: 2.h,
                           ),
