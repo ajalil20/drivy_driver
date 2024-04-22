@@ -14,6 +14,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:drivy_driver/Service/navigation_service.dart';
 import 'package:drivy_driver/Utils/my_colors.dart';
 import 'package:drivy_driver/Utils/utils.dart';
+import 'package:intl/intl.dart';
 import 'package:sizer/sizer.dart';
 import '../../Component/custom_buttom.dart';
 import '../../Component/custom_rectangle_textfield.dart';
@@ -71,40 +72,42 @@ class SignupScreen extends StatelessWidget {
                         const MyText(title: 'Make sure it matches the name on your government ID.',size: 11,),
                         SizedBox(height: 3.h,),
                         MyTextField(
-                          // controller: lastName,
+                          controller: dob,
                           hintText: 'Birthday (dd/mm/yyyy)',
                           maxLength: 30,
                           readOnly: true,
-                          suffixIconData: Icon(Icons.keyboard_arrow_down_rounded,size: 25,color: Colors.black,),
-                          onTap: (){
-                            // showCupertinoModalPopup<void>(
-                            //     context: context,
-                            //     builder: (BuildContext context) {
-                            //       return  CupertinoTheme(
-                            //           data: CupertinoThemeData(
-                            //             brightness: Brightness.dark,
-                            //             primaryColor: Colors.black,
-                            //             textTheme: CupertinoTextThemeData(
-                            //                 primaryColor: MyColors().black,
-                            //                 dateTimePickerTextStyle: TextStyle(
-                            //                     color:  MyColors().black,
-                            //                     fontSize: Get.height * 0.018)),
-                            //           ),
-                            //           child: CupertinoDatePicker(
-                            //             mode: CupertinoDatePickerMode.date,
-                            //             initialDateTime:
-                            //             DateTime(DateTime.now().year - 17),
-                            //             // minimumDate:
-                            //             //     DateTime(DateTime.now().year - 17),
-                            //             onDateTimeChanged: (DateTime newDateTime) {
-                            //               // signup.dateTime = newDateTime;
-                            //               // signup.updateDateFieldValue(
-                            //               //     DateFormat('yyyy-MM-dd')
-                            //               //         .format(signup.dateTime)
-                            //               //         .toString());
-                            //             },
-                            //           ));
-                            //     });
+                          suffixIconData: Icon(
+                            Icons.keyboard_arrow_down_rounded,
+                            size: 25,
+                            color: Colors.black,
+                          ),
+                          onTap: () async {
+                            await showCupertinoModalPopup<void>(
+                              context: context,
+                              builder: (_) {
+                                final size = MediaQuery.of(context).size;
+                                return Container(
+                                  decoration: const BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.only(
+                                      topLeft: Radius.circular(12),
+                                      topRight: Radius.circular(12),
+                                    ),
+                                  ),
+                                  height: size.height * 0.27,
+                                  child: CupertinoDatePicker(
+                                    mode: CupertinoDatePickerMode.date,
+                                    initialDateTime:   DateTime(DateTime.now().year - 17),
+                                    minimumDate: DateTime(DateTime.now().year - 100),
+                                    maximumDate: DateTime.now(),
+                                    onDateTimeChanged: (value) {
+                                      dob.text= DateFormat('yyyy-MM-dd').format(value).toString();
+                                      // dob.text= DateFormat('dd/MM/yyyy').format(value).toString();
+                                    },
+                                  ),
+                                );
+                              },
+                            );
                           },
                           // suffixIcons: Icon(Icons.keyboard_arrow_down_rounded,size: 20,color: Colors.black,),
                         ),

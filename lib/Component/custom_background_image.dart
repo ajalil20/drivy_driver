@@ -49,12 +49,17 @@ class CustomBackgroundImage extends StatelessWidget {
       ),
       child: Scaffold(
           body: Container(
-          height: 100.h,
-          width: 100.h,
-          decoration: BoxDecoration(
-          color: image!=null?null: MyColors().whiteColor,
-          ),
-          child: SafeArea(child: child!))),
+              height: 100.h,
+              width: 100.h,
+              decoration: BoxDecoration(
+                color: image!=null?null: MyColors().whiteColor,
+                image: image==null?null: DecorationImage(
+                    image: AssetImage(image!),
+                    fit: BoxFit.cover),
+              ),
+              child: SafeArea(child: child!)
+          )
+      ),
     ) ;
   }
 
