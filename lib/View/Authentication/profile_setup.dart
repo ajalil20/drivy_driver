@@ -352,12 +352,8 @@ class _ProfileSetupState extends State<ProfileSetup> {
     AuthController.i.countryCode=country;
     AuthController.i.phone =phone.text;
     AuthController.i.email =email.value;
-    AuthController.i.noTwitterFollowers =noTwitterFollowers.text;
-    AuthController.i.noInstagramFollowers =noInstagramFollowers.text;
-    AuthController.i.twitter =twitter.text;
-    AuthController.i.fb =fb.text;
+
     AuthController.i.isMerchantSetupDone =isMerchantSetupDone.value;
-    AuthController.i.profileSetupValidation(context,onSuccess: (){successDialog();},editProfile: widget.editProfile);
   }
 
   Future<void> getAddress(context) async {
@@ -381,14 +377,6 @@ class _ProfileSetupState extends State<ProfileSetup> {
       firstName.text=u.firstName;
       lastName.text=u.lastName;
       dob.text=u.dob;
-      location.text=u.location?.address;
-      // phone.text =u.phoneNumber;
-      fb.text=u.socialLinks?.facebook;
-      twitter.text=u.socialLinks?.twitter;
-      if(u.socialLinks!=null){
-        noInstagramFollowers.text =u.socialLinks!.instaFollowers.toString();
-        noTwitterFollowers.text = u.socialLinks!.twitterFollowers.toString();
-      }
       if(u.phoneNumber!=null){
         phone.text =u.phoneNumber;
         country=u.countryCode;

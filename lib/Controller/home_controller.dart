@@ -506,45 +506,7 @@ class HomeController extends GetxController{
     if(review.isEmpty){
       CustomToast().showToast('Error', 'Review field can\'t be empty', true);
     } else{
-      giveReview(context,onSuccess: (){AppNavigation.navigatorPop(context);},edit: edit,isProduct: isProduct);
-    }
-  }
-  Future<void> giveReview(context,{required Function onSuccess,required bool edit,Reviews? r,required bool isProduct}) async {
-    FocusManager.instance.primaryFocus?.unfocus();
-    Map jsonData = {
-      if(isProduct)
-      "order_id": orderDetail.value.id,
-      if(isProduct)
-      "product_id": orderProduct.value.id,
-      if(!isProduct)
-      "other_user_id": endUser.value.id,
-      "rating": rating,
-      "review": review,
-    };
-    var res =await b.basePostAPI(isProduct?APIEndpoints.addReview:APIEndpoints.addUserReview, jsonData, loading: true,context: context);
-    if(res['status']==1){
-      if(isProduct){
-        if(edit){editReview(r:Reviews.fromJson(res['data']),isProduct: isProduct);
-        } else{productReviews.add(Reviews.fromJson(res['data']));orderProduct.value.myRating=rating;
-        productReviews.last.isMyReview=1;
-        }
-        orderProduct.value.avgRating=res['data']['avg_rating'];
-      }else{
-        if(edit){editReview(r:Reviews.fromJson(res['data']),isProduct: isProduct);
-        } else{userReviews.add(Reviews.fromJson(res['data']));
-          endUser.value.isReviewed=1;
-        endUser.value.totalReviews++;
-        }
-        endUser.value.avgRating=res['data']['avgRating'];
-        endUser.refresh();
-      }
-      update();
-      onSuccess();
-      // setRatingTrue(index);
-      CustomToast().showToast("Success",res['message'], false);
-    }
-    else{
-      CustomToast().showToast("Error",res['message'], true);
+      // giveReview(context,onSuccess: (){AppNavigation.navigatorPop(context);},edit: edit,isProduct: isProduct);
     }
   }
   Future<void> getProductReviews({loading,required BuildContext context,required ProductsModel p}) async   {
@@ -574,26 +536,6 @@ class HomeController extends GetxController{
       CustomToast().showToast("Error",res['message'], true);
     }
   }
-  Future<void> deleteUserReview(context,{required Function onSuccess,required Reviews r}) async {
-    FocusManager.instance.primaryFocus?.unfocus();
-    var res =await b.baseDeleteAPI(APIEndpoints.deleteUserReview+r.id, loading: true,context: context);
-    if(res['status']==1){
-      int index = userReviews.indexWhere((i) => i.id == r.id);
-      if (index != -1) {
-        userReviews.removeAt(index);
-        endUser.value.isReviewed=0;
-        if(res['data']!=null){endUser.value.avgRating=res['data']['avgRating'];}
-        endUser.value.totalReviews--;
-        update();
-        endUser.refresh();
-      }
-      onSuccess();
-      CustomToast().showToast("Success",res['message'], false);
-    }
-    else{
-      CustomToast().showToast("Error",res['message'], true);
-    }
-  }
   editReview({required Reviews r,required bool isProduct}){
     if(isProduct){
       int index = productReviews.indexWhere((i) => i.id == r.id);
@@ -610,15 +552,7 @@ class HomeController extends GetxController{
       }
     }
   }
-  Future<void> getUserReviews({loading,required BuildContext context,required User u}) async   {
-    userReviews= List<Reviews>.empty().obs;
-    var r = await b.baseGetAPI(APIEndpoints.userReviews+u.id,loading: loading??true,context: context);
-    if(r['data']!=null){
-      endUser.value.totalReviews=r['data']['totalReviews']??0.0;
-      userReviews.value = (r['data']['reviews'] as List).map((data) => Reviews.fromJson(data)).toList();}
-    else{userReviews= List<Reviews>.empty().obs;}
-    update();
-  }
+
 
   /// User/product Reviews end
 
@@ -841,47 +775,7 @@ class HomeController extends GetxController{
       onSuccess();CustomToast().showToast("Success", res['message'], false);}
     else{CustomToast().showToast("Error", res['message'], true);}
   }
-  removeFollowFollowers({required bool isFollowing,required User u}){
-    if(isFollowing){
-      int index = following.indexWhere((i) => i.id == u.id);
-      if (index != -1) {
-        following.removeAt(index);
-        AuthController.i.user.value.following--;
-        AuthController.i.user.refresh();
-        update();
-      }
-      AuthController.i.user.refresh();
-      update();
-    } else{
 
-    }
-  }
-  addFollowFollowers({required User u}){
-    int index = followers.indexWhere((i) => i.id == u.id);
-    int followingIndex = following.indexWhere((i) => i.id == u.id);
-    if (index != -1) {
-      if(followers[index].isFollowing==0){
-        followers[index].isFollowing=1;
-        AuthController.i.user.value.following++;
-      }else{
-        followers[index].isFollowing=0;
-        AuthController.i.user.value.following--;
-      }
-    } if (followingIndex != -1) {
-      if(following[followingIndex].isFollowing==0){
-        following[followingIndex].isFollowing=1;
-        AuthController.i.user.value.following++;
-      }else{
-        following[followingIndex].isFollowing=0;
-        AuthController.i.user.value.following--;
-      }
-    }
-
-    AuthController.i.user.refresh();
-    followers.refresh();
-    following.refresh();
-    update();
-  }
   Future<void> getUserDetail({loading,required BuildContext context,required String id}) async   {
     var r = await b.baseGetAPI(APIEndpoints.profileDetails+id,loading: loading??true,context: context);
     if(r!=null){
@@ -1389,19 +1283,6 @@ class HomeController extends GetxController{
     influencerUser.value=liveStreaming.value.influencerId??User();
     update();
   }
-  checkAlreadySendInvite(context,{required Function onSuccess,required String id}){
-    bool isInvited = false;
-    for(var v in influencers){
-      if(v.isInvited==1){
-        isInvited=true;
-      }
-    }
-    if(isInvited){
-      CustomToast().showToast('Error', 'You can only send one invite at a time', true);
-    } else{
-      sendInvite(context, onSuccess: onSuccess, id: id);
-    }
-  }
 
   Future<int> sendInvite(context,{required Function onSuccess,required String id}) async {
     FocusManager.instance.primaryFocus?.unfocus();
@@ -1426,7 +1307,6 @@ class HomeController extends GetxController{
        removeStreamInvite(id: id);
       } else{
         int index = influencers.indexWhere((i) => i.requestId == id);
-        influencers[index].isInvited=0;
       }
       update();
       CustomToast().showToast("Success", r['message'], false);

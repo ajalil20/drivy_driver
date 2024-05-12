@@ -4,6 +4,7 @@ import 'package:drivy_driver/Component/custom_icon_container.dart';
 import 'package:drivy_driver/Component/custom_image.dart';
 import 'package:drivy_driver/Component/custom_padding.dart';
 import 'package:drivy_driver/Component/custom_refresh.dart';
+import 'package:drivy_driver/Controller/auth_controller.dart';
 import 'package:drivy_driver/Controller/home_controller.dart';
 import 'package:drivy_driver/Model/menu_model.dart';
 import 'package:drivy_driver/Model/stream_model.dart';
@@ -83,7 +84,7 @@ class _HomeState extends State<Home> {
                     children: [
                       CustomAppBar(screenTitle: "",
                         leading: Row(children: [
-                          CustomImage(height: 5.h,width: 5.h,isProfile: true,radius: 200,),
+                          CustomImage(height: 5.h,width: 5.h,isProfile: true,radius: 200,url: AuthController.i.user.value.userImage,),
                           SizedBox(width: 2.w,),
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -107,7 +108,7 @@ class _HomeState extends State<Home> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 MyText(title: 'Welcome Back',size: 15,),
-                                MyText(title: 'Mary Jane',size: 25,clr: MyColors().black,fontWeight: FontWeight.w700,),
+                                MyText(title: AuthController.i.user.value.fullName,size: 25,clr: MyColors().black,fontWeight: FontWeight.w700,),
                               ],
                             ),
                           ),

@@ -1,19 +1,25 @@
 
 class APIEndpoints{
   ///Local Server URL
-  static const baseURL = "";
-  static const baseImageURL = "https://host2.appsstaging.com:3024/";
+  static const baseURL = "https://drivy.lottawins.app/api/";
+  static const baseImageURL = "";
   ///Local Server Socket URL
   static const socketBaseURL = "https://host2.appsstaging.com:3024/";
 
-  static const login = "login";
-  static const signUp = "register";
-  static const verifyOtp = "verifyOtp";
+  static const user = "user/";
+  static const login = "${user}login";
+  static const signUp = "${user}register";
+  static const forgotPassword = "forgot/password";
+  static const verifyOtp = "confirm/otp";
+  static const resetPassword = "reset/password";
+  static const sendUserOtp = "${user}verify/sent/otp";
+  static const verifyPhoneOtp = "${user}verify/validate/otp";
+  static const editProfile = "${user}updateprofile";
+  static const logout = "${user}logout";
+
   static const resendOTP = "resend-code";
   static const completeProfile = "complete-profile";
-  static const editProfile = "update-profile";
   static const socialLogin = "socialLogin";
-  static const logout = "logout";
   static const dashboard = "dashboard-data";
   static const addCard = "add-card";
   static const allCards = "cards";

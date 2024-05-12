@@ -66,12 +66,6 @@ class ContractTile extends StatelessWidget {
           children: [
             GestureDetector(
               onTap: () async {
-                await HomeController.i.getUserDetail(loading: true,context: context,id:c.userId!.id.toString());
-                if(seller){
-                    AppNavigation.navigateTo(context, AppRouteName.INFLUENCER_PROFILE_ROUTE);
-                  } else{
-                    AppNavigation.navigateTo(context, AppRouteName.SELLER_PROFILE_ROUTE);
-                  }
               },
               child: Row(
                 children: [

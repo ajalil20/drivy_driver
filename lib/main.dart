@@ -1,5 +1,5 @@
 import 'dart:io';
-// import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 // import 'package:flutter_stripe/flutter_stripe.dart';
@@ -13,10 +13,10 @@ import 'Utils/my_colors.dart';
 
 void main() async {
   configLoading();
-  // WidgetsFlutterBinding.ensureInitialized();
+  WidgetsFlutterBinding.ensureInitialized();
   // Stripe.publishableKey = APIEndpoints.stripeKey;
   // await Stripe.instance.applySettings();
-  // await Firebase.initializeApp();
+  await Firebase.initializeApp();
   HttpOverrides.global = MyHttpOverrides();
   runApp(MyApp());
 }

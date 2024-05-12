@@ -295,7 +295,6 @@ class FirebaseMessagingService {
     if(SharedPreference().getUser() != null)
     {
       AuthController.i.user.value =User.fromJson(jsonDecode(SharedPreference().getUser()!));
-      Utils().setUserRole(AuthController.i.user.value.role);
       Utils().goToRoute(context: context, user:AuthController.i.user.value,isLogin: false);
     }
     else{

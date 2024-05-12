@@ -1,0 +1,99 @@
+{
+  "project_info": {
+    "project_number": "324879728267",
+    "firebase_url": "https://easyway-4409f.firebaseio.com",
+    "project_id": "easyway-4409f",
+    "storage_bucket": "easyway-4409f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:324879728267:android:98a999e1dd39882c979e8e",
+        "android_client_info": {
+          "package_name": "com.abtach.drivyRider"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "324879728267-2q3bb11flkbatblhlmpj0s779kdctepv.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.abtach.drivyRider",
+            "certificate_hash": "d6163dacc5dc6d4d04ea8ca9bead5a9ff3f7b4cc"
+          }
+        },
+        {
+          "client_id": "324879728267-56pmaibnriv33fn5bg2ph4b4th7hk6f2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCVyWhLr_88VxT292zUVvd46nrk2ERrtrw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "324879728267-56pmaibnriv33fn5bg2ph4b4th7hk6f2.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "324879728267-0fthqhbo5kt46re0bh7mnvqej7q40hss.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.abtach.drivyRider"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:324879728267:android:423cd5eeac05aa5b979e8e",
+        "android_client_info": {
+          "package_name": "com.abtach.drivyUser"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "324879728267-no0fi3l7jgesd538cmh24ndfqiao3ae4.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.abtach.drivyUser",
+            "certificate_hash": "d6163dacc5dc6d4d04ea8ca9bead5a9ff3f7b4cc"
+          }
+        },
+        {
+          "client_id": "324879728267-56pmaibnriv33fn5bg2ph4b4th7hk6f2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCVyWhLr_88VxT292zUVvd46nrk2ERrtrw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "324879728267-56pmaibnriv33fn5bg2ph4b4th7hk6f2.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "324879728267-0fthqhbo5kt46re0bh7mnvqej7q40hss.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.abtach.drivyRider"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

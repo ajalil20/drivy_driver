@@ -81,51 +81,56 @@ class _MoreState extends State<More> {
     );
   }
   profileCard(){
-    return Obx(()=> Container(
-      decoration: BoxDecoration(
-        border: Border.all(
-          color: Color(0xffDAE1F1),
-        ),
-        borderRadius: BorderRadius.circular(10),
-        color: MyColors().whiteColor,
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.1),
-            spreadRadius: 5,
-            blurRadius: 7,
-            offset: Offset(0, 3), // changes position of shadow
+    return Obx(()=>  GestureDetector(
+      onTap: (){
+        AppNavigation.navigateTo(context, AppRouteName.ProfileView);
+      },
+      child: Container(
+        decoration: BoxDecoration(
+          border: Border.all(
+            color: Color(0xffDAE1F1),
           ),
-        ],
-      ),
-      padding: EdgeInsets.all(12),
-        child: Row(
-          children: [
-            CircleAvatar(
-              radius:3.0.h,
-              backgroundColor: MyColors().primaryColor,
-              child: CustomImage(
-                height: 6.5.h,
-                width: 6.5.h,
-                isProfile: true,
-                photoView: false,
-                url: u.value.userImage,
-                radius: 100,
-              ),
+          borderRadius: BorderRadius.circular(10),
+          color: MyColors().whiteColor,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.1),
+              spreadRadius: 5,
+              blurRadius: 7,
+              offset: Offset(0, 3), // changes position of shadow
             ),
-            SizedBox(width: 3.w),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  MyText(title:'Rayna Siphron ',size: 14,clr: MyColors().textColor,fontWeight: FontWeight.w600,),
-                  MyText(title:'raynasiphron@gmail.com',size: 12,clr: MyColors().greyColor),
-                ],
-              ),
-            ),
-            Icon(Icons.chevron_right_rounded)
           ],
         ),
-      ),
+        padding: EdgeInsets.all(12),
+          child: Row(
+            children: [
+              CircleAvatar(
+                radius:3.0.h,
+                backgroundColor: MyColors().primaryColor,
+                child: CustomImage(
+                  height: 6.5.h,
+                  width: 6.5.h,
+                  isProfile: true,
+                  photoView: false,
+                  url: u.value.userImage,
+                  radius: 100,
+                ),
+              ),
+              SizedBox(width: 3.w),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    MyText(title:AuthController.i.user.value.fullName,size: 14,clr: MyColors().textColor,fontWeight: FontWeight.w600,),
+                    MyText(title:AuthController.i.user.value.email,size: 12,clr: MyColors().greyColor),
+                  ],
+                ),
+              ),
+              Icon(Icons.chevron_right_rounded)
+            ],
+          ),
+        ),
+    ),
     );
   }
 

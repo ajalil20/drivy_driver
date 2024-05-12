@@ -130,13 +130,6 @@ class ChatTile extends StatelessWidget {
                           ),
                         ],
                       ),
-                      MyText(
-                        title: c.user?.role??'',
-                        size: 9,
-                        clr: MyColors().greyColor,
-                        line: 1,
-                        toverflow: TextOverflow.ellipsis,
-                      ),
                       SizedBox(height: .5.h),
                       Row(
                         children: [

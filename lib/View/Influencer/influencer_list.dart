@@ -86,8 +86,6 @@ class InfluencerTile extends StatelessWidget {
       child: GestureDetector(
           onTap: () async{
             // HomeController.i.endUser.value=u;
-            await HomeController.i.getUserDetail(context: context,id: u.id);
-            AppNavigation.navigateTo(context, AppRouteName.INFLUENCER_PROFILE_ROUTE);
           },
           child: CustomCard(
             elevation: 2,

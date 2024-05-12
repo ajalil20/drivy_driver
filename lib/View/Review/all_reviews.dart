@@ -56,12 +56,12 @@ class _AllReviewsState extends State<AllReviews> {
             showAppBar: true,
             showBackButton: true,
             resizeBottomInset: false,
-            floating:d.endUser.value.id==AuthController.i.user.value.id?null:d.endUser.value.isReviewed==0? MyButton(
+            floating:MyButton(
                 width: 90.w,
                 title: 'Write a Review',
                 onTap: () {
                   giveReview(context);
-                }):null,
+                }),
             child: Padding(
               padding: EdgeInsets.symmetric(horizontal: 5.w),
               child: Column(
@@ -87,7 +87,6 @@ class _AllReviewsState extends State<AllReviews> {
                     itemSize:7.w,
                   ),
                   SizedBox(height: 1.h,),
-                  MyText(title: 'Based on ${d.endUser.value.totalReviews} reviews',size: 16,),
                   SizedBox(height: 1.h,),
                   Divider(),
                   Expanded(
@@ -129,7 +128,6 @@ class _AllReviewsState extends State<AllReviews> {
     );
   }
   Future<void> getData() async{
-    await HomeController.i.getUserReviews(context: context,u: HomeController.i.endUser.value);
   }
   // onSubmit(context){
   bool influencer =GlobalController.values.userRole.value == UserRole.influencer;
@@ -267,7 +265,7 @@ class UserReviewTile extends StatelessWidget {
                 GestureDetector(
                   onTap: (){
                     AppNavigation.navigatorPop(context);
-                    HomeController.i.deleteUserReview(context,onSuccess: (){},r: r);
+                    // HomeController.i.deleteUserReview(context,onSuccess: (){},r: r);
                   },
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.start,

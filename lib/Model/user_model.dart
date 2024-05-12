@@ -5,20 +5,12 @@ class User {
   String firstName='';
   String lastName='';
   String fullName='';
-  // String fullName='';
-  int followers=0;
-  int following=0;
-  int isFollowing=0;
-  int isReviewed=0;
   dynamic userImage;
   String countryCode='US';
   String dialCode='1';
   dynamic phoneNumber;
   dynamic avgRating;
   String dob='';
-  Location? location;
-  SocialLinks? socialLinks;
-  String role='';
   String userAuthentication='';
   String requestId='';
   String requestStatus='';
@@ -28,28 +20,41 @@ class User {
   int? userIsForgot;
   dynamic userSocialType;
   dynamic userSocialToken;
-  int totalReviews=0;
-  int contractRequested=0;
-  int isInvited=0;
-  int isJoined=0;
   String? userDeviceType;
   String? userDeviceToken;
   String? createdAt;
   String? updatedAt;
   int? v;
+  dynamic emirateId;
+  String? currentMode;
+  String? type;
+  String? status;
+  String? notification;
+  String? nightMode;
+  String country='';
+  dynamic socialType;
+  dynamic socialToken;
+  dynamic stripeId;
+  dynamic pmType;
+  dynamic pmLastFour;
+  dynamic trialEndsAt;
+  String? token;
+  dynamic emirateFront;
+  dynamic emirateBack;
+  List<dynamic>? license;
+  dynamic licenseFrontImage;
+  dynamic licenseBackImage;
+  dynamic emirateFrontImage;
+  dynamic emirateBackImage;
+  dynamic registrationCardImage;
+  bool? membership;
+  dynamic address;
 
   User({
     this.id='',
     this.email='',
     this.firstName='',
     this.lastName='',
-    // this.fullName='',
-    this.followers=0,
-    this.following=0,
-    this.contractRequested=0,
-    this.isFollowing=0,
-    this.isReviewed=0,
-    this.isInvited=0,
     this.userImage,
     this.avgRating,
     this.countryCode='US',
@@ -58,11 +63,6 @@ class User {
     this.dob='',
     this.requestId='',
     this.requestStatus='',
-    this.location,
-    this.totalReviews=0,
-    this.isJoined=0,
-    this.socialLinks,
-    this.role='',
     this.fullName='',
     this.userAuthentication='',
     this.isVerified,
@@ -76,33 +76,46 @@ class User {
     this.createdAt,
     this.updatedAt,
     this.v,
+    this.emirateId,
+    this.currentMode,
+    this.type,
+    this.status,
+    this.notification,
+    this.nightMode,
+    this.country='',
+    this.socialType,
+    this.socialToken,
+    this.stripeId,
+    this.pmType,
+    this.pmLastFour,
+    this.trialEndsAt,
+    this.token,
+    this.emirateFront,
+    this.emirateBack,
+    this.license,
+    this.licenseFrontImage,
+    this.licenseBackImage,
+    this.emirateFrontImage,
+    this.emirateBackImage,
+    this.registrationCardImage,
+    this.membership,
+    this.address,
   });
 
   User.fromJson(Map<String, dynamic> json) {
-    id = json['_id']??'';
+    id = json['id'].toString() ??'';
     email = json['email']??'';
     firstName = json['first_name']??'';
     lastName = json['last_name']??'';
     fullName='$firstName $lastName';
     requestId = json['request_id']??'';
     requestStatus = json['request_status']??'';
-    userImage = json['user_image'];
+    userImage = json['profile_image'];
     countryCode = json['country_code']??'US';
     dialCode = json['dial_code']??'1';
-    phoneNumber = json['phone_number'];
-    followers = json['followers_count']??json['follower_count']??0;
-    following = json['following_count']??0;
-    isFollowing = json['is_following']??0;
-    isReviewed = json['is_reviewed']??0;
-    totalReviews = json['totalReviews']??0;
-    isInvited = json['is_invited']??0;
-    isJoined = json['is_joined']??0;
-    contractRequested = json['is_contract_requested']??0;
+    phoneNumber = json['phone'];
     avgRating = json['avg_rating'];
-    dob = json['dob']??'';
-    location = (json['location'] as Map<String,dynamic>?) != null ? Location.fromJson(json['location'] as Map<String,dynamic>) : null;
-    socialLinks = (json['social_links'] as Map<String,dynamic>?) != null ? SocialLinks.fromJson(json['social_links'] as Map<String,dynamic>) : null;
-    role = json['role']??'';
+    dob = json['dateOfBirth']??'';
     userAuthentication = json['user_authentication']??'';
     isVerified = json['is_verified'] as int?;
     userIsProfileComplete = json['user_is_profile_complete'] as int?;
@@ -111,38 +124,53 @@ class User {
     userSocialType = json['user_social_type'];
     userSocialToken = json['user_social_token'];
     userDeviceType = json['user_device_type'] as String?;
-    userDeviceToken = json['user_device_token'] as String?;
+    userDeviceToken = json['device_token'] as String?;
     createdAt = json['createdAt'] as String?;
     updatedAt = json['updatedAt'] as String?;
     v = json['__v'] as int?;
     // fullName=firstName+lastName;
+    emirateId = json['emirate_id'];
+    currentMode = json['current_mode'] as String?;
+    type = json['type'] as String?;
+    status = json['status'] as String?;
+    notification = json['notification'] as String?;
+    nightMode = json['night_mode'] as String?;
+    country = json['country']??'';
+    socialType = json['social_type'];
+    socialToken = json['social_token'];
+    createdAt = json['created_at'] as String?;
+    updatedAt = json['updated_at'] as String?;
+    stripeId = json['stripe_id'];
+    pmType = json['pm_type'];
+    pmLastFour = json['pm_last_four'];
+    trialEndsAt = json['trial_ends_at'];
+    token = json['token'] as String?;
+    emirateFront = json['emirate_front'];
+    emirateBack = json['emirate_back'];
+    license = json['license'] as List?;
+    licenseFrontImage = json['license_front_image'];
+    licenseBackImage = json['license_back_image'];
+    emirateFrontImage = json['emirate_front_image'];
+    emirateBackImage = json['emirate_back_image'];
+    registrationCardImage = json['registration_card_image'];
+    membership = json['membership'] as bool?;
+    address = json['address'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> json = <String, dynamic>{};
-    json['_id'] = id;
+    json['id'] = id;
     json['email'] = email;
     json['first_name'] = firstName;
     json['last_name'] = lastName;
-    json['user_image'] = userImage;
+    json['profile_image'] = userImage;
     json['country_code'] = countryCode;
     json['dial_code'] = dialCode;
-    json['is_contract_requested'] = contractRequested;
-    json['phone_number'] = phoneNumber;
-    json['dob'] = dob;
-    json['is_invited'] = isInvited;
-    json['is_following'] = isFollowing;
-    json['is_reviewed'] = isReviewed;
+    json['phone'] = phoneNumber;
+    json['dateOfBirth'] = dob;
     json['request_status'] = requestStatus;
-    json['is_joined'] = isJoined;
     json['request_id'] = requestId;
-    json['totalReviews'] = totalReviews;
-    json['following_count'] = following;
-    json['followers_count'] = followers;
     json['avg_rating'] = avgRating;
-    json['location'] = location?.toJson();
-    json['social_links'] = socialLinks?.toJson();
-    json['role'] = role;
     json['user_authentication'] = userAuthentication;
     json['is_verified'] = isVerified;
     json['user_is_profile_complete'] = userIsProfileComplete;
@@ -151,66 +179,37 @@ class User {
     json['user_social_type'] = userSocialType;
     json['user_social_token'] = userSocialToken;
     json['user_device_type'] = userDeviceType;
-    json['user_device_token'] = userDeviceToken;
+    json['device_token'] = userDeviceToken;
     json['createdAt'] = createdAt;
     json['updatedAt'] = updatedAt;
     json['__v'] = v;
-    return json;
-  }
-}
-
-class Location {
-  String? type;
-  dynamic address;
-  List<dynamic>? coordinates;
-
-  Location({
-    this.type,
-    this.address,
-    this.coordinates,
-  });
-
-  Location.fromJson(Map<String, dynamic> json) {
-    type = json['type'] as String?;
-    address = json['address'];
-    coordinates = (json['coordinates'] as List?)?.map((dynamic e) => e).toList();
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> json = <String, dynamic>{};
+    json['emirate_id'] = emirateId;
+    json['current_mode'] = currentMode;
     json['type'] = type;
+    json['status'] = status;
+    json['notification'] = notification;
+    json['night_mode'] = nightMode;
+    json['country'] = country;
+    json['social_type'] = socialType;
+    json['social_token'] = socialToken;
+    json['created_at'] = createdAt;
+    json['updated_at'] = updatedAt;
+    json['stripe_id'] = stripeId;
+    json['pm_type'] = pmType;
+    json['pm_last_four'] = pmLastFour;
+    json['trial_ends_at'] = trialEndsAt;
+    json['token'] = token;
+    json['emirate_front'] = emirateFront;
+    json['emirate_back'] = emirateBack;
+    json['license'] = license;
+    json['license_front_image'] = licenseFrontImage;
+    json['license_back_image'] = licenseBackImage;
+    json['full_name'] = fullName;
+    json['emirate_front_image'] = emirateFrontImage;
+    json['emirate_back_image'] = emirateBackImage;
+    json['registration_card_image'] = registrationCardImage;
+    json['membership'] = membership;
     json['address'] = address;
-    json['coordinates'] = coordinates;
-    return json;
-  }
-}
-
-class SocialLinks {
-  dynamic facebook;
-  dynamic twitter;
-  int instaFollowers=0;
-  int twitterFollowers=0;
-
-  SocialLinks({
-    this.facebook,
-    this.twitter,
-    this.twitterFollowers=0,
-    this.instaFollowers=0,
-  });
-
-  SocialLinks.fromJson(Map<String, dynamic> json) {
-    facebook = json['facebook'];
-    twitter = json['twitter'];
-    instaFollowers = json['no_insta_follower']??0;
-    twitterFollowers = json['no_twitter_follower']??0;
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> json = <String, dynamic>{};
-    json['facebook'] = facebook;
-    json['twitter'] = twitter;
-    json['no_twitter_follower'] = twitterFollowers;
-    json['no_insta_follower'] = instaFollowers;
     return json;
   }
 }

@@ -22,7 +22,7 @@ class AuthController extends GetxController{
   static AuthController get i => Get.find();
   BaseService b = BaseService();
   Rx<User> user = User().obs;
-  String userID="",imageProfile="",firstName="",lastName="", email="", otp="", location="",dialCode="+971", phone="",password="",countryCode="AE", dob="",fb='',twitter='',noInstagramFollowers='',noTwitterFollowers='',verificationId="";
+  String userID="",imageProfile="",name="",country="",firstName="",lastName="", email="", otp="", location="",dialCode="971", phone="",password="",confirmPassword="",countryCode="AE", dob="",verificationId="";
   double lat=0,lng=0;
   bool isMerchantSetupDone = false;
   List fileName=[],files =[];
@@ -31,8 +31,7 @@ class AuthController extends GetxController{
 
   ///Login Validation
   loginValidation(context,{required bool isEmail}) async {
-    AppNavigation.navigateToRemovingAll(context, AppRouteName.HOME_SCREEN_ROUTE);
-    // AppNavigation.navigateTo(context, AppRouteName.ENTER_OTP_SCREEN_ROUTE,arguments: ScreenArguments(isFirebase: false));
+    // AppNavigation.navigateToRemovingAll(context, AppRouteName.HOME_SCREEN_ROUTE);
     FocusManager.instance.primaryFocus?.unfocus();
     if(isEmail){if (email.isEmpty) {
       CustomToast().showToast("Warning", "Email field can't be empty", true);
@@ -44,12 +43,16 @@ class AuthController extends GetxController{
       CustomToast().showToast("Warning", "Password is incorrect.", true);
     } else {
       userLogin(context,onSuccess: (){
-        AppNavigation.navigateTo(context, AppRouteName.ENTER_OTP_SCREEN_ROUTE,arguments: ScreenArguments(isFirebase: false));
-      });
+        AppNavigation.navigateToRemovingAll(context, AppRouteName.HOME_SCREEN_ROUTE);
+        // AppNavigation.navigateTo(context, AppRouteName.ENTER_OTP_SCREEN_ROUTE,arguments: ScreenArguments(isFirebase: false));
+      },isEmail: isEmail);
     }}else{
+      print(dialCode);
       if (phone.isEmpty) {
         CustomToast().showToast("Error", 'Phone number field can\'t be empty', true);
       }else if (!(dialCode+phone).isPhoneNumber) {
+        CustomToast().showToast("Error", 'Invalid phone number', true);
+      }else if (dialCode=='+971' &&phone.length<9) {
         CustomToast().showToast("Error", 'Invalid phone number', true);
       }else if (password.isEmpty) {
         CustomToast().showToast("Warning", "Password field can't be empty.", true);
@@ -57,8 +60,9 @@ class AuthController extends GetxController{
         CustomToast().showToast("Warning", "Password is incorrect.", true);
       }else {
         userLogin(context,onSuccess: (){
-          AppNavigation.navigateTo(context, AppRouteName.ENTER_OTP_SCREEN_ROUTE,arguments: ScreenArguments(isFirebase: false));
-        });
+          AppNavigation.navigateToRemovingAll(context, AppRouteName.HOME_SCREEN_ROUTE);
+          // AppNavigation.navigateTo(context, AppRouteName.ENTER_OTP_SCREEN_ROUTE,arguments: ScreenArguments(isFirebase: false));
+        },isEmail: isEmail);
       }
     }
   }
@@ -68,9 +72,13 @@ class AuthController extends GetxController{
       CustomToast().showToast("Error", 'Phone number field can\'t be empty', true);
     }else if (!(dialCode+phone).isPhoneNumber) {
       CustomToast().showToast("Error", 'Invalid phone number', true);
+    }else if (dialCode=='971' &&phone.length<9) {
+      CustomToast().showToast("Error", 'Invalid phone number', true);
     } else{
       print(dialCode+phone);
-      AppNavigation.navigateTo(context, AppRouteName.ENTER_OTP_SCREEN_ROUTE,arguments: ScreenArguments(isFirebase: true));
+      checkPhone(context,onSuccess: (){
+        AppNavigation.navigateTo(context, AppRouteName.ENTER_OTP_SCREEN_ROUTE,arguments: ScreenArguments(fromForgetPassword: false));
+      });
       // SocialAuthBloc social = SocialAuthBloc();
       // social.signInWithPhone(context: context,setProgressBar:(){
       //   EasyLoading.instance.userInteractions=false;
@@ -83,23 +91,42 @@ class AuthController extends GetxController{
       // );
     }
   }
+  Future<void> checkPhone(context,{required Function onSuccess}) async {
+    Map jsonData = {
+      "phone": '+${dialCode+phone}',
+    };
+    var res =await b.basePostAPI(APIEndpoints.sendUserOtp, jsonData, loading: true,context: context);
+    if(res['success']==true){
+      onSuccess();
+      CustomToast().showToast("Success", '${res['data']['otp']} ${res['message']}', false);
+      // CustomToast().showToast("Success", res['message'], false);
+    }
+    else{
+      CustomToast().showToast("Error",res['message'], true);
+    }
+  }
 
-  Future<void> userLogin(context,{required Function onSuccess}) async {
-    // Map jsonData = {
-    //   "email": email.toLowerCase().trim(),
-    //   "role":GlobalController.values.userRole.value.name,
-    //   "user_device_type": Platform.isIOS?"ios":"android",
-    //   "user_device_token": SharedPreference().getFcmToken(),
-    // };
-    // var res =await b.basePostAPI(APIEndpoints.login, jsonData, loading: true,context: context);
-    // if(res['status']==1){
-    //   userID=res['data']['_id'];
-    //   onSuccess();
-    //   // loginSuccess(res);
-    // }
-    // else{
-    //   CustomToast().showToast("Error",res['message'], true);
-    // }
+
+  Future<void> userLogin(context,{required Function onSuccess,required bool isEmail}) async {
+    Map jsonData = {
+      if(isEmail)
+        "email": email.toLowerCase().trim()
+      else
+        "phone": dialCode+phone,
+      "password":password,
+      "type":"host",
+      "user_device_type": Platform.isIOS?"ios":"android",
+      // "user_device_token": SharedPreference().getFcmToken(),
+    };
+    var res =await b.basePostAPI(APIEndpoints.login, jsonData, loading: true,context: context);
+    if(res['success']==true){
+      // userID=res['data']['_id'];
+      // onSuccess();
+      loginSuccess(res,context);
+    }
+    else{
+      CustomToast().showToast("Error",res['message'], true);
+    }
   }
   Future<void> socialLogin(context,{email,socialType,socialToken,String? firstName,String? lastName,String? phone,String? dialCode,String? countryCode}) async {
     Map jsonData = {
@@ -109,19 +136,19 @@ class AuthController extends GetxController{
       "role":GlobalController.values.userRole.value.name,
       "user_device_token": SharedPreference().getFcmToken(),
       if(phone!=null)
-      "phone_number": phone,
+        "phone_number": phone,
       if(dialCode!=null)
-      "dial_code": dialCode,
+        "dial_code": dialCode,
       if(countryCode!=null)
-      "country_code": countryCode,
+        "country_code": countryCode,
       if(firstName!=null)
-      "first_name" : firstName,
+        "first_name" : firstName,
       if(lastName!=null)
-      "last_name" : lastName,
+        "last_name" : lastName,
     };
     print(jsonData);
     var res =await b.basePostAPI(APIEndpoints.socialLogin, jsonData, loading: true,context: context);
-    if(res['status']==1){
+    if(res['success']==true){
       loginSuccess(res,context);
     }
     else{
@@ -130,10 +157,9 @@ class AuthController extends GetxController{
     }
   }
   loginSuccess(res,context){
-    SharedPreference().setBearerToken(token: res["data"]["user_authentication"]);
+    SharedPreference().setBearerToken(token: res["data"]["token"]);
     SharedPreference().setUser(user: jsonEncode(res['data']));
     AuthController.i.user.value =User.fromJson(jsonDecode(SharedPreference().getUser()!));
-    Utils().setUserRole(AuthController.i.user.value.role);
     log("loginSuccess");
     Utils().goToRoute(context: context, user:AuthController.i.user.value,isLogin: true);
 
@@ -157,47 +183,114 @@ class AuthController extends GetxController{
   }
 
   ///SignUp Validation
+  passwordValidation(context,{required bool fromForgetPassword}){
+    print(phone);
+    if (password.isEmpty) {
+      CustomToast().showToast("Warning", "Password field can't be empty.", true);
+    } else if (password.length < 8) {
+      CustomToast().showToast("Warning", "Password must contain 8 characters", true);
+    }else if (confirmPassword.isEmpty) {
+      CustomToast().showToast("Warning", "Confirm Password field can't be empty.", true);
+    } else if (confirmPassword!= password) {
+      CustomToast().showToast("Warning", "Password and Confirm Password must be same.", true);
+    } else{
+      if(fromForgetPassword){
+        updatePassword(context,onSuccess: (){AppNavigation.navigatorPop(context);AppNavigation.navigatorPop(context);});
+      }
+      else{
+        userSignUp(context);
+      }
+    }
+  }
   signUpValidation(context)async {
     FocusManager.instance.primaryFocus?.unfocus();
     if (firstName.isEmpty) {
       CustomToast().showToast("Warning", "First Name field can't be empty", true);
     }else if (lastName.isEmpty) {
       CustomToast().showToast("Warning", "Last Name field can't be empty", true);
-    } else if (email.isEmpty) {
+    }else if (dob.isEmpty) {
+      CustomToast().showToast("Warning", "Date of birth field can't be empty", true);
+    }  else if (email.isEmpty) {
       CustomToast().showToast("Warning", "Email field can't be empty", true);
     } else if (!email.trim().isEmail) {
       CustomToast().showToast("Warning", "Please enter valid email address", true);
     } else {
-      // userSignUp(context);
+      AppNavigation.navigateTo(context, AppRouteName.CreatePassword);
     }
   }
   Future<void> userSignUp(context) async {
     Map jsonData = {
-    "first_name" : firstName,
-    "last_name" : lastName,
-    "email": email.toLowerCase().trim(),
-    "role":GlobalController.values.userRole.value.name,
-    "user_device_type": Platform.isIOS?"ios":"android",
-    "user_device_token": SharedPreference().getFcmToken(),
+      "first_name" : firstName,
+      "last_name" : lastName,
+      "email": email.toLowerCase().trim(),
+      "phone": dialCode+phone,
+      "dial_code": dialCode,
+      "country_code": countryCode,
+      "date_of_birth": dob,
+      "type":"host",
+      "user_device_type": Platform.isIOS?"ios":"android",
+      "user_device_token": SharedPreference().getFcmToken(),
+      "password": password,
+      "password_confirmation": password,
     };
     var res =await b.basePostAPI(APIEndpoints.signUp, jsonData, loading: true,context: context);
-    if(res['status']==1)
-      {
-        userID=res['data']['_id'];
-        CustomToast().showToast("Success", res['message'], false);
-        AppNavigation.navigateTo(context, AppRouteName.ENTER_OTP_SCREEN_ROUTE,);
-      }
+    if(res['success']==true)
+    {
+      // userID=res['data']['_id'];
+      loginSuccess(res,context);
+      CustomToast().showToast("Success", res['message'], false);
+      // AppNavigation.navigateToRemovingAll(context, AppRouteName.HOME_SCREEN_ROUTE);
+      // AppNavigation.navigateTo(context, AppRouteName.ENTER_OTP_SCREEN_ROUTE,);
+    }
     else{
       CustomToast().showToast("Error", res['message'], true);
     }
   }
 
-  // ///OTP Validation
-  Future<void> resendOTP(context,{required Function onSuccess}) async {
-    var res =await b.basePostAPI(APIEndpoints.resendOTP, {"user_id":userID}, loading: true,context: context);
-    if(res['status']==1){onSuccess();}
-    else{CustomToast().showToast("Error", res['message'], true);}
+  forgetPasswordValidation(context) async {
+    FocusManager.instance.primaryFocus?.unfocus();
+    if (email.isEmpty) {
+      CustomToast().showToast("Warning", "Email field can't be empty", true);
+    } else if (!email.trim().isEmail) {
+      CustomToast().showToast("Warning", "Email is not valid.", true);
+    } else {
+      forgetPassword(context,onSuccess: (){
+        AppNavigation.navigateTo(context, AppRouteName.ENTER_OTP_SCREEN_ROUTE,arguments: ScreenArguments(fromForgetPassword:true));
+      });
+    }
   }
+  Future<void> forgetPassword(context,{required Function onSuccess}) async {
+    Map jsonData = {
+      "email": email,
+    };
+    var res =await b.basePostAPI(APIEndpoints.forgotPassword, jsonData, loading: true,context: context);
+    if(res['success']==true){
+      // userID=res['_id'];
+      onSuccess();
+      CustomToast().showToast("Success", '${res['data']['remember_token']} ${res['message']}', false);
+      // CustomToast().showToast("Success", res['message'], false);
+    }
+    else{
+      CustomToast().showToast("Error",res['message'], true);
+    }
+  }
+  Future<void> updatePassword(context,{required Function onSuccess}) async {
+    Map jsonData = {
+      "email": email,
+      "password": password,
+      "cpass": password
+    };
+    var res =await b.basePostAPI(APIEndpoints.resetPassword, jsonData, loading: true,context: context);
+    if(res['success']==true){
+      onSuccess();
+      CustomToast().showToast("Success",res['message'], false);
+    }
+    else{
+      CustomToast().showToast("Error",res['message'], true);
+    }
+  }
+
+
 
   // ///OTP Validation
   otpValidation(context,{required bool firebase,required bool fromForgetPassword})async {
@@ -205,37 +298,36 @@ class AuthController extends GetxController{
     if (otp.isEmpty) {CustomToast().showToast("Warning", "Please enter verification code", true);}
     else if (otp.length<4) {CustomToast().showToast("Warning", "Please enter a valid verification code", true);}
     else {
-      if(fromForgetPassword){
-        AppNavigation.navigatorPop(context);
-        AppNavigation.navigateTo(context, AppRouteName.CreatePassword,arguments: ScreenArguments(fromForgetPassword: true));
-      }
-      else{
-        AppNavigation.navigateTo(context, AppRouteName.SIGNUP_SCREEN_ROUTE);
-      }
+      verifyOTP(context,fromForgetPassword: fromForgetPassword,onSuccess: (){
+        if(fromForgetPassword){
+          AppNavigation.navigateTo(context, AppRouteName.CreatePassword,arguments: ScreenArguments(fromForgetPassword: true));
+        }
+        else{
+          AppNavigation.navigateTo(context, AppRouteName.SIGNUP_SCREEN_ROUTE);
+        }
+      });
       // if(firebase){verifyFirebaseOTP(context);}
       // else{
       //   verifyOTP(context);
       // }
     }
   }
-  Future<void> verifyOTP(context) async {
-    Map jsonData = {"verification_code": int.parse(otp),"user_id":userID};
-    var res =await b.basePostAPI(APIEndpoints.verifyOtp, jsonData, loading: true,context: context);
-    if(res['status']==1){
+  Future<void> verifyOTP(context,{required Function onSuccess,required bool fromForgetPassword}) async {
+    Map jsonData = {
+      if(fromForgetPassword)
+        "token": int.parse(otp)
+      else
+        "otp": int.parse(otp),
+      if(fromForgetPassword)
+        "email":email
+      else
+        "phone":'+${dialCode+phone}',
+    };
+    var res =await b.basePostAPI(fromForgetPassword?APIEndpoints.verifyOtp:APIEndpoints.verifyPhoneOtp, jsonData, loading: true,context: context);
+    if(res['success']==true){
       AppNavigation.navigatorPop(context);
-      loginSuccess(res,context);
-
-      // SharedPreference().setBearerToken(token:res['data']['user_authentication']);
-      // SharedPreference().setUser(user: jsonEncode(res['data']));
-      // user.value=User.fromJson(res['data']);
-      // AppNavigation.navigatorPop(context);
-      // if(user.value.userIsProfileComplete==1){
-      //   CustomToast().showToast("Success", "Login Successfully", false);
-      //   AppNavigation.navigateTo(context, AppRouteName.HOME_SCREEN_ROUTE,);
-      // } else{
-      //   CustomToast().showToast("Success", "Account validation completed.", false);
-      //   AppNavigation.navigateTo(context, AppRouteName.COMPLETE_PROFILE_SCREEN_ROUTE,);
-      // }
+      onSuccess();
+      // loginSuccess(res,context);
     }
     else{
       CustomToast().showToast("Error", res['message'], true);
@@ -262,65 +354,37 @@ class AuthController extends GetxController{
   }
 
   ///ProfileSetup Validation
-  profileSetupValidation(context,{required bool editProfile,required Function onSuccess})async {
+  editProfile(context,{required bool editProfile,required Function onSuccess})async {
     FocusManager.instance.primaryFocus?.unfocus();
     bool emailLogin = GlobalController.values.loginType.value==LoginType.email;
     print(dialCode+phone);
-    // bool phoneLogin = GlobalController.values.loginType.value==LoginType.phone;
-    { if (firstName.isEmpty) {
-        CustomToast().showToast("Warning", "First Name field can't be empty", true);
-      }else if (lastName.isEmpty) {
-        CustomToast().showToast("Warning", "Last Name field can't be empty", true);
-      } else if (dob.isEmpty) {
-        CustomToast().showToast("Warning", "Date of birth field can't be empty", true);
-      } else if (location.isEmpty) {
-        CustomToast().showToast("Warning", "Location field can't be empty", true);
-      } else if (phone.isEmpty) {
-        CustomToast().showToast("Warning", "Phone number field can't be empty", true);
-      }
-    //   else if (phone.length!=10) {
-    //   CustomToast().showToast("Error", "Invalid phone", true);
-    // }
-    else if (!(dialCode+phone).isPhoneNumber) {
-        CustomToast().showToast("Warning", "Invalid phone number", true);
-      } else if (fb.isNotEmpty && !fb.isURL) {
-        CustomToast().showToast("Warning", "Enter valid facebook url", true);
-      } else if (twitter.isNotEmpty && !twitter.isURL) {
-        CustomToast().showToast("Warning", "Enter valid twitter url", true);
-      } else if (email.isEmpty && emailLogin) {
-        CustomToast().showToast("Warning", "Email field can't be empty", true);
-      } else if (!email.isEmail && emailLogin) {
-        CustomToast().showToast("Warning", "Enter valid email", true);
-      } else{if (isMerchantSetupDone==false && editProfile==false && GlobalController.values.userRole.value!=UserRole.user) {
-      CustomToast().showToast("Error", "Merchant account setup is required", true);
-      } else {
+    if(firstName.isEmpty) {
+      CustomToast().showToast("Warning", "First Name field can't be empty", true);
+    }else if (lastName.isEmpty) {
+      CustomToast().showToast("Warning", "Last Name field can't be empty", true);
+    }else if (country.isEmpty) {
+      CustomToast().showToast("Warning", "Country field can't be empty", true);
+    }else {
       setProfile(context,onSuccess: onSuccess,editProfile:editProfile);
-      }}
     }
-
   }
   setProfile(context,{required Function onSuccess,required bool editProfile}) async {
     Map<String,String> jsonData;
     jsonData = {
-      'id':userID,
       "first_name": firstName,
       "last_name": lastName,
-      "phone_number": phone,
-      "address": location,
-      "latitude": lat.toString(),
-      "longitude": lng.toString(),
+      "phone": phone,
+      // "address": location,
+      // "latitude": lat.toString(),
+      // "longitude": lng.toString(),
       "dial_code":dialCode,
       "country_code":countryCode,
-      "dob":dob,
-      'facebook':fb,
-      'twitter':twitter,
-      'no_insta_follower':noInstagramFollowers,
-      'no_twitter_follower':noTwitterFollowers
+      "country":country,
     };
     print(jsonData);
     getFiles();
-    var res =await b.baseFormPostAPI(editProfile? APIEndpoints.editProfile:APIEndpoints.completeProfile, jsonData,files,fileName,loading: true,context: context);
-    if(res['status']==1){
+    var res =await b.baseFormPostAPI(editProfile? APIEndpoints.editProfile:APIEndpoints.editProfile, jsonData,files,fileName,loading: true,context: context);
+    if(res['success']==true){
       SharedPreference().setUser(user: jsonEncode(res['data']));
       user.value =User.fromJson(jsonDecode(SharedPreference().getUser()!));
       onSuccess();
@@ -332,7 +396,7 @@ class AuthController extends GetxController{
   getFiles(){
     fileName=[];files =[];
     if(imageProfile.isNotEmpty)
-    {fileName.add("user_image");files.add(File(imageProfile));}
+    {fileName.add("profile_image");files.add(File(imageProfile));}
   }
 
   Future<String?> checkMerchantVerification({required BuildContext context}) async {
@@ -351,9 +415,7 @@ class AuthController extends GetxController{
   Future<void> getDashboard({loading,required BuildContext context}) async   {
     var r = await b.baseGetAPI(APIEndpoints.dashboard,loading: loading??true,context: context);
     if(r!=null){
-      user.value.followers = User.fromJson(r['data']).followers;
-      user.value.following = User.fromJson(r['data']).following;
-      user.value.avgRating = User.fromJson(r['data']).avgRating;
+      // user.value.avgRating = User.fromJson(r['data']).avgRating;
       user.refresh();
     }
     update();

@@ -121,10 +121,11 @@ class CreatePassword extends StatelessWidget {
   }
 
   onSubmit(context){
-    AppNavigation.navigateTo(context, AppRouteName.DriverRegister);
-    // AppNavigation.navigateToRemovingAll(context, AppRouteName.HOME_SCREEN_ROUTE);
-    // AuthController.i.otp=otp.text;
-    // AuthController.i.otpValidation(context,firebase:widget.isFirebase??false);
+    AuthController.i.password=password.text;
+    AuthController.i.confirmPassword=confirmPassword.text;
+    AuthController.i.passwordValidation(context,fromForgetPassword: fromForgetPassword??false);
+    // AppNavigation.navigateTo(context, AppRouteName.DriverRegister)
+
   }
   pointText({p ,t}){
     return Row(

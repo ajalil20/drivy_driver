@@ -35,11 +35,8 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    Timer(const Duration(seconds: 3), () {
-      AppNavigation.navigateToRemovingAll(context, AppRouteName.LOGIN_SCREEN_ROUTE);
-    });
-    // saveFCMToken();
-    // setNotifications(context);
+    saveFCMToken();
+    setNotifications(context);
   }
 
   @override

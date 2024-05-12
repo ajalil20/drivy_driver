@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>324879728267-0fthqhbo5kt46re0bh7mnvqej7q40hss.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.324879728267-0fthqhbo5kt46re0bh7mnvqej7q40hss</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>324879728267-2q3bb11flkbatblhlmpj0s779kdctepv.apps.googleusercontent.com</string>
+	<key>API_KEY</key>
+	<string>AIzaSyDWT_pM82zPEnTypN6h6UZM4XmMhJAjAkQ</string>
+	<key>GCM_SENDER_ID</key>
+	<string>324879728267</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.abtach.drivyRider</string>
+	<key>PROJECT_ID</key>
+	<string>easyway-4409f</string>
+	<key>STORAGE_BUCKET</key>
+	<string>easyway-4409f.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:324879728267:ios:72290ff25f0833b6979e8e</string>
+	<key>DATABASE_URL</key>
+	<string>https://easyway-4409f.firebaseio.com</string>
+</dict>
+</plist>

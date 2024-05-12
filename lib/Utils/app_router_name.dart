@@ -37,6 +37,9 @@ class AppRouteName {
   static const String RideBookingDetail = "/RideBookingDetail";
   static const String RentalBookingDetail = "/RentalBookingDetail";
   static const String CityBookingDetail = "/CityBookingDetail";
+  static const String ProfileView = "/ProfileView";
+  static const String editProfile = "/editProfile";
+
 
 
   static const String COMPLETE_PROFILE_SCREEN_ROUTE = "/complete-profile";
@@ -65,7 +68,6 @@ class AppRouteName {
   static const String MY_EARNING_SCREEN = "/my-earning";
   static const String CONTRACT_HISTORY_SCREEN = "/contract-history";
   static const String CREATE_CONTRACT_SCREEN = "/create-contract";
-  static const String INFLUENCER_PROFILE_ROUTE = "/influencer-profile";
   static const String INFLUENCERS_LIST_ROUTE = "/influencers-list";
   static const String SELLER_STREAM_REQUEST_ROUTE = "/seller-stream-request";
   static const String ALL_REVIEWS_ROUTE = "/all-reviews";

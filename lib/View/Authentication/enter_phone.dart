@@ -22,7 +22,7 @@ import '../base_view.dart';
 class EnterPhone extends StatelessWidget {
   EnterPhone({super.key});
   TextEditingController phone = TextEditingController();
-  String dialCode = "+971";
+  String dialCode = "971";
   String countryCode = "AE";
   TextEditingController fullName = TextEditingController(),firstName = TextEditingController(),lastName = TextEditingController(),email = TextEditingController(),password = TextEditingController(), confirmPassword = TextEditingController(),dob = TextEditingController();
   // Rx<bool> isVisible = false.obs, isVisibleConfirm = false.obs, rememberMeLogin = false.obs;

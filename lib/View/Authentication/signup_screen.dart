@@ -25,7 +25,7 @@ import '../base_view.dart';
 
 class SignupScreen extends StatelessWidget {
   SignupScreen({super.key});
-  TextEditingController phone = TextEditingController();
+  // TextEditingController phone = TextEditingController();
   String dialCode = "+971";
   String countryCode = "AE";
   TextEditingController fullName = TextEditingController(),firstName = TextEditingController(),lastName = TextEditingController(),email = TextEditingController(),password = TextEditingController(), confirmPassword = TextEditingController(),dob = TextEditingController();
@@ -266,15 +266,14 @@ class SignupScreen extends StatelessWidget {
   }
 
   onSubmit(context) {
-    AuthController.i.phone=phone.text;
+    // AuthController.i.phone=phone.text;
     AuthController.i.dialCode=dialCode;
     AuthController.i.countryCode=countryCode;
+    AuthController.i.dob=dob.text;
 
     AuthController.i.firstName = firstName.text;
     AuthController.i.lastName = lastName.text;
     AuthController.i.email = email.text;
-
-    AppNavigation.navigateTo(context, AppRouteName.CreatePassword);
     AuthController.i.signUpValidation(context);
   }
 }

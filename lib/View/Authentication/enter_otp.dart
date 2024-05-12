@@ -189,9 +189,19 @@ class _EnterOTPState extends State<EnterOTP> {
                         otp.clear();
                         if (isTimeComplete)
                         {
-                          setState(() {
-                            resetTimer();
-                          });
+                          if(widget.fromForgetPassword==true){
+                            AuthController.i.forgetPassword(context,onSuccess: (){
+                              setState(() {
+                                resetTimer();
+                              });
+                            });
+                          }else{
+                            AuthController.i.checkPhone(context,onSuccess: (){
+                              setState(() {
+                                resetTimer();
+                              });
+                            });
+                          }
                         }
                       },
                   ),

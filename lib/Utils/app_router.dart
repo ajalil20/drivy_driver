@@ -68,6 +68,7 @@ import '../View/User/More/change_password.dart';
 import '../View/User/More/payment_settings.dart';
 import '../View/User/More/account_details.dart';
 import '../View/User/More/saved_address.dart';
+import '../View/profile_view.dart';
 import 'app_router_name.dart';
 
 class AppRouter {
@@ -188,6 +189,11 @@ class AppRouter {
             return RentalBookingDetail();
           case AppRouteName.CityBookingDetail:
             return CityBookingDetail();
+          case AppRouteName.ProfileView:
+            return ProfileView();
+          case AppRouteName.editProfile:
+            return EditProfile();
+
 
 
           case AppRouteName.SETTINGS_ROUTE:
@@ -196,8 +202,6 @@ class AppRouter {
             return SellerEarning();
           case AppRouteName.SELLER_CONTRACT_HISTORY_ROUTE:
             return SellerContractHistory();
-          case AppRouteName.SELLER_PROFILE_ROUTE:
-            return SellerProfile();
           case AppRouteName.ALL_CARDS_ROUTE:
             return AllCards();
           case AppRouteName.ADD_CARD_ROUTE:
@@ -231,9 +235,6 @@ class AppRouter {
               title: contentRoutingArgument?.title ?? "",
               isMerchantSetupDone: contentRoutingArgument?.isMerchantSetupDone,
             );
-          case AppRouteName.INFLUENCER_PROFILE_ROUTE:
-            ScreenArguments? arg = routeSettings.arguments as ScreenArguments?;
-            return InfluencerProfile(contractPending: arg?.contractPending,contractSigned: arg?.contractSigned,);
           case AppRouteName.INFLUENCERS_LIST_ROUTE:
             return InfluencersList();
           case AppRouteName.CREATE_CONTRACT_SCREEN:

@@ -295,30 +295,25 @@ class Utils {
 
 
   goToRoute({required context, required User user, required bool isLogin}) async {
+    ///Alfa
     RemoteMessage? terminatedMessage = await FirebaseMessaging.instance.getInitialMessage();
     AuthController.i.userID = user.id ?? '';
-    if (user.isVerified == 0 && isLogin) {
-      AppNavigation.navigateTo(context, AppRouteName.ENTER_OTP_SCREEN_ROUTE);
-    } else if (user.isVerified == 1 && user.userIsProfileComplete == 0 && isLogin) {
-      AppNavigation.navigateReplacementNamed(context, AppRouteName.COMPLETE_PROFILE_SCREEN_ROUTE,);
-    } else if (user.isVerified == 1 && user.userIsProfileComplete == 1) {
-      connectSocket(onConnect: (){});
-      AppNavigation.navigateTo(context, AppRouteName.HOME_SCREEN_ROUTE,);
-    }  else {
-      AppNavigation.navigateReplacementNamed(context, AppRouteName.LOGIN_SCREEN_ROUTE,);
-    }
+    AppNavigation.navigateToRemovingAll(context, AppRouteName.HOME_SCREEN_ROUTE);
+    // if (user.isVerified == 0 && isLogin) {
+    //   AppNavigation.navigateTo(context, AppRouteName.ENTER_OTP_SCREEN_ROUTE);
+    // } else if (user.isVerified == 1 && user.userIsProfileComplete == 0 && isLogin) {
+    //   AppNavigation.navigateReplacementNamed(context, AppRouteName.COMPLETE_PROFILE_SCREEN_ROUTE,);
+    // } else if (user.isVerified == 1 && user.userIsProfileComplete == 1) {
+    //   connectSocket(onConnect: (){});
+    //   AppNavigation.navigateTo(context, AppRouteName.HOME_SCREEN_ROUTE,);
+    // }  else {
+    //   AppNavigation.navigateReplacementNamed(context, AppRouteName.LOGIN_SCREEN_ROUTE,);
+    // }
   }
-  // if(user.value.userIsProfileComplete==1){
-  //   CustomToast().showToast("Success", "Login Successfully", false);
-  //   AppNavigation.navigateTo(context, AppRouteName.HOME_SCREEN_ROUTE,);
-  // } else{
-  //   CustomToast().showToast("Success", "Account validation completed.", false);
-  //   AppNavigation.navigateTo(context, AppRouteName.COMPLETE_PROFILE_SCREEN_ROUTE,);
-  // }
+
   goToNotificationRoute({required context,required NotificationModel n,required bool isPush}) async{
     if(isPush){
       AuthController.i.user.value =User.fromJson(jsonDecode(SharedPreference().getUser()!));
-      Utils().setUserRole(AuthController.i.user.value.role);
       // if(AuthController.i.user.value.userIsProfileComplete==1){
       //   connectSocket(onConnect: (){});
       // }
@@ -344,27 +339,6 @@ class Utils {
       }
       AppNavigation.navigateToRemovingAll(context, AppRouteName.HOME_SCREEN_ROUTE,);
     }
-    else if (n.notificationType==AppStrings.FOLLOW_NOTIFICATION) {
-      if(isPush){
-        HomeController h= Get.put(HomeController());
-        AppNavigation.navigateTo(context, AppRouteName.HOME_SCREEN_ROUTE,);
-      }
-      var h =HomeController.i;
-      await h.getUserDetail(context: context,id: n.senderId);
-      if(h.endUser.value.role==AppStrings.INFLUENCER){
-        AppNavigation.navigateTo(context, AppRouteName.INFLUENCER_PROFILE_ROUTE);
-      } else if(h.endUser.value.role==AppStrings.SELLER){
-        AppNavigation.navigateTo(context, AppRouteName.SELLER_PROFILE_ROUTE);
-      }else if(h.endUser.value.role==AppStrings.USER){
-        AppNavigation.navigateTo(context, AppRouteName.USER_PROFILE_ROUTE);
-      }
-    }
-   //  else if (n.notificationType==AppStrings.REQUEST_NOTIFICATION) {
-   //    if(isPush){
-   //      HomeController h= Get.put(HomeController());
-   //      AppNavigation.navigateTo(context, AppRouteName.HOME_SCREEN_ROUTE,);
-   //    }
-   // }
 
     else if (n.notificationType==AppStrings.NEW_ORDER_NOTIFICATION) {
       if(isPush){

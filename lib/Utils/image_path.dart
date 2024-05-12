@@ -33,6 +33,16 @@ class ImagePath{
   static const String random2 = "${randomImagePath}random2.png";
   static const String delete = "${iconPath}delete.png";
 
+  static const String user = "${iconPath}user.png";
+  static const String email2 = "${iconPath}email2.png";
+  static const String flag = "${iconPath}flag.png";
+  static const String phone2 = "${iconPath}phone2.png";
+  static const String jpeg = "${iconPath}jpeg.png";
+  static const String imgCircle = "${iconPath}img_circle.png";
+  static const String edit2 = "${iconPath}edit2.png";
+  static const String back = "${iconPath}back.png";
+
+
   static const String driver = "${iconPath}driver.png";
   static const String promo = "${iconPath}promo.png";
   static const String card = "${iconPath}card.png";

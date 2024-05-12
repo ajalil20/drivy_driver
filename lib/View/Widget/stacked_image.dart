@@ -56,7 +56,6 @@ class StackedImage extends StatelessWidget {
             onTap: () async{
               if(!isInfluencer){
                 await HomeController.i.getUserDetail(context: context, id: influencer!.id);
-                AppNavigation.navigateTo(context, AppRouteName.INFLUENCER_PROFILE_ROUTE,);
               } else{
                 AppNavigation.navigateTo(context, AppRouteName.HOME_SCREEN_ROUTE,arguments: ScreenArguments(index: 3));
               }
