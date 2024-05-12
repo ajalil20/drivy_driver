@@ -80,7 +80,7 @@ class CreatePassword extends StatelessWidget {
               pointText(p: '2.', t: 'Complexity: A strong password should include a combination of uppercase and lowercase letters, numbers, and symbols. '),
               pointText(p: '3.', t: 'Uniqueness: Do not use the same password for multiple accounts. If one account is compromised, all other accounts with the same password are also at risk.'),
               const Spacer(),
-              MyButton(title: fromForgetPassword==true?'Continue' :'Complete Sign up',onTap: (){onSubmit(context);},),
+              MyButton(title: fromForgetPassword==true?'Continue' :'Next',onTap: (){onSubmit(context);},),
               SizedBox(height: 1.h),
               if(fromForgetPassword!=true)
               Center(

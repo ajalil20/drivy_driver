@@ -154,9 +154,15 @@ class ProfileView extends StatelessWidget {
                   customImageText(img:ImagePath.flag,text: AuthController.i.user.value.countryCode),
                   SizedBox(height: 2.h),
                   customImageText(img:ImagePath.phone2,text: '${AuthController.i.user.value.phoneNumber}'),
-                  SizedBox(height: 3.h),
+                  SizedBox(height: 1.h),
+                  GestureDetector(
+                      onTap: (){
+                        AppNavigation.navigateTo(context, AppRouteName.AddCar);
+                      },
+                      child: Image.asset(ImagePath.addCar,scale: 2,)),
+                  SizedBox(height: 2.h),
 
-                ],),)
+                ],),),
               // Spacer(),
 
             ],

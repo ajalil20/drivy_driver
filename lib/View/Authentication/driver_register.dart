@@ -1,21 +1,14 @@
-
 import 'dart:io';
-
 import 'package:drivy_driver/Arguments/screen_arguments.dart';
-import 'package:drivy_driver/Component/Appbar/appbar_components.dart';
-import 'package:drivy_driver/Model/menu_model.dart';
 import 'package:drivy_driver/Service/navigation_service.dart';
 import 'package:drivy_driver/Utils/app_router_name.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:get/get.dart';
-import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:sizer/sizer.dart';
 import '../../../../Component/custom_buttom.dart';
 import '../../../../Component/custom_text.dart';
 import '../../../../Component/custom_textfield.dart';
-import '../../../../Component/custom_toast.dart';
 import '../../../../Utils/image_path.dart';
 import '../../../../Utils/my_colors.dart';
 import '../../Controller/auth_controller.dart';
@@ -23,9 +16,22 @@ import '../../Service/api_endpoints.dart';
 import '../Widget/upload_media.dart';
 import '../base_view.dart';
 
-class DriverRegister extends StatelessWidget {
+class DriverRegister extends StatefulWidget {
+  @override
+  State<DriverRegister> createState() => _DriverRegisterState();
+}
+
+class _DriverRegisterState extends State<DriverRegister> {
   Rx<File> imageProfile = File("").obs;
   RxBool carRegister = false.obs;
+  TextEditingController name = TextEditingController(), emiratesID = TextEditingController(), passport = TextEditingController();
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    name.text='${AuthController.i.firstName} ${AuthController.i.lastName}';
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -154,10 +160,11 @@ class DriverRegister extends StatelessWidget {
                         MyTextField(
                             width: 90.w,
                             hintText: 'Driver Name'.tr,
-                            // controller: name,
+                            controller: name,
                             onFieldSubmit: (val) {
                               FocusManager.instance.primaryFocus?.unfocus();
                             },
+                          readOnly: true,
                           ),
                           SizedBox(height: 3.h,),
                           MyText(
@@ -169,7 +176,8 @@ class DriverRegister extends StatelessWidget {
                           MyTextField(
                             width: 90.w,
                             hintText: 'Emirates ID'.tr,
-                            // controller: name,
+                            controller: emiratesID,
+                            maxLength: 15,
                             onFieldSubmit: (val) {
                               FocusManager.instance.primaryFocus?.unfocus();
                             },
@@ -185,7 +193,8 @@ class DriverRegister extends StatelessWidget {
                           MyTextField(
                             width: 90.w,
                             hintText: 'Passport Number'.tr,
-                            // controller: name,
+                            maxLength: 12,
+                            controller: passport,
                             onFieldSubmit: (val) {
                               FocusManager.instance.primaryFocus?.unfocus();
                             },
@@ -243,11 +252,8 @@ class DriverRegister extends StatelessWidget {
                             ),
                           ],),
                           SizedBox(height: 3.h,),
-                          MyButton(title: 'Next',onTap: (){
-                            if(carRegister.isTrue){                        AppNavigation.navigateTo(context, AppRouteName.AddCar,arguments: ScreenArguments(fromSignup: true));}
-                            else{
-                              AppNavigation.navigateToRemovingAll(context, AppRouteName.HOME_SCREEN_ROUTE);
-                            }
+                          MyButton(title: 'Complete Sign up',onTap: (){
+                           onSubmit(context);
                           },),
                           SizedBox(height: 2.h,),
                         ],),
@@ -260,5 +266,14 @@ class DriverRegister extends StatelessWidget {
         }),
       ),
     );
+  }
+
+  onSubmit(context){
+    AuthController.i.name=name.text;
+    AuthController.i.emiratesId=emiratesID.text;
+    AuthController.i.passport=passport.text;
+    AuthController.i.carRegister=carRegister.value;
+    AuthController.i.imageProfile = imageProfile.value.path;
+    AuthController.i.driverRegisterationValidation(context);
   }
 }

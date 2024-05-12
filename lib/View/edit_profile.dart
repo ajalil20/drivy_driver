@@ -174,27 +174,27 @@ class _EditProfileState extends State<EditProfile> {
               SizedBox(
                 height: 2.h,
               ),
-              Padding(
-                padding: EdgeInsets.only(left: 2.w, bottom: 1.h),
-                child: Align(
-                    alignment: Alignment.centerLeft,
-                    child: MyText(title: "Country",
-                      size: 13,
-                      fontWeight: FontWeight.w600,)),
-              ),
-              MyTextField(
-                width: 90.w,
-                hintText: 'Country'.tr,
-                maxLength: 8,
-                controller: country,
-                // inputType: TextInputType.emailAddress,
-                onFieldSubmit: (val) {
-                  FocusManager.instance.primaryFocus?.unfocus();
-                },
-              ),
-              SizedBox(
-                height: 2.h,
-              ),
+              // Padding(
+              //   padding: EdgeInsets.only(left: 2.w, bottom: 1.h),
+              //   child: Align(
+              //       alignment: Alignment.centerLeft,
+              //       child: MyText(title: "Country",
+              //         size: 13,
+              //         fontWeight: FontWeight.w600,)),
+              // ),
+              // MyTextField(
+              //   width: 90.w,
+              //   hintText: 'Country'.tr,
+              //   maxLength: 8,
+              //   controller: country,
+              //   // inputType: TextInputType.emailAddress,
+              //   onFieldSubmit: (val) {
+              //     FocusManager.instance.primaryFocus?.unfocus();
+              //   },
+              // ),
+              // SizedBox(
+              //   height: 2.h,
+              // ),
               Padding(
                 padding: EdgeInsets.only(left: 2.w, bottom: 1.h),
                 child: Align(

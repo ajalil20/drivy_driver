@@ -22,9 +22,9 @@ class AuthController extends GetxController{
   static AuthController get i => Get.find();
   BaseService b = BaseService();
   Rx<User> user = User().obs;
-  String userID="",imageProfile="",name="",country="",firstName="",lastName="", email="", otp="", location="",dialCode="971", phone="",password="",confirmPassword="",countryCode="AE", dob="",verificationId="";
+  String userID="",imageProfile="",name="",country="",firstName="",lastName="", email="", otp="", location="",dialCode="971", phone="",password="",confirmPassword="",countryCode="AE", dob="",verificationId="",emiratesId="",passport="";
   double lat=0,lng=0;
-  bool isMerchantSetupDone = false;
+  bool isMerchantSetupDone = false,carRegister = false;
   List fileName=[],files =[];
 
   // Rx<File> imageProfile = File("").obs, resume = File("").obs;
@@ -156,13 +156,12 @@ class AuthController extends GetxController{
       CustomToast().showToast("Error",res['message'], true);
     }
   }
-  loginSuccess(res,context){
+  loginSuccess(res,context,{bool route = true}){
     SharedPreference().setBearerToken(token: res["data"]["token"]);
     SharedPreference().setUser(user: jsonEncode(res['data']));
     AuthController.i.user.value =User.fromJson(jsonDecode(SharedPreference().getUser()!));
     log("loginSuccess");
-    Utils().goToRoute(context: context, user:AuthController.i.user.value,isLogin: true);
-
+    Utils().goToRoute(context: context, user:AuthController.i.user.value,isLogin: true,route:route);
 
     // SharedPreference().setBearerToken(token:res['data']['user_authentication']);
     // SharedPreference().setUser(user: jsonEncode(res['data']));
@@ -198,7 +197,7 @@ class AuthController extends GetxController{
         updatePassword(context,onSuccess: (){AppNavigation.navigatorPop(context);AppNavigation.navigatorPop(context);});
       }
       else{
-        userSignUp(context);
+        AppNavigation.navigateTo(context, AppRouteName.DriverRegister);
       }
     }
   }
@@ -218,8 +217,19 @@ class AuthController extends GetxController{
       AppNavigation.navigateTo(context, AppRouteName.CreatePassword);
     }
   }
+  driverRegisterationValidation(context)async {
+    FocusManager.instance.primaryFocus?.unfocus();
+    if (emiratesId.isEmpty) {
+      CustomToast().showToast("Warning", "Emirates ID field can't be empty", true);
+    }else if (lastName.isEmpty) {
+      CustomToast().showToast("Warning", "Passport Number field can't be empty", true);
+    }else {
+      userSignUp(context);
+    }
+  }
+
   Future<void> userSignUp(context) async {
-    Map jsonData = {
+    Map<String,String> jsonData = {
       "first_name" : firstName,
       "last_name" : lastName,
       "email": email.toLowerCase().trim(),
@@ -229,18 +239,22 @@ class AuthController extends GetxController{
       "date_of_birth": dob,
       "type":"host",
       "user_device_type": Platform.isIOS?"ios":"android",
-      "user_device_token": SharedPreference().getFcmToken(),
+      "user_device_token": SharedPreference().getFcmToken()??'',
       "password": password,
       "password_confirmation": password,
     };
-    var res =await b.basePostAPI(APIEndpoints.signUp, jsonData, loading: true,context: context);
+    getFiles(); 
+    var res =await b.baseFormPostAPI(APIEndpoints.signUp, jsonData,files,fileName,loading: true,context: context);
     if(res['success']==true)
     {
-      // userID=res['data']['_id'];
-      loginSuccess(res,context);
+      loginSuccess(res,context,route: false);
+      if(carRegister){
+        AppNavigation.navigateTo(context, AppRouteName.AddCar,arguments: ScreenArguments(fromSignup: true));
+      }
+      else{
+        AppNavigation.navigateToRemovingAll(context, AppRouteName.HOME_SCREEN_ROUTE);
+      }
       CustomToast().showToast("Success", res['message'], false);
-      // AppNavigation.navigateToRemovingAll(context, AppRouteName.HOME_SCREEN_ROUTE);
-      // AppNavigation.navigateTo(context, AppRouteName.ENTER_OTP_SCREEN_ROUTE,);
     }
     else{
       CustomToast().showToast("Error", res['message'], true);
@@ -362,9 +376,11 @@ class AuthController extends GetxController{
       CustomToast().showToast("Warning", "First Name field can't be empty", true);
     }else if (lastName.isEmpty) {
       CustomToast().showToast("Warning", "Last Name field can't be empty", true);
-    }else if (country.isEmpty) {
-      CustomToast().showToast("Warning", "Country field can't be empty", true);
-    }else {
+    }
+    // else if (country.isEmpty) {
+    //   CustomToast().showToast("Warning", "Country field can't be empty", true);
+    // }
+    else {
       setProfile(context,onSuccess: onSuccess,editProfile:editProfile);
     }
   }

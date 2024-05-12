@@ -294,11 +294,13 @@ class Utils {
   }
 
 
-  goToRoute({required context, required User user, required bool isLogin}) async {
+  goToRoute({required context, required User user, required bool isLogin,bool route=true}) async {
     ///Alfa
     RemoteMessage? terminatedMessage = await FirebaseMessaging.instance.getInitialMessage();
     AuthController.i.userID = user.id ?? '';
-    AppNavigation.navigateToRemovingAll(context, AppRouteName.HOME_SCREEN_ROUTE);
+    if(route){
+      AppNavigation.navigateToRemovingAll(context, AppRouteName.HOME_SCREEN_ROUTE);
+    }
     // if (user.isVerified == 0 && isLogin) {
     //   AppNavigation.navigateTo(context, AppRouteName.ENTER_OTP_SCREEN_ROUTE);
     // } else if (user.isVerified == 1 && user.userIsProfileComplete == 0 && isLogin) {

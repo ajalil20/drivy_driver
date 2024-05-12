@@ -43,6 +43,7 @@ class ImagePath{
   static const String back = "${iconPath}back.png";
   static const String tStar = "${iconPath}t_star.png";
   static const String star = "${iconPath}start.png";
+  static const String addCar = "${imagePath}add.png";
 
   static const String driver = "${iconPath}driver.png";
   static const String promo = "${iconPath}promo.png";

@@ -24,7 +24,7 @@ void configLoading() {
   EasyLoading.instance
     ..indicatorType = EasyLoadingIndicatorType.ring
     ..backgroundColor = Colors.transparent
-    ..indicatorColor = Color(0xff540163)
+    ..indicatorColor = Color(0xffF2951F)
     ..textColor = Colors.transparent
     ..boxShadow=[BoxShadow(color: Colors.transparent)]
     ..maskType=EasyLoadingMaskType.custom
