@@ -68,6 +68,7 @@ import '../View/User/More/change_password.dart';
 import '../View/User/More/payment_settings.dart';
 import '../View/User/More/account_details.dart';
 import '../View/User/More/saved_address.dart';
+import '../View/edit_profile.dart';
 import '../View/profile_view.dart';
 import 'app_router_name.dart';
 

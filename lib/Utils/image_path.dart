@@ -41,7 +41,8 @@ class ImagePath{
   static const String imgCircle = "${iconPath}img_circle.png";
   static const String edit2 = "${iconPath}edit2.png";
   static const String back = "${iconPath}back.png";
-
+  static const String tStar = "${iconPath}t_star.png";
+  static const String star = "${iconPath}start.png";
 
   static const String driver = "${iconPath}driver.png";
   static const String promo = "${iconPath}promo.png";
@@ -153,7 +154,6 @@ class ImagePath{
   static const String privacy = "${iconPath}privacy.png";
   static const String terms = "${iconPath}terms.png";
   static const String share = "${iconPath}share.png";
-  static const String star = "${iconPath}star.png";
   static const String starOutlined = "${iconPath}star_outlined.png";
   static const String editReview = "${iconPath}edit-review.png";
   static const String play = "${iconPath}play.png";
