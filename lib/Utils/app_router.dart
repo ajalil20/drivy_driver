@@ -137,7 +137,7 @@ class AppRouter {
           case AppRouteName.MyDrivers:
             return MyDrivers();
           case AppRouteName.AccountDetails:
-            return AccountDetails();
+            return BankAccount();
           case AppRouteName.PaymentSettings:
             ScreenArguments? arg = routeSettings.arguments as ScreenArguments?;
             return PaymentSettings(

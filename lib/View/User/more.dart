@@ -172,7 +172,7 @@ class _MoreState extends State<More> {
     );
   }
   List<MenuModel> userList = [
-    MenuModel(name: 'Account Details',image: ImagePath.document,onTap: (context){AppNavigation.navigateTo(context, AppRouteName.AccountDetails,);}),
+    MenuModel(name: 'Bank Account Details',image: ImagePath.document,onTap: (context){AppNavigation.navigateTo(context, AppRouteName.AccountDetails,);}),
     MenuModel(name: 'Help & Support',image: ImagePath.help,onTap: (context){AppNavigation.navigateTo(context, AppRouteName.HelpSupport);}),
     MenuModel(name: 'Settings',image: ImagePath.settings,onTap: (context){AppNavigation.navigateTo(context, AppRouteName.SETTINGS_ROUTE);}),
     MenuModel(name: 'Logout',image: ImagePath.logout,onTap: (context){ showDialog(

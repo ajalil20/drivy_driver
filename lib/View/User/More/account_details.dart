@@ -17,11 +17,11 @@ import '../../../../Component/custom_text.dart';
 import '../../../../Utils/my_colors.dart';
 import '../../../Component/custom_textfield.dart';
 
-class AccountDetails extends StatelessWidget {
+class BankAccount extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BaseView(
-      screenTitle: 'Account Details',
+      screenTitle: 'Bank Account Details',
       showAppBar: true,
       centerTitle: false,
       showBackButton: true,

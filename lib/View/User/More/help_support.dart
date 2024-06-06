@@ -97,8 +97,9 @@ class _HelpSupportState extends State<HelpSupport> with SingleTickerProviderStat
                             border: Border(bottom: BorderSide(width: 2.0, color:MyColors().primaryColor,),)
                         ),
                         unselectedLabelStyle: GoogleFonts.poppins(
-                          color: MyColors().lightGreyColor.withOpacity(.1),
+                          color: MyColors().lightGreyColor
                         ),
+
                         labelColor: MyColors().black,
                         labelStyle: GoogleFonts.inter(fontWeight: FontWeight.w700,fontSize: 16),
                         tabs: _tabs,
@@ -161,11 +162,13 @@ class _HelpSupportState extends State<HelpSupport> with SingleTickerProviderStat
                                               mainAxisAlignment: MainAxisAlignment
                                                   .spaceBetween,
                                               children: [
-                                                MyText(
-                                                  title: ques[index] ?? "",
-                                                  clr: MyColors().textColor,
-                                                  fontWeight: FontWeight.w600,
-                                                  size: 16,
+                                                Expanded(
+                                                  child: MyText(
+                                                    title: ques[index] ?? "",
+                                                    clr: MyColors().textColor,
+                                                    fontWeight: FontWeight.w600,
+                                                    size: 16,
+                                                  ),
                                                 ),
                                                 GestureDetector(
                                                   onTap: () {

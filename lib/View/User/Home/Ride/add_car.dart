@@ -202,7 +202,7 @@ class _AddCarState extends State<AddCar> {
                             height: 2.h,
                           ),
                           Container(
-                            height: 10.h,
+                            height: 13.h,
                             width: 100.w,
                             alignment: Alignment.centerLeft,
                             child: ListView.builder(
@@ -234,14 +234,14 @@ class _AddCarState extends State<AddCar> {
                                           BorderRadius.circular(
                                               3)),
                                       child: Container(
-                                        // height: 12.h,
-                                        // width: 15.w,
+                                        height: 12.h,
+                                        width: 15.w,
                                         // margin: EdgeInsets.symmetric(horizontal: 1.5.w, vertical: 1.w),
                                           child: Image.asset(
                                             carBrands[i].image!,
                                             // height: 13.w,
                                             // width: 13.w,
-                                            // fit: BoxFit.fill,
+                                            // fit: BoxFit.cover,
                                           )),
                                     ));
                               },
@@ -317,8 +317,13 @@ class _AddCarState extends State<AddCar> {
                                     },
                                     child: Container(
                                         width: 15.w,
-                                        margin: EdgeInsets.only(
-                                            right: 3.w),
+                                        decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(8),
+                                          border: Border.all(
+                                            color: selectedSeries.value == 'Series ${i+1}'? MyColors().primaryColor:Colors.transparent,
+                                          )
+                                        ),
+                                        margin: EdgeInsets.only(right: 3.w),
                                         child: Column(
                                           crossAxisAlignment:
                                           CrossAxisAlignment

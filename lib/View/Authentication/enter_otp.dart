@@ -212,7 +212,7 @@ class _EnterOTPState extends State<EnterOTP> {
 
             const Spacer(),
             MyButton(title: 'Submit',onTap: (){onSubmit(context);},bgColor: otp.text.length==4?null:MyColors().greyColor  ,),
-            SizedBox(height: 0.h),
+            SizedBox(height: 2.h),
           ],
         ),
       ),
