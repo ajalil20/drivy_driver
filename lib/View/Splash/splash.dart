@@ -44,23 +44,36 @@ class _SplashScreenState extends State<SplashScreen> {
     return Container(
       decoration: BoxDecoration(
         image: DecorationImage(
-          image: AssetImage(ImagePath.splashImage,)
-        ),
+            image: AssetImage(
+          ImagePath.splashImage,
+        )),
       ),
     );
   }
 
-  setNotifications(context) async{
-    await FirebaseMessagingService().initializeNotificationSettings();
+  setNotifications(context) async {
+    // await FirebaseMessagingService().initializeNotificationSettings();
     Timer(const Duration(seconds: 3), () {
-      FirebaseMessagingService().terminateNotification(context);
+      // FirebaseMessagingService().terminateNotification(context);
+      _navigate();
     });
-    DynamicLinkProvider().initDynamicLinks();
-    FirebaseMessagingService().foregroundNotification();
-    FirebaseMessagingService().backgroundTapNotification();
+    // DynamicLinkProvider().initDynamicLinks();
+    // FirebaseMessagingService().foregroundNotification();
+    // FirebaseMessagingService().backgroundTapNotification();
   }
-  saveFCMToken()async{
+
+  saveFCMToken() async {
     await SharedPreference().sharedPreference;
     Utils().saveFCMToken();
+  }
+
+  _navigate() {
+    if (SharedPreference().getUser() != null) {
+      AppNavigation.navigateToRemovingAll(
+          context, AppRouteName.HOME_SCREEN_ROUTE);
+    } else {
+      AppNavigation.navigateToRemovingAll(
+          context, AppRouteName.LOGIN_SCREEN_ROUTE);
+    }
   }
 }

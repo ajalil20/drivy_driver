@@ -2,6 +2,8 @@ import 'dart:developer';
 import 'dart:io';
 import 'dart:convert';
 import 'dart:typed_data';
+import 'package:drivy_driver/Model/new/ride_detail.dart';
+import 'package:drivy_driver/Model/new/rides.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
@@ -27,7 +29,6 @@ import 'package:drivy_driver/Utils/app_strings.dart';
 import 'package:drivy_driver/Utils/enum.dart';
 import 'package:drivy_driver/Utils/local_shared_preferences.dart';
 import 'package:drivy_driver/View/Products/add_product.dart';
-import 'package:drivy_driver/main.dart';
 import 'package:share_plus/share_plus.dart';
 import '../Model/notification_model.dart';
 import '../Model/stream_model.dart';
@@ -35,7 +36,7 @@ import '../Service/navigation_service.dart';
 import '../Utils/utils.dart';
 import 'global_controller.dart';
 
-class HomeController extends GetxController{
+class HomeController extends GetxController {
   static HomeController get i => Get.find();
   BaseService b = BaseService();
 
@@ -53,7 +54,7 @@ class HomeController extends GetxController{
   Rx<ProductsModel> currentProduct = ProductsModel().obs;
   RxList<User> followers = List<User>.empty().obs;
   RxList<User> following = List<User>.empty().obs;
-  String totalEarning='0';
+  String totalEarning = '0';
   RxList<EarningModel> earnings = List<EarningModel>.empty().obs;
   Rx<User> endUser = User().obs;
   RxList<User> userProfileVisits = List<User>.empty().obs;
@@ -66,193 +67,286 @@ class HomeController extends GetxController{
 
   RxList<ScheduleModel> tSchedule = List<ScheduleModel>.empty().obs;
   RxList<ScheduleModel> schedule = List<ScheduleModel>.empty().obs;
-  List<OrderProductsModel> orderProducts=[];
-  List<ScheduleModel> scheduleList=[];
+  List<OrderProductsModel> orderProducts = [];
+  List<ScheduleModel> scheduleList = [];
   Rx<DateTime> selectedDate = DateTime.now().obs;
 
-  String name="",cardNumber="",month="",year='',cvc="",token='',category='',price='',description='',address='',zipCode='',state='',rating='',review='',startDate='${DateTime.now()}',endDate='',paymentMethod='',amount='';
+  int currentActiveRideId = 0;
+
+  String name = "",
+      cardNumber = "",
+      month = "",
+      year = '',
+      cvc = "",
+      token = '',
+      category = '',
+      price = '',
+      description = '',
+      address = '',
+      zipCode = '',
+      state = '',
+      rating = '',
+      review = '',
+      startDate = '${DateTime.now()}',
+      endDate = '',
+      paymentMethod = '',
+      amount = '';
   List fileName = [], files = [];
   List<FileNetwork> temp = [];
-  bool cameraPermission=false;
-  bool microphonePermission=false;
+  bool cameraPermission = false;
+  bool microphonePermission = false;
 
   ///Card
   Rx<CardModel> defaultCard = CardModel().obs;
   RxList<CardModel> cards = List<CardModel>.empty().obs;
+  RxList<RideData> rides = List<RideData>.empty().obs;
+
   ///Card end
 
   /// Order
   RxList<OrderModel> recentOrders = List<OrderModel>.empty().obs;
   RxList<OrderModel> pastOrders = List<OrderModel>.empty().obs;
-  Rx<OrderModel> orderDetail =OrderModel().obs;
-  Rx<ProductsModel> orderProduct =ProductsModel().obs;
+  Rx<OrderModel> orderDetail = OrderModel().obs;
+  Rx<ProductsModel> orderProduct = ProductsModel().obs;
+
   /// Order end
 
   /// Contract
-  Rx<ContractModel> contract =ContractModel().obs;
+  Rx<ContractModel> contract = ContractModel().obs;
   RxList<ContractModel> recentContract = List<ContractModel>.empty().obs;
   RxList<ContractModel> historyContract = List<ContractModel>.empty().obs;
+
   /// Contract end
 
   /// Chat
   RxList<Chat> tChats = List<Chat>.empty().obs;
   RxList<Chat> chats = List<Chat>.empty().obs;
   RxList<Chat> inboxChats = List<Chat>.empty().obs;
+
   /// Chat end
 
   /// Stream start
-  String roomID="",streamToken="";
+  String roomID = "", streamToken = "";
   RxList<StreamModel> streams = List<StreamModel>.empty().obs;
   RxList<StreamModel> searchStreams = List<StreamModel>.empty().obs;
   RxList<StreamModel> streamedVideos = List<StreamModel>.empty().obs;
   Rx<StreamModel> liveStreaming = StreamModel().obs;
+
   /// Stream end
 
-  addProductValidation(context,{required bool fromEdit}){
+  addProductValidation(context, {required bool fromEdit}) {
     FocusManager.instance.primaryFocus?.unfocus();
-    if(temp.isEmpty){
+    if (temp.isEmpty) {
       CustomToast().showToast('Error', 'At least one image is required', true);
-    } else if(name.isEmpty){
+    } else if (name.isEmpty) {
       CustomToast().showToast('Error', 'Title field can\'t be empty', true);
-    }else if(category.isEmpty){
+    } else if (category.isEmpty) {
       CustomToast().showToast('Error', 'Category can\'t be empty', true);
-    }else if(price.isEmpty){
+    } else if (price.isEmpty) {
       CustomToast().showToast('Error', 'Price field can\'t be empty', true);
-    }else if(double.parse(price)<1){
-      CustomToast().showToast('Error', 'Price should be greater than equal to 1', true);
-    }else if(description.isEmpty){
-      CustomToast().showToast('Error', 'Description field can\'t be empty', true);
-    } else{
-      addProduct(context,onSuccess: (){
+    } else if (double.parse(price) < 1) {
+      CustomToast()
+          .showToast('Error', 'Price should be greater than equal to 1', true);
+    } else if (description.isEmpty) {
+      CustomToast()
+          .showToast('Error', 'Description field can\'t be empty', true);
+    } else {
+      addProduct(context, onSuccess: () {
         AppNavigation.navigatorPop(context);
-        CustomToast().showToast('Success',fromEdit?'Product updated successfully' :'Product added successfully', false);
-      },fromEdit:fromEdit);
+        CustomToast().showToast(
+            'Success',
+            fromEdit
+                ? 'Product updated successfully'
+                : 'Product added successfully',
+            false);
+      }, fromEdit: fromEdit);
     }
   }
-  Future<void> addProduct(context,{required Function onSuccess,required bool fromEdit}) async {
-    Map<String,String> jsonData;
+
+  Future<void> addProduct(context,
+      {required Function onSuccess, required bool fromEdit}) async {
+    Map<String, String> jsonData;
     jsonData = {
-      if(fromEdit)
-      'product_id':currentProduct.value.id,
-      'title':name,
+      if (fromEdit) 'product_id': currentProduct.value.id,
+      'title': name,
       "description": description,
       "price": double.parse(price).toString(),
       "category_id": category,
       for (int i = 0; i < temp.length; i++)
-      if(temp[i].isNetwork)
-      "prevImg":getUrlFiles(),
+        if (temp[i].isNetwork) "prevImg": getUrlFiles(),
     };
     log(jsonData.toString());
     getFiles(title: 'prod_image');
-    var res =await b.baseFormPostAPI(fromEdit?APIEndpoints.updateProduct:APIEndpoints.addProduct, jsonData,files,fileName,loading: true,context: context);
-    if(res['status']==1){
-      if(fromEdit){
+    var res = await b.baseFormPostAPI(
+        fromEdit ? APIEndpoints.updateProduct : APIEndpoints.addProduct,
+        jsonData,
+        files,
+        fileName,
+        loading: true,
+        context: context);
+    if (res['status'] == 1) {
+      if (fromEdit) {
         int index = products.indexWhere((i) => i.id == currentProduct.value.id);
         if (index != -1) {
           products[index] = ProductsModel.fromJson(res['data']);
           currentProduct.value = products[index];
         }
-      }
-      else{
+      } else {
         products.add(ProductsModel.fromJson(res['data']));
       }
       update();
-      onSuccess();CustomToast().showToast("Success", res['message'], false);
+      onSuccess();
+      CustomToast().showToast("Success", res['message'], false);
+    } else {
+      CustomToast().showToast("Error", res['message'], true);
     }
-    else{CustomToast().showToast("Error", res['message'], true);}
   }
 
   /// Cart
-  String sellerID='';
+  String sellerID = '';
   RxList<ProductsModel> cart = List<ProductsModel>.empty().obs;
-  RxDouble cartTotal = 0.0.obs,productTax = 12.5.obs, totalAmount = 0.0.obs;
+  RxDouble cartTotal = 0.0.obs, productTax = 12.5.obs, totalAmount = 0.0.obs;
+
   /// Cart end
 
   ///Products
-  Future<void> getAllProducts({loading,required BuildContext context,required bool myProducts}) async   {
-    var r = await b.baseGetAPI(myProducts?APIEndpoints.myProducts:APIEndpoints.product,loading: loading??true,context: context);
-    if(r!=null){products.value = (r['data'] as List).map((data) => ProductsModel.fromJson(data)).toList();}
-    else{products= List<ProductsModel>.empty().obs;}
-    update();
-  }
-  Future<void> getSellerProducts({loading,required BuildContext context,required String id}) async   {
-    sellerProducts= List<ProductsModel>.empty().obs; var r = await b.baseGetAPI(APIEndpoints.sellerProducts+id,loading: loading??true,context: context);
-    if(r!=null){sellerProducts.value = (r['data'] as List).map((data) => ProductsModel.fromJson(data)).toList();}
-    else{sellerProducts= List<ProductsModel>.empty().obs;}
-    update();
-  }
-  Future<void> getLiveStreamProducts({loading,required BuildContext context,required String id}) async   {
-    var r = await b.baseGetAPI(APIEndpoints.streamProducts+roomID,loading: loading??true,context: context);
-    if(r!=null){liveStreamingProducts.value = (r['data'] as List).map((data) => ProductsModel.fromJson(data)).toList();}
-    else{liveStreamingProducts= List<ProductsModel>.empty().obs;}
+  Future<void> getAllProducts(
+      {loading,
+      required BuildContext context,
+      required bool myProducts}) async {
+    var r = await b.baseGetAPI(
+        myProducts ? APIEndpoints.myProducts : APIEndpoints.product,
+        loading: loading ?? true,
+        context: context);
+    if (r != null) {
+      products.value = (r['data'] as List)
+          .map((data) => ProductsModel.fromJson(data))
+          .toList();
+    } else {
+      products = List<ProductsModel>.empty().obs;
+    }
     update();
   }
 
-  Future<void> deleteProduct(context,{required Function onSuccess,required String id,required int index}) async {
-    var res =await b.baseDeleteAPI(APIEndpoints.deleteProduct+currentProduct.value.id, loading: true,context: context);
-    if(res['status']==1){
+  Future<void> getSellerProducts(
+      {loading, required BuildContext context, required String id}) async {
+    sellerProducts = List<ProductsModel>.empty().obs;
+    var r = await b.baseGetAPI(APIEndpoints.sellerProducts + id,
+        loading: loading ?? true, context: context);
+    if (r != null) {
+      sellerProducts.value = (r['data'] as List)
+          .map((data) => ProductsModel.fromJson(data))
+          .toList();
+    } else {
+      sellerProducts = List<ProductsModel>.empty().obs;
+    }
+    update();
+  }
+
+  Future<void> getLiveStreamProducts(
+      {loading, required BuildContext context, required String id}) async {
+    var r = await b.baseGetAPI(APIEndpoints.streamProducts + roomID,
+        loading: loading ?? true, context: context);
+    if (r != null) {
+      liveStreamingProducts.value = (r['data'] as List)
+          .map((data) => ProductsModel.fromJson(data))
+          .toList();
+    } else {
+      liveStreamingProducts = List<ProductsModel>.empty().obs;
+    }
+    update();
+  }
+
+  Future<void> deleteProduct(context,
+      {required Function onSuccess,
+      required String id,
+      required int index}) async {
+    var res = await b.baseDeleteAPI(
+        APIEndpoints.deleteProduct + currentProduct.value.id,
+        loading: true,
+        context: context);
+    if (res['status'] == 1) {
       onSuccess();
       products.removeAt(index);
       update();
       CustomToast().showToast('Success', res['message'], false);
-    }
-    else{
-      CustomToast().showToast("Error",res['message'], true);
+    } else {
+      CustomToast().showToast("Error", res['message'], true);
     }
   }
-  Future<void> addRemoveFavorite(context,{required Function onSuccess,required String id}) async {
-    var res =await b.baseGetAPI(APIEndpoints.addRemoveFavorite+id, loading: true,context: context);
-    if(res['status']==1){onSuccess();updateFavorite(id: id);}
-    else{CustomToast().showToast("Error", res['message'], true);}
+
+  Future<void> addRemoveFavorite(context,
+      {required Function onSuccess, required String id}) async {
+    var res = await b.baseGetAPI(APIEndpoints.addRemoveFavorite + id,
+        loading: true, context: context);
+    if (res['status'] == 1) {
+      onSuccess();
+      updateFavorite(id: id);
+    } else {
+      CustomToast().showToast("Error", res['message'], true);
+    }
   }
-  updateFavorite({required String id}){
+
+  updateFavorite({required String id}) {
     int index = products.indexWhere((i) => i.id == id);
     int indexWishList = wishlist.indexWhere((i) => i.id == id);
     int indexSellerList = sellerProducts.indexWhere((i) => i.id == id);
-    int indexStreamProductList = liveStreamingProducts.indexWhere((i) => i.id == id);
+    int indexStreamProductList =
+        liveStreamingProducts.indexWhere((i) => i.id == id);
     if (index != -1) {
-      products[index].isFavourite==1?products[index].isFavourite=0:products[index].isFavourite=1;
-    }if (indexWishList != -1) {
+      products[index].isFavourite == 1
+          ? products[index].isFavourite = 0
+          : products[index].isFavourite = 1;
+    }
+    if (indexWishList != -1) {
       // wishlist[indexWishList].isFavourite==1?wishlist[indexWishList].isFavourite=0:wishlist[indexWishList].isFavourite=1;
-      if(wishlist[indexWishList].isFavourite==1){
+      if (wishlist[indexWishList].isFavourite == 1) {
         wishlist.removeAt(indexWishList);
       }
     }
     if (indexSellerList != -1) {
-      sellerProducts[indexSellerList].isFavourite==1?sellerProducts[indexSellerList].isFavourite=0:sellerProducts[indexSellerList].isFavourite=1;
+      sellerProducts[indexSellerList].isFavourite == 1
+          ? sellerProducts[indexSellerList].isFavourite = 0
+          : sellerProducts[indexSellerList].isFavourite = 1;
     }
     if (indexStreamProductList != -1) {
-      liveStreamingProducts[indexStreamProductList].isFavourite==1?liveStreamingProducts[indexStreamProductList].isFavourite=0:liveStreamingProducts[indexStreamProductList].isFavourite=1;
+      liveStreamingProducts[indexStreamProductList].isFavourite == 1
+          ? liveStreamingProducts[indexStreamProductList].isFavourite = 0
+          : liveStreamingProducts[indexStreamProductList].isFavourite = 1;
     }
 
     //Commented because profile detail ma favorite wapis toggle ho raha to
     // ussi state pa ajata jis pa tha
-    if(currentProduct.value.id==id){
-      currentProduct.value.isFavourite==1?currentProduct.value.isFavourite=0:currentProduct.value.isFavourite=1;
+    if (currentProduct.value.id == id) {
+      currentProduct.value.isFavourite == 1
+          ? currentProduct.value.isFavourite = 0
+          : currentProduct.value.isFavourite = 1;
     }
     update();
   }
+
   Future<void> addProductLiveStream({required String id}) async {
     int index = products.indexWhere((i) => i.id == id);
     int tempIndex = tempAllLiveProducts.indexWhere((i) => i.id == id);
     if (index != -1) {
-      products[index].isChecked=!products[index].isChecked;update();
+      products[index].isChecked = !products[index].isChecked;
+      update();
     }
     if (tempIndex == -1) {
       tempAllLiveProducts.add(products[index]);
     }
-    liveProducts= List<ProductsModel>.empty().obs;
-    for(var v in products){
-      if(v.isChecked){liveProducts.add(v);}
+    liveProducts = List<ProductsModel>.empty().obs;
+    for (var v in products) {
+      if (v.isChecked) {
+        liveProducts.add(v);
+      }
     }
   }
 
-
   Future<void> getSearchProducts({required String s}) async {
     searchProducts.clear();
-    if(products.isNotEmpty)
-    {
-      for(var v in products){
+    if (products.isNotEmpty) {
+      for (var v in products) {
         String name = v.title;
         if (name.toLowerCase().contains(s.toLowerCase())) {
           searchProducts.add(v);
@@ -261,37 +355,36 @@ class HomeController extends GetxController{
     }
     update();
   }
+
   Future<void> getSearchInfluencers({required String s}) async {
     searchInfluencers.clear();
-    if(influencers.isNotEmpty)
-    {
-      for(var v in influencers){
+    if (influencers.isNotEmpty) {
+      for (var v in influencers) {
         String fName = v.firstName;
         String lName = v.lastName;
-        if (fName.toLowerCase().contains(s.toLowerCase()) || lName.toLowerCase().contains(s.toLowerCase()) )  {
+        if (fName.toLowerCase().contains(s.toLowerCase()) ||
+            lName.toLowerCase().contains(s.toLowerCase())) {
           searchInfluencers.add(v);
         }
       }
     }
     update();
   }
+
   Future<void> getSearchStream({required String s}) async {
     searchStreams.clear();
-    if(streams.isNotEmpty)
-    {
-      for(var v in streams){
-        String sFName = v.sellerId?.firstName??'';
-        String sLName = v.sellerId?.lastName??'';
-        String iFName = v.influencerId?.firstName??'';
-        String iLName = v.influencerId?.lastName??'';
-        String description = v.description??'';
-        if (
-           sFName.toLowerCase().contains(s.toLowerCase())||
-            sLName.toLowerCase().contains(s.toLowerCase())||
-            iFName.toLowerCase().contains(s.toLowerCase())||
-           iLName.toLowerCase().contains(s.toLowerCase())||
-           description.toLowerCase().contains(s.toLowerCase())
-        ) {
+    if (streams.isNotEmpty) {
+      for (var v in streams) {
+        String sFName = v.sellerId?.firstName ?? '';
+        String sLName = v.sellerId?.lastName ?? '';
+        String iFName = v.influencerId?.firstName ?? '';
+        String iLName = v.influencerId?.lastName ?? '';
+        String description = v.description ?? '';
+        if (sFName.toLowerCase().contains(s.toLowerCase()) ||
+            sLName.toLowerCase().contains(s.toLowerCase()) ||
+            iFName.toLowerCase().contains(s.toLowerCase()) ||
+            iLName.toLowerCase().contains(s.toLowerCase()) ||
+            description.toLowerCase().contains(s.toLowerCase())) {
           searchStreams.add(v);
         }
       }
@@ -299,15 +392,24 @@ class HomeController extends GetxController{
     update();
   }
 
-  Future<void> getWishlistProducts({loading,required BuildContext context}) async   {
-    var r = await b.baseGetAPI(APIEndpoints.wishlist,loading: loading??true,context: context);
-    if(r!=null){wishlist.value = (r['data'] as List).map((data) => ProductsModel.fromJson(data)).toList();}
-    else{wishlist= List<ProductsModel>.empty().obs;}
+  Future<void> getWishlistProducts(
+      {loading, required BuildContext context}) async {
+    var r = await b.baseGetAPI(APIEndpoints.wishlist,
+        loading: loading ?? true, context: context);
+    if (r != null) {
+      wishlist.value = (r['data'] as List)
+          .map((data) => ProductsModel.fromJson(data))
+          .toList();
+    } else {
+      wishlist = List<ProductsModel>.empty().obs;
+    }
     update();
   }
-  removeWishlistProduct({required ProductsModel p}){
+
+  removeWishlistProduct({required ProductsModel p}) {
     /// For removing favorite in wish list
     int index = wishlist.indexWhere((i) => i.id == p.id);
+
     /// For removing favorite in products list
     int productsIndex = products.indexWhere((i) => i.id == p.id);
     if (index != -1) {
@@ -315,70 +417,82 @@ class HomeController extends GetxController{
       update();
     }
     if (productsIndex != -1) {
-      products[productsIndex].isFavourite=0;
+      products[productsIndex].isFavourite = 0;
       update();
     }
   }
-  Future<void> getProductDetail(context,{required ProductsModel p,bool? loading}) async {
-    currentProduct.value=p;
-    getProductReviews(context: context,p:p);
-    var r = await b.baseGetAPI(APIEndpoints.getProductDetail+p.id,loading: loading??true,context: context);
+
+  Future<void> getProductDetail(context,
+      {required ProductsModel p, bool? loading}) async {
+    currentProduct.value = p;
+    getProductReviews(context: context, p: p);
+    var r = await b.baseGetAPI(APIEndpoints.getProductDetail + p.id,
+        loading: loading ?? true, context: context);
     currentProduct.value = ProductsModel.fromJson(r['data']);
     update();
   }
 
-  checkProduct({required String id}){
+  checkProduct({required String id}) {
     int index = products.indexWhere((i) => i.id == id);
     if (index != -1) {
-      currentProduct.value=products[index];
+      currentProduct.value = products[index];
       return true;
-    } else{
+    } else {
       return false;
     }
   }
-   void shareProduct({String? postId,int? postIndex,required Uint8List capturedImage}) async{
- //   AppDialogs.progressAlertDialog(context: globalkey.navigatorKey.currentContext!);
+
+  void shareProduct(
+      {String? postId,
+      int? postIndex,
+      required Uint8List capturedImage}) async {
+    //   AppDialogs.progressAlertDialog(context: globalkey.navigatorKey.currentContext!);
 
     DynamicLinkProvider()
-        .createLink(postId: postId,postIndex: postIndex,capturedImage: capturedImage)
-        .then((value) async{
+        .createLink(
+            postId: postId, postIndex: postIndex, capturedImage: capturedImage)
+        .then((value) async {
       //AppNavigation.navigatorPop(StaticData.navigatorKey.currentContext!);
       // Constants.shareUrl(url: value);
       print("DynamicLinkProvider called");
-      await Share.shareFiles([value[0]],text: value[1]);
+      await Share.shareFiles([value[0]], text: value[1]);
       // await Share.share(value);
     });
     //
   }
 
-
-
-  Future<void> getCategories({loading,required BuildContext context}) async   {
-    var r = await b.baseGetAPI(APIEndpoints.categories,loading: loading??true,context: context);
-    if(r!=null){categories.value = (r['data'] as List).map((data) => Category.fromJson(data)).toList();}
-    for(var v in categories){
+  Future<void> getCategories({loading, required BuildContext context}) async {
+    var r = await b.baseGetAPI(APIEndpoints.categories,
+        loading: loading ?? true, context: context);
+    if (r != null) {
+      categories.value =
+          (r['data'] as List).map((data) => Category.fromJson(data)).toList();
+    }
+    for (var v in categories) {
       log(v.id);
       log(v.categoryName);
     }
     print(categories.length);
     update();
   }
-  orderValidation(context,{required Function onSuccess}){
-    if(cards.isEmpty){
+
+  orderValidation(context, {required Function onSuccess}) {
+    if (cards.isEmpty) {
       CustomToast().showToast('Error', 'Add payment card', true);
-    }else if(!checkDefaultCard()){
+    } else if (!checkDefaultCard()) {
       CustomToast().showToast('Error', 'Select payment card', true);
-    }else if(address.isEmpty){
+    } else if (address.isEmpty) {
       CustomToast().showToast('Error', 'Address field is required', true);
-    } else if(zipCode.isEmpty){
+    } else if (zipCode.isEmpty) {
       CustomToast().showToast('Error', 'Zip code field is required', true);
-    } else if(state.isEmpty){
+    } else if (state.isEmpty) {
       CustomToast().showToast('Error', 'State field is required', true);
-    } else{
-      checkOut(context,onSuccess: onSuccess);
+    } else {
+      checkOut(context, onSuccess: onSuccess);
     }
   }
-  Future<void> checkOut(context,{required Function onSuccess}) async {
+
+  Future<void> checkOut(context, {required Function onSuccess}) async {
     createOrderList();
     Map jsonData = {
       "card_id": defaultCard.value.id,
@@ -387,51 +501,56 @@ class HomeController extends GetxController{
       "zip_code": zipCode,
       "price": cartTotal.value,
       "sub_total": totalAmount.value,
-      'seller_id':cart.first.sellerId?.id,
-      'tax':productTax.value,
+      'seller_id': cart.first.sellerId?.id,
+      'tax': productTax.value,
       "products": orderProducts.map((orders) => orders.toJson()).toList(),
     };
     log(jsonData.toString());
-    var res =await b.basePostAPI(APIEndpoints.checkout, jsonData, loading: true,context: context);
-    if(res['status']==1){
+    var res = await b.basePostAPI(APIEndpoints.checkout, jsonData,
+        loading: true, context: context);
+    if (res['status'] == 1) {
       onSuccess();
       emptyCart();
       // CustomToast().showToast("Success",res['message'], false);
-    }
-    else{
-      CustomToast().showToast("Error",res['message'], true);
+    } else {
+      CustomToast().showToast("Error", res['message'], true);
     }
   }
-  checkDefaultCard(){
+
+  checkDefaultCard() {
     int index = cards.indexWhere((i) => i.isActive == 1);
     if (index != -1) {
-      defaultCard.value=cards[index];
+      defaultCard.value = cards[index];
       return true;
-    } else{
+    } else {
       return false;
     }
   }
-  checkSellerInCart({required ProductsModel p}){
+
+  checkSellerInCart({required ProductsModel p}) {
     // int index = cart.indexWhere((i) => i.sellerId == p.sellerId);
     // print(index);
     log(sellerID);
     log(p.id);
-    if (sellerID==p.sellerId?.id) {
+    if (sellerID == p.sellerId?.id) {
       return true;
-    } else{
+    } else {
       return false;
     }
   }
-  createOrderList(){
+
+  createOrderList() {
     orderProducts = <OrderProductsModel>[];
     for (var element in cart) {
-      orderProducts.add(OrderProductsModel(id: element.id,quantity: element.quantity));
+      orderProducts
+          .add(OrderProductsModel(id: element.id, quantity: element.quantity));
     }
   }
-  emptyCart(){
+
+  emptyCart() {
     cart = List<ProductsModel>.empty().obs;
-    cartTotal=0.0.obs;
-    totalAmount=0.0.obs;
+    cartTotal = 0.0.obs;
+    totalAmount = 0.0.obs;
     SharedPreference().setCart(cart: jsonEncode(cart));
     // GetStorageRepo.setValue(LocalDBKeys.CART, jsonEncode(cart));
   }
@@ -439,40 +558,59 @@ class HomeController extends GetxController{
   ///Products End
 
   ///Order History
-  Future<void> getOrderHistory({loading,required BuildContext context,required bool recent}) async   {
-    bool userRole =GlobalController.values.userRole.value == UserRole.user;
-    var r = await b.basePostAPI(userRole?APIEndpoints.myOrders:APIEndpoints.orderHistory,{'type': recent?AppStrings.CURRENT:AppStrings.HISTORY},loading: loading??false,context: context);
-    if(r!=null){
-      if(recent){recentOrders.value = (r['data'] as List).map((data) => OrderModel.fromJson(data)).toList();}
-      else{pastOrders.value = (r['data'] as List).map((data) => OrderModel.fromJson(data)).toList();}
-    }
-    else{
-      if(recent){recentOrders.value =List<OrderModel>.empty().obs;}
-      else{pastOrders.value =List<OrderModel>.empty().obs;}
+  Future<void> getOrderHistory(
+      {loading, required BuildContext context, required bool recent}) async {
+    bool userRole = GlobalController.values.userRole.value == UserRole.user;
+    var r = await b.basePostAPI(
+        userRole ? APIEndpoints.myOrders : APIEndpoints.orderHistory,
+        {'type': recent ? AppStrings.CURRENT : AppStrings.HISTORY},
+        loading: loading ?? false,
+        context: context);
+    if (r != null) {
+      if (recent) {
+        recentOrders.value = (r['data'] as List)
+            .map((data) => OrderModel.fromJson(data))
+            .toList();
+      } else {
+        pastOrders.value = (r['data'] as List)
+            .map((data) => OrderModel.fromJson(data))
+            .toList();
+      }
+    } else {
+      if (recent) {
+        recentOrders.value = List<OrderModel>.empty().obs;
+      } else {
+        pastOrders.value = List<OrderModel>.empty().obs;
+      }
     }
     update();
   }
-  Future<void> getOrderDetails({loading,required BuildContext context,required OrderModel o}) async   {
+
+  Future<void> getOrderDetails(
+      {loading, required BuildContext context, required OrderModel o}) async {
     // orderDetail.value=o;
-    var r = await b.baseGetAPI(APIEndpoints.ordersDetails+o.id,loading: loading??true,context: context);
+    var r = await b.baseGetAPI(APIEndpoints.ordersDetails + o.id,
+        loading: loading ?? true, context: context);
     orderDetail.value = OrderModel.fromJson(r['data']);
     update();
   }
-  Future<void> updateOrderStatus(context,{required Function onSuccess,required OrderModel o,required String status}) async {
+
+  Future<void> updateOrderStatus(context,
+      {required Function onSuccess,
+      required OrderModel o,
+      required String status}) async {
     FocusManager.instance.primaryFocus?.unfocus();
-    Map jsonData = {
-      "order_id": o.id,
-      "status": status
-    };
-    var res =await b.basePostAPI(APIEndpoints.orderStatus, jsonData, loading: true,context: context);
-    if(res['status']==1){
+    Map jsonData = {"order_id": o.id, "status": status};
+    var res = await b.basePostAPI(APIEndpoints.orderStatus, jsonData,
+        loading: true, context: context);
+    if (res['status'] == 1) {
       onSuccess();
-      recentOrderStatusUpdate(o: o,status: status);
-    }
-    else{
-      CustomToast().showToast("Error",res['message'], true);
+      recentOrderStatusUpdate(o: o, status: status);
+    } else {
+      CustomToast().showToast("Error", res['message'], true);
     }
   }
+
   // recentOrderStatusUpdate({required OrderModel o,required String status}){
   //   int index = recentOrders.indexWhere((i) => i.id == o.id);
   //   if (index != -1) {
@@ -486,96 +624,117 @@ class HomeController extends GetxController{
   //     update();
   //   }
   // }
-  recentOrderStatusUpdate({required OrderModel o,required String status}){
+  recentOrderStatusUpdate({required OrderModel o, required String status}) {
     int index = recentOrders.indexWhere((i) => i.id == o.id);
     if (index != -1) {
-      if(status==AppStrings.CANCELLED || status==AppStrings.COMPLETED){
-        o.orderStatus=status;
+      if (status == AppStrings.CANCELLED || status == AppStrings.COMPLETED) {
+        o.orderStatus = status;
         int recentOrdersIndex = recentOrders.indexWhere((i) => i.id == o.id);
         pastOrders.add(recentOrders[recentOrdersIndex]);
         recentOrders.removeAt(index);
-      } else{
-        recentOrders[index].orderStatus=status;
+      } else {
+        recentOrders[index].orderStatus = status;
       }
       update();
     }
   }
 
   /// User/product Reviews
-  giveReviewValidation(context,{required bool edit,Reviews? r,required bool isProduct}){
-    if(review.isEmpty){
+  giveReviewValidation(context,
+      {required bool edit, Reviews? r, required bool isProduct}) {
+    if (review.isEmpty) {
       CustomToast().showToast('Error', 'Review field can\'t be empty', true);
-    } else{
+    } else {
       // giveReview(context,onSuccess: (){AppNavigation.navigatorPop(context);},edit: edit,isProduct: isProduct);
     }
   }
-  Future<void> getProductReviews({loading,required BuildContext context,required ProductsModel p}) async   {
-    productReviews= List<Reviews>.empty().obs;
-    var r = await b.baseGetAPI(APIEndpoints.productReviews+p.id,loading: loading??true,context: context);
-    if(r['data']!=null){
-      orderProduct.value.avgRating=r['data']['avgRating']??0.0;
-      productReviews.value = (r['data']['reviews'] as List).map((data) => Reviews.fromJson(data)).toList();}
-    else{productReviews= List<Reviews>.empty().obs;}
+
+  Future<void> getProductReviews(
+      {loading,
+      required BuildContext context,
+      required ProductsModel p}) async {
+    productReviews = List<Reviews>.empty().obs;
+    var r = await b.baseGetAPI(APIEndpoints.productReviews + p.id,
+        loading: loading ?? true, context: context);
+    if (r['data'] != null) {
+      orderProduct.value.avgRating = r['data']['avgRating'] ?? 0.0;
+      productReviews.value = (r['data']['reviews'] as List)
+          .map((data) => Reviews.fromJson(data))
+          .toList();
+    } else {
+      productReviews = List<Reviews>.empty().obs;
+    }
     update();
   }
-  Future<void> deleteReview(context,{required Function onSuccess,required Reviews r}) async {
+
+  Future<void> deleteReview(context,
+      {required Function onSuccess, required Reviews r}) async {
     FocusManager.instance.primaryFocus?.unfocus();
-    var res =await b.baseDeleteAPI(APIEndpoints.deleteReview+r.id, loading: true,context: context);
-    if(res['status']==1){
+    var res = await b.baseDeleteAPI(APIEndpoints.deleteReview + r.id,
+        loading: true, context: context);
+    if (res['status'] == 1) {
       int index = productReviews.indexWhere((i) => i.id == r.id);
       if (index != -1) {
         productReviews.removeAt(index);
-        orderProduct.value.myRating=null;
-        orderProduct.value.avgRating=res['data']['avg_rating']??0.0;
+        orderProduct.value.myRating = null;
+        orderProduct.value.avgRating = res['data']['avg_rating'] ?? 0.0;
         update();
       }
       onSuccess();
-      CustomToast().showToast("Success",res['message'], false);
-    }
-    else{
-      CustomToast().showToast("Error",res['message'], true);
-    }
-  }
-  editReview({required Reviews r,required bool isProduct}){
-    if(isProduct){
-      int index = productReviews.indexWhere((i) => i.id == r.id);
-      if (index != -1) {
-        productReviews[index]=r;
-        productReviews[index].isMyReview=1;
-        update();
-      }
-    }else{
-      int index = userReviews.indexWhere((i) => i.id == r.id);
-      if (index != -1) {
-        userReviews[index]=r;
-        update();
-      }
+      CustomToast().showToast("Success", res['message'], false);
+    } else {
+      CustomToast().showToast("Error", res['message'], true);
     }
   }
 
+  editReview({required Reviews r, required bool isProduct}) {
+    if (isProduct) {
+      int index = productReviews.indexWhere((i) => i.id == r.id);
+      if (index != -1) {
+        productReviews[index] = r;
+        productReviews[index].isMyReview = 1;
+        update();
+      }
+    } else {
+      int index = userReviews.indexWhere((i) => i.id == r.id);
+      if (index != -1) {
+        userReviews[index] = r;
+        update();
+      }
+    }
+  }
 
   /// User/product Reviews end
 
   ///Order History End
 
   ///Notifications
-  Future<void> getNotifications({loading,required BuildContext context}) async   {
-    var r = await b.baseGetAPI(APIEndpoints.getNotifications,loading: loading??true,context: context);
-    if(r!=null){notifications.value = (r['data'] as List).map((data) => NotificationModel.fromJson(data)).toList();}
-    else{notifications= List<NotificationModel>.empty().obs;}
+  Future<void> getNotifications(
+      {loading, required BuildContext context}) async {
+    var r = await b.baseGetAPI(APIEndpoints.getNotifications,
+        loading: loading ?? true, context: context);
+    if (r != null) {
+      notifications.value = (r['data'] as List)
+          .map((data) => NotificationModel.fromJson(data))
+          .toList();
+    } else {
+      notifications = List<NotificationModel>.empty().obs;
+    }
     update();
   }
-  Future<void> onOffNotifications(context,{required Function onSuccess,required bool on}) async {
+
+  Future<void> onOffNotifications(context,
+      {required Function onSuccess, required bool on}) async {
     FocusManager.instance.primaryFocus?.unfocus();
     Map jsonData = {
-      "is_notification": on?'on':'off',
+      "is_notification": on ? 'on' : 'off',
     };
-    var res =await b.basePostAPI(APIEndpoints.onOffNotifications, jsonData, loading: true,context: context);
-    if(res['status']==1){
+    var res = await b.basePostAPI(APIEndpoints.onOffNotifications, jsonData,
+        loading: true, context: context);
+    if (res['status'] == 1) {
       onSuccess();
-    }
-    else{
-      CustomToast().showToast("Error",res['message'], true);
+    } else {
+      CustomToast().showToast("Error", res['message'], true);
     }
   }
 
@@ -586,22 +745,23 @@ class HomeController extends GetxController{
     int index = cart.indexWhere((i) => i.id == p.id);
     if (index != -1) {
       cart[index].quantity = p.quantity;
-      CustomToast().showToast('Cart', '${p.title} quantity increased to ${p.quantity}', false);
-    }
-    else{
+      CustomToast().showToast(
+          'Cart', '${p.title} quantity increased to ${p.quantity}', false);
+    } else {
       cart.add(p);
       CustomToast().showToast('Cart', '${p.title} added to your cart', false);
     }
     getCartTotal();
   }
 
-  getCartDelte(){
-    for(var v in cart){
+  getCartDelte() {
+    for (var v in cart) {
       log(v.id);
       log(v.title);
     }
     log("Cart Length is ${cart.length}");
   }
+
   Future<void> removeFromCart({required ProductsModel p}) async {
     int index = cart.indexWhere((i) => i.id == p.id);
     if (index != -1) {
@@ -610,27 +770,36 @@ class HomeController extends GetxController{
       getCartTotal();
     }
   }
+
   Future<void> getProductQuantity() async {
     int index = cart.indexWhere((i) => i.id == currentProduct.value.id);
     if (index != -1) {
-      currentProduct.value.quantity=cart[index].quantity; update();
+      currentProduct.value.quantity = cart[index].quantity;
+      update();
     }
   }
-  getCartTotal(){
-    cartTotal.value=0.0;
-    totalAmount.value=0.0;
+
+  getCartTotal() {
+    cartTotal.value = 0.0;
+    totalAmount.value = 0.0;
     productTax.value = 0;
-    for (var f in cart) {cartTotal.value += f.price * f.quantity;productTax.value = 12.5;}
-    totalAmount.value=productTax.value+cartTotal.value;
+    for (var f in cart) {
+      cartTotal.value += f.price * f.quantity;
+      productTax.value = 12.5;
+    }
+    totalAmount.value = productTax.value + cartTotal.value;
     SharedPreference().setCart(cart: jsonEncode(cart));
     // getLocalCart();
     update();
   }
-  getLocalCart(){
+
+  getLocalCart() {
     String? d = SharedPreference().getCart();
     print("SharedPreference cart");
-    if(d!=null){
-      cart.value = (jsonDecode(d.toString()) as List).map((data) => ProductsModel.fromJson(data)).toList();
+    if (d != null) {
+      cart.value = (jsonDecode(d.toString()) as List)
+          .map((data) => ProductsModel.fromJson(data))
+          .toList();
     }
 
     getCartTotal();
@@ -648,26 +817,33 @@ class HomeController extends GetxController{
     // }
     // getCartTotal();
   }
+
   /// Cart end
 
   /// Cards
   addCardValidation(context) async {
     FocusManager.instance.primaryFocus?.unfocus();
     if (name.isEmpty) {
-      CustomToast().showToast("Warning", "Card holder name field can't be empty", true);
+      CustomToast()
+          .showToast("Warning", "Card holder name field can't be empty", true);
     } else if (cardNumber.isEmpty) {
-      CustomToast().showToast("Warning", "Card Number field can't be empty.", true);
-    } else if (cardNumber.length<19) {
-      CustomToast().showToast("Warning", "Please enter valid card number.", true);
-    }else if (month.isEmpty) {
-      CustomToast().showToast("Warning", "Expiry month field can't be empty.", true);
-    }else if (year.isEmpty) {
-      CustomToast().showToast("Warning", "Expiry year field can't be empty.", true);
-    }else if (int.parse(year)==DateTime.now().year && int.parse(month)<=DateTime.now().month) {
+      CustomToast()
+          .showToast("Warning", "Card Number field can't be empty.", true);
+    } else if (cardNumber.length < 19) {
+      CustomToast()
+          .showToast("Warning", "Please enter valid card number.", true);
+    } else if (month.isEmpty) {
+      CustomToast()
+          .showToast("Warning", "Expiry month field can't be empty.", true);
+    } else if (year.isEmpty) {
+      CustomToast()
+          .showToast("Warning", "Expiry year field can't be empty.", true);
+    } else if (int.parse(year) == DateTime.now().year &&
+        int.parse(month) <= DateTime.now().month) {
       CustomToast().showToast("Warning", "Your card has been expired.", true);
     } else if (cvc.isEmpty) {
       CustomToast().showToast("Warning", "CVV field can't be empty.", true);
-    } else if (cvc.length<3) {
+    } else if (cvc.length < 3) {
       CustomToast().showToast("Warning", "Please enter valid CVV.", true);
     } else {
       loadingOn();
@@ -678,188 +854,264 @@ class HomeController extends GetxController{
       loadingOff();
     }
   }
-  Future<void> addCard(context,{required Function onSuccess}) async {
-    var res =await b.basePostAPI(APIEndpoints.addCard, {'card_number':cardNumber.replaceAll(' ', ''),"stripe_token":token}, loading: false,context: context);
-    if(res['status']==1){
+
+  Future<void> addCard(context, {required Function onSuccess}) async {
+    var res = await b.basePostAPI(APIEndpoints.addCard,
+        {'card_number': cardNumber.replaceAll(' ', ''), "stripe_token": token},
+        loading: false, context: context);
+    if (res['status'] == 1) {
       onSuccess();
       CustomToast().showToast("Success", res['message'], false);
-      if(cards.isEmpty){cards.value=[];}
+      if (cards.isEmpty) {
+        cards.value = [];
+      }
       cards.add(CardModel.fromJson(await res['data']));
       update();
+    } else {
+      CustomToast().showToast("Error", res['message'], true);
     }
-    else{CustomToast().showToast("Error", res['message'], true);}
   }
-  Future<void> setCardDefault(context,{required Function onSuccess,required String id,required int index}) async {
-    var res =await b.basePostAPI(APIEndpoints.setCardDefault, {'card_id':id}, loading: true,context: context);
-    if(res['status']==1){
+
+  Future<void> setCardDefault(context,
+      {required Function onSuccess,
+      required String id,
+      required int index}) async {
+    var res = await b.basePostAPI(APIEndpoints.setCardDefault, {'card_id': id},
+        loading: true, context: context);
+    if (res['status'] == 1) {
       deactivateCards();
-      cards[index].isActive=1;
+      cards[index].isActive = 1;
       cards.refresh();
       onSuccess();
-    }
-    else{
-      CustomToast().showToast("Error",res['message'], true);
+    } else {
+      CustomToast().showToast("Error", res['message'], true);
     }
   }
-  Future<bool> deleteCard(context,{required Function onSuccess,required String id,required int index}) async {
-    var res =await b.baseDeleteAPI(APIEndpoints.deleteCard+id, loading: true,context: context);
-    if(res['status']==1){
+
+  Future<bool> deleteCard(context,
+      {required Function onSuccess,
+      required String id,
+      required int index}) async {
+    var res = await b.baseDeleteAPI(APIEndpoints.deleteCard + id,
+        loading: true, context: context);
+    if (res['status'] == 1) {
       cards.removeAt(index);
       update();
       return true;
-    }
-    else{
-      CustomToast().showToast("Error",res['message'], true);
+    } else {
+      CustomToast().showToast("Error", res['message'], true);
       return false;
     }
   }
-  Future<void> getCards(context,{loading}) async {
-    var r = await b.baseGetAPI(APIEndpoints.allCards,loading: loading??true,context: context);
-    if(r['data']!=null){
-      cards.value =(r['data'] as List).map((data) => CardModel.fromJson(data)).toList();
-    } else{
+
+  Future<void> getCards(context, {loading}) async {
+    var r = await b.baseGetAPI(APIEndpoints.allCards,
+        loading: loading ?? true, context: context);
+    if (r['data'] != null) {
+      cards.value =
+          (r['data'] as List).map((data) => CardModel.fromJson(data)).toList();
+    } else {
       cards.value = List<CardModel>.empty();
     }
     update();
   }
+
   deactivateCards() {
-    for(int i=0;i<cards.length;i++)
-    {cards[i].isActive=0;}
+    for (int i = 0; i < cards.length; i++) {
+      cards[i].isActive = 0;
+    }
     update();
   }
+
   /// Cards end
-
-
 
   getFiles({required String title}) {
     fileName = [];
     files = [];
     for (var v in temp) {
-      if(!v.isNetwork)
-      {files.add(File(v.path));fileName.add(title);}
+      if (!v.isNetwork) {
+        files.add(File(v.path));
+        fileName.add(title);
+      }
     }
   }
+
   getUrlFiles() {
     String t = '[';
     for (var v in temp) {
-      if(v.isNetwork)
-      {t='$t"${v.path}",';}
+      if (v.isNetwork) {
+        t = '$t"${v.path}",';
+      }
     }
-    if (t.endsWith(",")) {t = t.substring(0,t.length - 1);}
+    if (t.endsWith(",")) {
+      t = t.substring(0, t.length - 1);
+    }
     t = '$t]';
     return t;
   }
 
   ///Follow/Followers
-  Future<void> getFollowers({loading,required BuildContext context,required String id}) async {
-    var r = await b.baseGetAPI(APIEndpoints.followers+id,loading: loading??true,context: context);
-    if(r!=null){followers.value = (r['data'] as List).map((data) => User.fromJson(data)).toList();
-    // AuthController.i.user.value.followers=followers.length;
+  Future<void> getFollowers(
+      {loading, required BuildContext context, required String id}) async {
+    var r = await b.baseGetAPI(APIEndpoints.followers + id,
+        loading: loading ?? true, context: context);
+    if (r != null) {
+      followers.value =
+          (r['data'] as List).map((data) => User.fromJson(data)).toList();
+      // AuthController.i.user.value.followers=followers.length;
+    } else {
+      followers = List<User>.empty().obs;
     }
-    else{followers = List<User>.empty().obs;}
     update();
-  }
-  Future<void> getFollowing({loading,required BuildContext context,required String id}) async {
-    var r = await b.baseGetAPI(APIEndpoints.following+id,loading: loading??true,context: context);
-    if(r!=null){following.value = (r['data'] as List).map((data) => User.fromJson(data)).toList();
-    // AuthController.i.user.value.following=following.length;
-    }
-    else{following = List<User>.empty().obs;}
-    update();
-  }
-  Future<void> addFollowUnFollow(context,{required Function onSuccess,required String id}) async {
-    var res =await b.baseGetAPI(APIEndpoints.followUnfollow+id, loading: true,context: context);
-    if(res['status']==1){
-      // cards.add(CardModel.fromJson(res['data']));
-      update();
-      onSuccess();CustomToast().showToast("Success", res['message'], false);}
-    else{CustomToast().showToast("Error", res['message'], true);}
   }
 
-  Future<void> getUserDetail({loading,required BuildContext context,required String id}) async   {
-    var r = await b.baseGetAPI(APIEndpoints.profileDetails+id,loading: loading??true,context: context);
-    if(r!=null){
+  Future<void> getFollowing(
+      {loading, required BuildContext context, required String id}) async {
+    var r = await b.baseGetAPI(APIEndpoints.following + id,
+        loading: loading ?? true, context: context);
+    if (r != null) {
+      following.value =
+          (r['data'] as List).map((data) => User.fromJson(data)).toList();
+      // AuthController.i.user.value.following=following.length;
+    } else {
+      following = List<User>.empty().obs;
+    }
+    update();
+  }
+
+  Future<void> addFollowUnFollow(context,
+      {required Function onSuccess, required String id}) async {
+    var res = await b.baseGetAPI(APIEndpoints.followUnfollow + id,
+        loading: true, context: context);
+    if (res['status'] == 1) {
+      // cards.add(CardModel.fromJson(res['data']));
+      update();
+      onSuccess();
+      CustomToast().showToast("Success", res['message'], false);
+    } else {
+      CustomToast().showToast("Error", res['message'], true);
+    }
+  }
+
+  Future<void> getUserDetail(
+      {loading, required BuildContext context, required String id}) async {
+    var r = await b.baseGetAPI(APIEndpoints.profileDetails + id,
+        loading: loading ?? true, context: context);
+    if (r != null) {
       endUser.value = User.fromJson(r['data']);
       onProfileVisit();
     }
   }
-  onProfileVisit(){
+
+  onProfileVisit() {
     userProfileVisits.add(endUser.value);
   }
-  onProfileVisitBack(){
+
+  onProfileVisitBack() {
     print('userProfileVisits ${userProfileVisits.length}');
     // userProfileVisits.removeLast();
-    if(userProfileVisits.isNotEmpty){
-      endUser.value= userProfileVisits.last;
+    if (userProfileVisits.isNotEmpty) {
+      endUser.value = userProfileVisits.last;
       endUser.refresh();
     }
   }
 
-
-  Future<void> getUserStreamedVideos({loading,required BuildContext context,required String id,required String role}) async   {
-    var r = await b.basePostAPI(APIEndpoints.savedStreaming,{
-      'id':id,
-      'role':role
-    },loading: loading??false,context: context);
-    if(r!=null){
-      streamedVideos.value = (r['data']['stream'] as List).map((data) => StreamModel.fromJson(data)).toList();
-      if(r['data']['live_stream']!=null){
-        liveStreaming.value=StreamModel.fromJson(r['data']['live_stream']);
-      }else{
-        liveStreaming= StreamModel().obs;
+  Future<void> getUserStreamedVideos(
+      {loading,
+      required BuildContext context,
+      required String id,
+      required String role}) async {
+    var r = await b.basePostAPI(
+        APIEndpoints.savedStreaming, {'id': id, 'role': role},
+        loading: loading ?? false, context: context);
+    if (r != null) {
+      streamedVideos.value = (r['data']['stream'] as List)
+          .map((data) => StreamModel.fromJson(data))
+          .toList();
+      if (r['data']['live_stream'] != null) {
+        liveStreaming.value = StreamModel.fromJson(r['data']['live_stream']);
+      } else {
+        liveStreaming = StreamModel().obs;
       }
+    } else {
+      streamedVideos = List<StreamModel>.empty().obs;
     }
-    else{streamedVideos= List<StreamModel>.empty().obs;}
     update();
   }
 
   /// Follow/Followers End
-  Future<void> getInfluencers({loading,required BuildContext context}) async   {
-    var r = await b.baseGetAPI(APIEndpoints.influencers,loading: loading??true,context: context);
-    if(r!=null){influencers.value = (r['data'] as List).map((data) => User.fromJson(data)).toList();}
-    else{influencers = List<User>.empty().obs;}
-    update();
-  }
-  Future<void> getStreamInfluencers({loading,required BuildContext context}) async   {
-    // var r = await b.baseGetAPI(APIEndpoints.streamInfluencers+'/${DateTime.now().toUtc()}',loading: loading??true,context: context);
-    var r = await b.basePostAPI(APIEndpoints.streamInfluencers,{
-      'room_id':roomID,
-      'date':'${DateTime.now().toUtc()}',
-    },loading: loading??true,context: context);
-    if(r!=null){influencers.value = (r['data'] as List).map((data) => User.fromJson(data)).toList();}
-    else{influencers = List<User>.empty().obs;}
+  Future<void> getInfluencers({loading, required BuildContext context}) async {
+    var r = await b.baseGetAPI(APIEndpoints.influencers,
+        loading: loading ?? true, context: context);
+    if (r != null) {
+      influencers.value =
+          (r['data'] as List).map((data) => User.fromJson(data)).toList();
+    } else {
+      influencers = List<User>.empty().obs;
+    }
     update();
   }
 
+  Future<void> getStreamInfluencers(
+      {loading, required BuildContext context}) async {
+    // var r = await b.baseGetAPI(APIEndpoints.streamInfluencers+'/${DateTime.now().toUtc()}',loading: loading??true,context: context);
+    var r = await b.basePostAPI(
+        APIEndpoints.streamInfluencers,
+        {
+          'room_id': roomID,
+          'date': '${DateTime.now().toUtc()}',
+        },
+        loading: loading ?? true,
+        context: context);
+    if (r != null) {
+      influencers.value =
+          (r['data'] as List).map((data) => User.fromJson(data)).toList();
+    } else {
+      influencers = List<User>.empty().obs;
+    }
+    update();
+  }
 
   /// Schedule
-  Future<void> addSchedule(context,{required Function onSuccess}) async {
-    Map<String,dynamic> jsonData;
+  Future<void> addSchedule(context, {required Function onSuccess}) async {
+    Map<String, dynamic> jsonData;
     jsonData = {
-      'start_date':startDate,
-      'end_date':endDate,
+      'start_date': startDate,
+      'end_date': endDate,
       "schedule": scheduleList.map((v) => v.toJson()).toList(),
     };
-    var res =await b.basePostAPI(APIEndpoints.addSchedule, jsonData,loading: true,context: context);
-    if(res['status']==1){
-      schedule.value = (res['data']['schedule'] as List).map((data) => ScheduleModel.fromJson(data)).toList();
+    var res = await b.basePostAPI(APIEndpoints.addSchedule, jsonData,
+        loading: true, context: context);
+    if (res['status'] == 1) {
+      schedule.value = (res['data']['schedule'] as List)
+          .map((data) => ScheduleModel.fromJson(data))
+          .toList();
       update();
-      onSuccess();CustomToast().showToast("Success", res['message'], false);
+      onSuccess();
+      CustomToast().showToast("Success", res['message'], false);
+    } else {
+      CustomToast().showToast("Error", res['message'], true);
     }
-    else{CustomToast().showToast("Error", res['message'], true);}
   }
-  Future<void> getSchedule(context,{required String d,required String id}) async {
+
+  Future<void> getSchedule(context,
+      {required String d, required String id}) async {
     schedule = List<ScheduleModel>.empty().obs;
     update();
-    Map<String,String> jsonData;
+    Map<String, String> jsonData;
     jsonData = {
-      'user_id':id,
-      "start_date": Utils.convertTimeToUTC(time:Utils.dayStartTime, date: DateTime.parse(d)),
-      "end_date": Utils.convertTimeToUTC(time:Utils.dayEndTime, date: DateTime.parse(d)),
+      'user_id': id,
+      "start_date": Utils.convertTimeToUTC(
+          time: Utils.dayStartTime, date: DateTime.parse(d)),
+      "end_date": Utils.convertTimeToUTC(
+          time: Utils.dayEndTime, date: DateTime.parse(d)),
     };
-    var res =await b.basePostAPI(APIEndpoints.getSchedule, jsonData,loading: true,context: context);
-    if(res['status']==1){
-      schedule.value = (res['data'] as List).map((data) => ScheduleModel.fromJson(data)).toList();
+    var res = await b.basePostAPI(APIEndpoints.getSchedule, jsonData,
+        loading: true, context: context);
+    if (res['status'] == 1) {
+      schedule.value = (res['data'] as List)
+          .map((data) => ScheduleModel.fromJson(data))
+          .toList();
       // tSchedule.value = (res['data'] as List).map((data) => ScheduleModel.fromJson(data)).toList();
       // for (var v in tSchedule) {
       //   if (d == Utils.convertToLocalDate(time: v.startTime)) {
@@ -869,146 +1121,201 @@ class HomeController extends GetxController{
     }
     update();
   }
-  Future<void> deleteSchedule(context,{required Function onSuccess,required ScheduleModel s}) async {
+
+  Future<void> deleteSchedule(context,
+      {required Function onSuccess, required ScheduleModel s}) async {
     FocusManager.instance.primaryFocus?.unfocus();
-    var res =await b.baseDeleteAPI(APIEndpoints.deleteSchedule+s.id, loading: true,context: context);
-    if(res['status']==1){
+    var res = await b.baseDeleteAPI(APIEndpoints.deleteSchedule + s.id,
+        loading: true, context: context);
+    if (res['status'] == 1) {
       int index = schedule.indexWhere((i) => i.id == s.id);
       if (index != -1) {
         schedule.removeAt(index);
         update();
       }
       onSuccess();
-      CustomToast().showToast("Success",res['message'], false);
-    }
-    else{
-      CustomToast().showToast("Error",res['message'], true);
+      CustomToast().showToast("Success", res['message'], false);
+    } else {
+      CustomToast().showToast("Error", res['message'], true);
     }
   }
 
   /// Schedule End
 
   ///Contract
-  createContractValidation(context,{required Function onSuccess}){
+  createContractValidation(context, {required Function onSuccess}) {
     FocusManager.instance.primaryFocus?.unfocus();
-    if(name.isEmpty){
+    if (name.isEmpty) {
       CustomToast().showToast('Error', 'Influencer name is required', true);
-    }else if(startDate.isEmpty){
+    } else if (startDate.isEmpty) {
       CustomToast().showToast('Error', 'Start Date is required', true);
-    }else if(endDate.isEmpty){
+    } else if (endDate.isEmpty) {
       CustomToast().showToast('Error', 'End Date is required', true);
-    }else if(DateFormat("MM-dd-yyyy").parse(startDate).isAfter(DateFormat("MM-dd-yyyy").parse(endDate))){
-      CustomToast().showToast('Error', 'Start date must not be greater than end date', true);
-    } else if(paymentMethod.isEmpty){
+    } else if (DateFormat("MM-dd-yyyy")
+        .parse(startDate)
+        .isAfter(DateFormat("MM-dd-yyyy").parse(endDate))) {
+      CustomToast().showToast(
+          'Error', 'Start date must not be greater than end date', true);
+    } else if (paymentMethod.isEmpty) {
       CustomToast().showToast('Error', 'Mode of payment is required', true);
-    }else if(amount.isEmpty){
-      CustomToast().showToast('Error', paymentMethod==AppStrings.GIFT ?'Gift field can\'t be empty': 'Price is required', true);
-    } else{
-      if(paymentMethod==AppStrings.OTP || paymentMethod==AppStrings.COMMISION){
-      if(double.parse(amount)<1){
-        CustomToast().showToast('Error', 'Price should be greater than equal to 1', true);
-      } else{
-          AppNavigation.navigateTo(context, AppRouteName.PAY_INFLUENCER_ROUTE,);
+    } else if (amount.isEmpty) {
+      CustomToast().showToast(
+          'Error',
+          paymentMethod == AppStrings.GIFT
+              ? 'Gift field can\'t be empty'
+              : 'Price is required',
+          true);
+    } else {
+      if (paymentMethod == AppStrings.OTP ||
+          paymentMethod == AppStrings.COMMISION) {
+        if (double.parse(amount) < 1) {
+          CustomToast().showToast(
+              'Error', 'Price should be greater than equal to 1', true);
+        } else {
+          AppNavigation.navigateTo(
+            context,
+            AppRouteName.PAY_INFLUENCER_ROUTE,
+          );
         }
+      } else {
+        createContract(context, onSuccess: () {
+          onSuccess();
+        }, isGift: true);
       }
-      else{
-        createContract(context,onSuccess: (){onSuccess();},isGift: true);
-      }
     }
-  }
-  createContractValidationII(context,{required Function onSuccess}){
-    FocusManager.instance.primaryFocus?.unfocus();
-    if(cards.isEmpty){
-      CustomToast().showToast('Error', 'Add payment card', true);
-    }else if(!checkDefaultCard()){
-      CustomToast().showToast('Error', 'Select payment card', true);
-    }else{
-      createContract(context,onSuccess: (){onSuccess();},isGift: false);
-    }
-  }
-  Future<void> createContract(context,{required Function onSuccess,required bool isGift}) async {
-    Map<String,String> jsonData;
-    jsonData = {
-      'influencer_id':endUser.value.id,
-      'start_date': Utils.convertTimeToUTC(time:Utils.dayStartTime, date: Utils().convertToDateTime(d: startDate)),
-      'end_date':  Utils.convertTimeToUTC(time:Utils.dayEndTime, date: Utils().convertToDateTime(d: endDate)),
-      // 'start_date':startDate,
-      // 'end_date':endDate,
-      if(isGift)
-      'gift':amount
-      else
-      'price':amount,
-      'payment_type': Utils().getContractPaymentKey(paymentMethod),
-    };
-    var res =await b.basePostAPI(APIEndpoints.sendContract, jsonData,loading: true,context: context);
-    if(res['status']==1){
-      updateInfluencerContactStatus(status: AppStrings.PENDING_KEY,id: endUser.value.id);
-      onSuccess();
-      // CustomToast().showToast("Success", res['message'], false);
-    }
-    else{CustomToast().showToast("Error", res['message'], true);}
   }
 
-  Future<void> getContract({loading,required BuildContext context,required String type}) async   {
-    bool sellerRole =GlobalController.values.userRole.value == UserRole.seller;
-    var r = await b.baseGetAPI(sellerRole?APIEndpoints.contractHistorySeller+type:APIEndpoints.contractHistoryInfluencer+type,loading: loading??true,context: context);
-    if(r!=null){
-      if(type==AppStrings.RECENT){recentContract.value = (r['data'] as List).map((data) => ContractModel.fromJson(data)).toList();}
-      else{historyContract.value = (r['data'] as List).map((data) => ContractModel.fromJson(data)).toList();}
+  createContractValidationII(context, {required Function onSuccess}) {
+    FocusManager.instance.primaryFocus?.unfocus();
+    if (cards.isEmpty) {
+      CustomToast().showToast('Error', 'Add payment card', true);
+    } else if (!checkDefaultCard()) {
+      CustomToast().showToast('Error', 'Select payment card', true);
+    } else {
+      createContract(context, onSuccess: () {
+        onSuccess();
+      }, isGift: false);
     }
-    else{
-      if(type==AppStrings.RECENT){recentContract.value =List<ContractModel>.empty().obs;}
-      else{historyContract.value =List<ContractModel>.empty().obs;}
+  }
+
+  Future<void> createContract(context,
+      {required Function onSuccess, required bool isGift}) async {
+    Map<String, String> jsonData;
+    jsonData = {
+      'influencer_id': endUser.value.id,
+      'start_date': Utils.convertTimeToUTC(
+          time: Utils.dayStartTime,
+          date: Utils().convertToDateTime(d: startDate)),
+      'end_date': Utils.convertTimeToUTC(
+          time: Utils.dayEndTime, date: Utils().convertToDateTime(d: endDate)),
+      // 'start_date':startDate,
+      // 'end_date':endDate,
+      if (isGift) 'gift': amount else 'price': amount,
+      'payment_type': Utils().getContractPaymentKey(paymentMethod),
+    };
+    var res = await b.basePostAPI(APIEndpoints.sendContract, jsonData,
+        loading: true, context: context);
+    if (res['status'] == 1) {
+      updateInfluencerContactStatus(
+          status: AppStrings.PENDING_KEY, id: endUser.value.id);
+      onSuccess();
+      // CustomToast().showToast("Success", res['message'], false);
+    } else {
+      CustomToast().showToast("Error", res['message'], true);
+    }
+  }
+
+  Future<void> getContract(
+      {loading, required BuildContext context, required String type}) async {
+    bool sellerRole = GlobalController.values.userRole.value == UserRole.seller;
+    var r = await b.baseGetAPI(
+        sellerRole
+            ? APIEndpoints.contractHistorySeller + type
+            : APIEndpoints.contractHistoryInfluencer + type,
+        loading: loading ?? true,
+        context: context);
+    if (r != null) {
+      if (type == AppStrings.RECENT) {
+        recentContract.value = (r['data'] as List)
+            .map((data) => ContractModel.fromJson(data))
+            .toList();
+      } else {
+        historyContract.value = (r['data'] as List)
+            .map((data) => ContractModel.fromJson(data))
+            .toList();
+      }
+    } else {
+      if (type == AppStrings.RECENT) {
+        recentContract.value = List<ContractModel>.empty().obs;
+      } else {
+        historyContract.value = List<ContractModel>.empty().obs;
+      }
     }
     update();
   }
-  onTapContract({required ContractModel c}){
-    contract.value=c;
-  }
-  Future<void> acceptRejectContract(context,{required Function onSuccess,required String status}) async {
-    Map<String,String> jsonData;
-    jsonData = {
-      'request_id':contract.value.id,
-      'request_status':status,
-    };
-    var res =await b.basePostAPI(APIEndpoints.acceptRejectContract, jsonData,loading: true,context: context);
-    if(res['status']==1){
-      updateContactStatus(status: status);
-      onSuccess();CustomToast().showToast("Success", res['message'], false);
-    }
-    else{CustomToast().showToast("Error", res['message'], true);}
+
+  onTapContract({required ContractModel c}) {
+    contract.value = c;
   }
 
-  updateContactStatus({required String status}){
+  Future<void> acceptRejectContract(context,
+      {required Function onSuccess, required String status}) async {
+    Map<String, String> jsonData;
+    jsonData = {
+      'request_id': contract.value.id,
+      'request_status': status,
+    };
+    var res = await b.basePostAPI(APIEndpoints.acceptRejectContract, jsonData,
+        loading: true, context: context);
+    if (res['status'] == 1) {
+      updateContactStatus(status: status);
+      onSuccess();
+      CustomToast().showToast("Success", res['message'], false);
+    } else {
+      CustomToast().showToast("Error", res['message'], true);
+    }
+  }
+
+  updateContactStatus({required String status}) {
     int index = recentContract.indexWhere((i) => i.id == contract.value.id);
     if (index != -1) {
-      recentContract[index].requestStatus=status;
-      if(status==AppStrings.REJECTED_KEY){
+      recentContract[index].requestStatus = status;
+      if (status == AppStrings.REJECTED_KEY) {
         recentContract.removeAt(index);
       }
     }
     update();
   }
-  updateInfluencerContactStatus({required String status,required String id}){
+
+  updateInfluencerContactStatus({required String status, required String id}) {
     int index = influencers.indexWhere((i) => i.id == id);
     if (index != -1) {
-      influencers[index].requestStatus=status;
-      endUser.value.requestStatus=status;
+      influencers[index].requestStatus = status;
+      endUser.value.requestStatus = status;
       endUser.refresh();
     }
     update();
   }
+
   ///Contract End
 
   /// Earning
-  Future<void> getEarnings({loading,required BuildContext context}) async {
-    var r = await b.baseGetAPI(APIEndpoints.myEarnings,loading: loading??true,context: context);
-    if(r!=null){totalEarning='${r['data']['total_earnings']??0}'; earnings.value = (r['data']['earning_details'] as List).map((data) => EarningModel.fromJson(data)).toList();}
-    else{totalEarning='0';earnings = List<EarningModel>.empty().obs;}
+  Future<void> getEarnings({loading, required BuildContext context}) async {
+    var r = await b.baseGetAPI(APIEndpoints.myEarnings,
+        loading: loading ?? true, context: context);
+    if (r != null) {
+      totalEarning = '${r['data']['total_earnings'] ?? 0}';
+      earnings.value = (r['data']['earning_details'] as List)
+          .map((data) => EarningModel.fromJson(data))
+          .toList();
+    } else {
+      totalEarning = '0';
+      earnings = List<EarningModel>.empty().obs;
+    }
     update();
   }
-  /// Earning end
 
+  /// Earning end
 
   loadingOn() {
     EasyLoading.instance.userInteractions = false;
@@ -1021,56 +1328,97 @@ class HomeController extends GetxController{
 
   /// Chats
   void getAllMessages({required String id}) {
-    SocketService.instance?.socketEmitMethod(eventName: APIEndpoints.getMessages, eventParamaters: {
-      'sender_id': AuthController.i.user.value.id,
-      'receiver_id':id,
-    });
+    SocketService.instance?.socketEmitMethod(
+        eventName: APIEndpoints.getMessages,
+        eventParamaters: {
+          'sender_id': AuthController.i.user.value.id,
+          'receiver_id': id,
+        });
   }
-  setChatMessages({required dynamic r}){
-    if(r['object_type']==AppStrings.GET_ALL_MESSAGES){chats.value = (r['data'] as List).map((data) => Chat.fromJson(data)).toList();}
-    else{chats.add(Chat.fromJson(r['data']));}
+
+  setChatMessages({required dynamic r}) {
+    if (r['object_type'] == AppStrings.GET_ALL_MESSAGES) {
+      chats.value =
+          (r['data'] as List).map((data) => Chat.fromJson(data)).toList();
+    } else {
+      chats.add(Chat.fromJson(r['data']));
+    }
     update();
   }
-  void sendMessage({required Function onSuccess, required String message,required String id,String?type}) {
+
+  void sendMessage(
+      {required Function onSuccess,
+      required String message,
+      required String id,
+      String? type}) {
     FocusManager.instance.primaryFocus?.unfocus();
-    SocketService.instance?.socketEmitMethod(eventName: APIEndpoints.sendMessage, eventParamaters: {
-      'sender_id': AuthController.i.user.value.id,
-      'receiver_id':id,
-      'message':message,
-      'type':type,
-    });
+    SocketService.instance?.socketEmitMethod(
+        eventName: APIEndpoints.sendMessage,
+        eventParamaters: {
+          'sender_id': AuthController.i.user.value.id,
+          'receiver_id': id,
+          'message': message,
+          'type': type,
+        });
   }
+
   Future<void> sendImage(context) async {
     loadingOn();
-    var res =await b.baseFormPostAPI(APIEndpoints.sendImage, {},File(temp.first.path),["message_image"],loading: false,context: context);
-    if(res['status']==1){}
-    else{CustomToast().showToast("Error",res['message'], true);}
+    var res = await b.baseFormPostAPI(
+        APIEndpoints.sendImage, {}, File(temp.first.path), ["message_image"],
+        loading: false, context: context);
+    if (res['status'] == 1) {
+    } else {
+      CustomToast().showToast("Error", res['message'], true);
+    }
   }
-  Future<void> getChats({loading,required BuildContext context}) async   {
-    var r = await b.baseGetAPI(APIEndpoints.chatList,loading: loading??true,context: context);
-    inboxChats= List<Chat>.empty().obs;
-    tChats= List<Chat>.empty().obs;
-    if(r!=null){
-      tChats.value = (r['data'] as List).map((data) => Chat.fromJson(data)).toList();
-      for (var v in tChats){
-        if(v.receiverId?.id!=AuthController.i.user.value.id){
-          inboxChats.add(Chat(id: v.id,user: v.receiverId,type: v.type,attachment: v.attachment,isRead:v.isRead,isBlocked:v.isBlocked,createdAt:v.createdAt,updatedAt:v.updatedAt,message:v.message));
-        }else if(v.senderId?.id!=AuthController.i.user.value.id){
-          inboxChats.add(Chat(id: v.id,user: v.senderId,type: v.type,attachment: v.attachment,isRead:v.isRead,isBlocked:v.isBlocked,createdAt:v.createdAt,updatedAt:v.updatedAt,message:v.message));
+
+  Future<void> getChats({loading, required BuildContext context}) async {
+    var r = await b.baseGetAPI(APIEndpoints.chatList,
+        loading: loading ?? true, context: context);
+    inboxChats = List<Chat>.empty().obs;
+    tChats = List<Chat>.empty().obs;
+    if (r != null) {
+      tChats.value =
+          (r['data'] as List).map((data) => Chat.fromJson(data)).toList();
+      for (var v in tChats) {
+        if (v.receiverId?.id != AuthController.i.user.value.id) {
+          inboxChats.add(Chat(
+              id: v.id,
+              user: v.receiverId,
+              type: v.type,
+              attachment: v.attachment,
+              isRead: v.isRead,
+              isBlocked: v.isBlocked,
+              createdAt: v.createdAt,
+              updatedAt: v.updatedAt,
+              message: v.message));
+        } else if (v.senderId?.id != AuthController.i.user.value.id) {
+          inboxChats.add(Chat(
+              id: v.id,
+              user: v.senderId,
+              type: v.type,
+              attachment: v.attachment,
+              isRead: v.isRead,
+              isBlocked: v.isBlocked,
+              createdAt: v.createdAt,
+              updatedAt: v.updatedAt,
+              message: v.message));
         }
       }
     }
     // else{chats= List<Chat>.empty().obs;}
     update();
   }
+
   /// Chats end
 
   /// Live Streaming
-  startStreamingValidation(context,{required Function onSuccess})async{
+  startStreamingValidation(context, {required Function onSuccess}) async {
     FocusManager.instance.primaryFocus?.unfocus();
-    if(temp.isEmpty){
+    if (temp.isEmpty) {
       CustomToast().showToast('Error', 'Thumbnail is required', true);
-    }else if(!Platform.isIOS){
+    } else if (!Platform.isIOS) {
       // checkCameraMicrophone();
       // if(!cameraPermission){
       //   CustomToast().showToast('Error', 'Camera access is required to go live', true);
@@ -1080,16 +1428,20 @@ class HomeController extends GetxController{
       //   startStreaming(context,onSuccess: (){onSuccess(); });
       // }
 
-      if(!cameraPermission){
-        if(!(await Utils().requestCameraPermissions())){
-          CustomToast().showToast('Error', 'Camera access is required to go live', true);
+      if (!cameraPermission) {
+        if (!(await Utils().requestCameraPermissions())) {
+          CustomToast()
+              .showToast('Error', 'Camera access is required to go live', true);
         }
-      }else if(!microphonePermission){
-        if(!(await Utils().requestMicrophonePermissions() )){
-          CustomToast().showToast('Error', 'Microphone access is required to go live', true);
+      } else if (!microphonePermission) {
+        if (!(await Utils().requestMicrophonePermissions())) {
+          CustomToast().showToast(
+              'Error', 'Microphone access is required to go live', true);
         }
-      } else{
-        startStreaming(context,onSuccess: (){onSuccess(); });
+      } else {
+        startStreaming(context, onSuccess: () {
+          onSuccess();
+        });
       }
       // if(!(await Utils().requestCameraPermissions())){
       //   CustomToast().showToast('Error', 'Camera access is required to go live', true);
@@ -1098,273 +1450,435 @@ class HomeController extends GetxController{
       // } else{
       //   startStreaming(context,onSuccess: (){onSuccess(); });
       // }
-    } else{
-      startStreaming(context,onSuccess: (){onSuccess(); });
+    } else {
+      startStreaming(context, onSuccess: () {
+        onSuccess();
+      });
     }
   }
-  Future<void> getStreaming({loading,required BuildContext context}) async   {
-    bool influencerRole =GlobalController.values.userRole.value == UserRole.influencer;
-    var r = await b.baseGetAPI(influencerRole? APIEndpoints.streamInvites:APIEndpoints.streams ,loading: loading??true,context: context);
-    if(r!=null){streams.value = (r['data'] as List).map((data) => StreamModel.fromJson(data)).toList();}
-    else{streams= List<StreamModel>.empty().obs;}
+
+  Future<void> getStreaming({loading, required BuildContext context}) async {
+    bool influencerRole =
+        GlobalController.values.userRole.value == UserRole.influencer;
+    var r = await b.baseGetAPI(
+        influencerRole ? APIEndpoints.streamInvites : APIEndpoints.streams,
+        loading: loading ?? true,
+        context: context);
+    if (r != null) {
+      streams.value = (r['data'] as List)
+          .map((data) => StreamModel.fromJson(data))
+          .toList();
+    } else {
+      streams = List<StreamModel>.empty().obs;
+    }
     update();
   }
-  Future<void> startStreaming(context,{required Function onSuccess}) async {
+
+  Future<void> startStreaming(context, {required Function onSuccess}) async {
     FocusManager.instance.primaryFocus?.unfocus();
-    Map<String,String> jsonData = {
-      'description':'${AuthController.i.user.value.firstName} ${AuthController.i.user.value.lastName} started streaming',
-      'category_id':liveProducts.first.categoryId!.id.toString(),
-      for (int i=0;i<liveProducts.length;i++)
+    Map<String, String> jsonData = {
+      'description':
+          '${AuthController.i.user.value.firstName} ${AuthController.i.user.value.lastName} started streaming',
+      'category_id': liveProducts.first.categoryId!.id.toString(),
+      for (int i = 0; i < liveProducts.length; i++)
         "products[$i]": liveProducts[i].id,
     };
     print(jsonData);
     getFiles(title: 'thumbnail_image');
-    var r =await b.baseFormPostAPI(APIEndpoints.startStreaming, jsonData,files,fileName,loading: true,context: context);
-    if(r['status']==1 && r['data']!=null){
-      roomID=r['data']['room_id'];
-      streamToken=r['data']['token'];
+    var r = await b.baseFormPostAPI(
+        APIEndpoints.startStreaming, jsonData, files, fileName,
+        loading: true, context: context);
+    if (r['status'] == 1 && r['data'] != null) {
+      roomID = r['data']['room_id'];
+      streamToken = r['data']['token'];
       onSuccess();
       CustomToast().showToast("Success", r['message'], false);
-      startLeaveStreamingSocket(context,roomId: roomID,start: true);
+      startLeaveStreamingSocket(context, roomId: roomID, start: true);
       addProductToLiveStream();
+    } else {
+      CustomToast().showToast("Error", r['message'], true);
     }
-    else{CustomToast().showToast("Error", r['message'], true);}
   }
+
   checkCameraMicrophone() async {
     // microphonePermission
     final status = await Permission.camera.request();
-    if(status.isGranted){
-      cameraPermission=true;
+    if (status.isGranted) {
+      cameraPermission = true;
     } else if (status.isPermanentlyDenied) {
-      CustomToast().showToast('Camera access denied', 'To enable camera access, please visit our app\'s settings. ⚙️', true);
+      CustomToast().showToast(
+          'Camera access denied',
+          'To enable camera access, please visit our app\'s settings. ⚙️',
+          true);
       openAppSettings();
       return false;
     }
     final microphoneStatus = await Permission.microphone.request();
-    if(microphoneStatus.isGranted){
-      microphonePermission=true;
-    }else if (microphoneStatus.isPermanentlyDenied) {
-      CustomToast().showToast('Microphone access denied', 'To enable microphone access, please visit our app\'s settings. ⚙️', true);
+    if (microphoneStatus.isGranted) {
+      microphonePermission = true;
+    } else if (microphoneStatus.isPermanentlyDenied) {
+      CustomToast().showToast(
+          'Microphone access denied',
+          'To enable microphone access, please visit our app\'s settings. ⚙️',
+          true);
       openAppSettings();
       return false;
     }
   }
 
-  addProductToLiveStream(){
+  addProductToLiveStream() {
     // List<String> t = [];
     // for (int i=0;i<liveProducts.length;i++){
     //   t.add(liveProducts[i].id);
     // }
-    Map<String,dynamic> jsonData = {
-      'user_id':AuthController.i.user.value.id,
-      'room_id':roomID,
+    Map<String, dynamic> jsonData = {
+      'user_id': AuthController.i.user.value.id,
+      'room_id': roomID,
       // "products":  t.toString(),
-      "products":  liveProducts.map((orders) => orders.id).toList(),
+      "products": liveProducts.map((orders) => orders.id).toList(),
       // for (int i=0;i<liveProducts.length;i++)
       //   "products[$i]": liveProducts[i].id,
     };
     log('addProductToLiveStream');
     log(jsonData.toString());
-    SocketService.instance?.socketEmitMethod(eventName:APIEndpoints.addProductSocket, eventParamaters:jsonData);
+    SocketService.instance?.socketEmitMethod(
+        eventName: APIEndpoints.addProductSocket, eventParamaters: jsonData);
   }
 
-
-  Future<void> endStreaming(context,{required Function onSuccess}) async {
+  Future<void> endStreaming(context, {required Function onSuccess}) async {
     FocusManager.instance.primaryFocus?.unfocus();
-    bool sellerRole =GlobalController.values.userRole.value == UserRole.seller;
-    if(sellerRole){endStreamingSocket(context);}
-    else{
-      startLeaveStreamingSocket(context,roomId: roomID,start: false);
+    bool sellerRole = GlobalController.values.userRole.value == UserRole.seller;
+    if (sellerRole) {
+      endStreamingSocket(context);
+    } else {
+      startLeaveStreamingSocket(context, roomId: roomID, start: false);
     }
     emptyStreamingProducts();
-    Map<String,String> jsonData = {
+    Map<String, String> jsonData = {
       'room_id': roomID,
-      for (int i=0;i<tempAllLiveProducts.length;i++)
-      "products[$i]": tempAllLiveProducts[i].id,
+      for (int i = 0; i < tempAllLiveProducts.length; i++)
+        "products[$i]": tempAllLiveProducts[i].id,
     };
-    var r =await b.basePostAPI(APIEndpoints.endStreaming, jsonData,loading: false,context: context);
-    if(r['status']==1){
+    var r = await b.basePostAPI(APIEndpoints.endStreaming, jsonData,
+        loading: false, context: context);
+    if (r['status'] == 1) {
       onSuccess();
       // CustomToast().showToast("Success", r['message'], false);
+    } else {
+      CustomToast().showToast("Error", r['message'], true);
     }
-    else{CustomToast().showToast("Error", r['message'], true);}
-
   }
-  Future<void> startLeaveStreamingSocket(context,{String?id,String?r,required String roomId,required bool start}) async {
+
+  Future<void> startLeaveStreamingSocket(context,
+      {String? id,
+      String? r,
+      required String roomId,
+      required bool start}) async {
     FocusManager.instance.primaryFocus?.unfocus();
-    String role = GlobalController.values.userRole.value == UserRole.seller?AppStrings.BROADCASTER: GlobalController.values.userRole.value == UserRole.influencer?AppStrings.CO_BROADCASTER: AppStrings.USER;
+    String role = GlobalController.values.userRole.value == UserRole.seller
+        ? AppStrings.BROADCASTER
+        : GlobalController.values.userRole.value == UserRole.influencer
+            ? AppStrings.CO_BROADCASTER
+            : AppStrings.USER;
     log('startLeaveStreamingSocket');
     log({
-      'user_id':id??AuthController.i.user.value.id,
-      'room_id':roomId,
-      'role':r??role,
+      'user_id': id ?? AuthController.i.user.value.id,
+      'room_id': roomId,
+      'role': r ?? role,
     }.toString());
-    SocketService.instance?.socketEmitMethod(eventName:start?APIEndpoints.joinStreamSocket:APIEndpoints.leaveStreamSocket, eventParamaters: {
-      'user_id':id??AuthController.i.user.value.id,
-      'room_id':roomId,
-      'role': r??role,
-    });
-
+    SocketService.instance?.socketEmitMethod(
+        eventName: start
+            ? APIEndpoints.joinStreamSocket
+            : APIEndpoints.leaveStreamSocket,
+        eventParamaters: {
+          'user_id': id ?? AuthController.i.user.value.id,
+          'room_id': roomId,
+          'role': r ?? role,
+        });
   }
+
   Future<void> endStreamingSocket(context) async {
     FocusManager.instance.primaryFocus?.unfocus();
-    SocketService.instance?.socketEmitMethod(eventName:APIEndpoints.endStream, eventParamaters: {
-      'room_id':roomID,
+    SocketService.instance
+        ?.socketEmitMethod(eventName: APIEndpoints.endStream, eventParamaters: {
+      'room_id': roomID,
     });
   }
-  Future<void> removeUserSocket(context,{required String id}) async {
+
+  Future<void> removeUserSocket(context, {required String id}) async {
     FocusManager.instance.primaryFocus?.unfocus();
-    SocketService.instance?.socketEmitMethod(eventName:APIEndpoints.removeUser, eventParamaters: {
-      'admin_id':AuthController.i.user.value.id,
-      'user_id':id,
-      'room_id':roomID,
-    });
+    SocketService.instance?.socketEmitMethod(
+        eventName: APIEndpoints.removeUser,
+        eventParamaters: {
+          'admin_id': AuthController.i.user.value.id,
+          'user_id': id,
+          'room_id': roomID,
+        });
     log("Event Name : ${APIEndpoints.removeUser}");
     log({
-      'admin_id':AuthController.i.user.value.id,
-      'user_id':id,
-      'room_id':roomID,
+      'admin_id': AuthController.i.user.value.id,
+      'user_id': id,
+      'room_id': roomID,
     }.toString());
   }
-  Future<void> commentStreamingSocket(context,{required String comment}) async {
+
+  Future<void> commentStreamingSocket(context,
+      {required String comment}) async {
     FocusManager.instance.primaryFocus?.unfocus();
-    SocketService.instance?.socketEmitMethod(eventName:APIEndpoints.commentSocket, eventParamaters: {
-      'user_id':AuthController.i.user.value.id,
-      'room_id':roomID,
-      'comment': comment,
-    });
-    print({ 'user_id':AuthController.i.user.value.id,
-      'room_id':roomID,
+    SocketService.instance?.socketEmitMethod(
+        eventName: APIEndpoints.commentSocket,
+        eventParamaters: {
+          'user_id': AuthController.i.user.value.id,
+          'room_id': roomID,
+          'comment': comment,
+        });
+    print({
+      'user_id': AuthController.i.user.value.id,
+      'room_id': roomID,
       'comment': comment,
     });
   }
+
   Future<void> getCommentStreamingSocket(context) async {
     FocusManager.instance.primaryFocus?.unfocus();
-    SocketService.instance?.socketEmitMethod(eventName:APIEndpoints.getComments, eventParamaters: {
-      'user_id':AuthController.i.user.value.id,
-      'room_id':roomID,
-    });
+    SocketService.instance?.socketEmitMethod(
+        eventName: APIEndpoints.getComments,
+        eventParamaters: {
+          'user_id': AuthController.i.user.value.id,
+          'room_id': roomID,
+        });
   }
-  Future<void> deleteCommentStreamingSocket(context,{required String commentID}) async {
+
+  Future<void> deleteCommentStreamingSocket(context,
+      {required String commentID}) async {
     FocusManager.instance.primaryFocus?.unfocus();
-    SocketService.instance?.socketEmitMethod(eventName:APIEndpoints.deleteCommentSocket, eventParamaters: {
-      'user_id':AuthController.i.user.value.id,
-      'room_id':roomID,
-      'comment_id': commentID,
-    });
+    SocketService.instance?.socketEmitMethod(
+        eventName: APIEndpoints.deleteCommentSocket,
+        eventParamaters: {
+          'user_id': AuthController.i.user.value.id,
+          'room_id': roomID,
+          'comment_id': commentID,
+        });
   }
-  Future<void> joinStreaming(context,{required Function onSuccess,required String roomId,String?id}) async {
+
+  Future<void> joinStreaming(context,
+      {required Function onSuccess, required String roomId, String? id}) async {
     FocusManager.instance.primaryFocus?.unfocus();
-    String role = GlobalController.values.userRole.value == UserRole.seller?AppStrings.BROADCASTER: GlobalController.values.userRole.value == UserRole.influencer?AppStrings.CO_BROADCASTER: AppStrings.USER;
-    Map<String,String> jsonData = {
-      'room_id':roomId,
+    String role = GlobalController.values.userRole.value == UserRole.seller
+        ? AppStrings.BROADCASTER
+        : GlobalController.values.userRole.value == UserRole.influencer
+            ? AppStrings.CO_BROADCASTER
+            : AppStrings.USER;
+    Map<String, String> jsonData = {
+      'room_id': roomId,
       'role': role,
-      if(id!=null)
-      'request_id': id,
+      if (id != null) 'request_id': id,
     };
-    var r =await b.basePostAPI(APIEndpoints.joinToken , jsonData,loading: true,context: context);
-    if(r['status']==1){
-      roomID=roomId;
-      streamToken= r['data']['authToken'];
+    var r = await b.basePostAPI(APIEndpoints.joinToken, jsonData,
+        loading: true, context: context);
+    if (r['status'] == 1) {
+      roomID = roomId;
+      streamToken = r['data']['authToken'];
       onSuccess();
-      startLeaveStreamingSocket(context,roomId: roomId,start: true);
+      startLeaveStreamingSocket(context, roomId: roomId, start: true);
       // CustomToast().showToast("Success", r['message'], false);
+    } else {
+      CustomToast().showToast("Error", r['message'], true);
     }
-    else{CustomToast().showToast("Error", r['message'], true);}
     return r['status'];
   }
-  onStreamJoined({required dynamic r}){
-    bool sellerRole =GlobalController.values.userRole.value == UserRole.seller;
-    if(sellerRole){
-      sellerUser.value=AuthController.i.user.value;
+
+  onStreamJoined({required dynamic r}) {
+    bool sellerRole = GlobalController.values.userRole.value == UserRole.seller;
+    if (sellerRole) {
+      sellerUser.value = AuthController.i.user.value;
     }
-    liveStreaming.value= StreamModel.fromJson(r);
-    sellerUser.value=liveStreaming.value.sellerId??User();
-    influencerUser.value=liveStreaming.value.influencerId??User();
+    liveStreaming.value = StreamModel.fromJson(r);
+    sellerUser.value = liveStreaming.value.sellerId ?? User();
+    influencerUser.value = liveStreaming.value.influencerId ?? User();
     update();
   }
 
-  Future<int> sendInvite(context,{required Function onSuccess,required String id}) async {
+  Future<int> sendInvite(context,
+      {required Function onSuccess, required String id}) async {
     FocusManager.instance.primaryFocus?.unfocus();
-    var r =await b.basePostAPI(APIEndpoints.sendInvite, {
-      'influencer_id':id,'room_id':roomID
-    },loading: true,context: context);
-    if(r['status']==1){
+    var r = await b.basePostAPI(
+        APIEndpoints.sendInvite, {'influencer_id': id, 'room_id': roomID},
+        loading: true, context: context);
+    if (r['status'] == 1) {
       int index = influencers.indexWhere((i) => i.id == id);
-      if(index !=-1){influencers[index].requestId=r['data']['_id'];}
+      if (index != -1) {
+        influencers[index].requestId = r['data']['_id'];
+      }
       onSuccess();
       CustomToast().showToast("Success", r['message'], false);
+    } else {
+      CustomToast().showToast("Error", r['message'], true);
     }
-    else{CustomToast().showToast("Error", r['message'], true);}
     return r['status'];
   }
 
-  Future<void> rejectInvite({loading,required BuildContext context,required String id}) async   {
-    bool sellerRole =GlobalController.values.userRole.value == UserRole.seller;
-    var r = await b.baseGetAPI(sellerRole?APIEndpoints.cancelInvite+id: APIEndpoints.rejectInvite+id,loading: loading??true,context: context);
-    if(r['status']==1){
-      if(!sellerRole){
-       removeStreamInvite(id: id);
-      } else{
+  Future<void> rejectInvite(
+      {loading, required BuildContext context, required String id}) async {
+    bool sellerRole = GlobalController.values.userRole.value == UserRole.seller;
+    var r = await b.baseGetAPI(
+        sellerRole
+            ? APIEndpoints.cancelInvite + id
+            : APIEndpoints.rejectInvite + id,
+        loading: loading ?? true,
+        context: context);
+    if (r['status'] == 1) {
+      if (!sellerRole) {
+        removeStreamInvite(id: id);
+      } else {
         int index = influencers.indexWhere((i) => i.requestId == id);
       }
       update();
       CustomToast().showToast("Success", r['message'], false);
+    } else {
+      CustomToast().showToast("Error", r['message'], true);
     }
-    else{CustomToast().showToast("Error", r['message'], true);}
     update();
   }
-  removeStreamInvite({required String id}){
+
+  removeStreamInvite({required String id}) {
     int index = streams.indexWhere((i) => i.id == id);
-    if (index != -1) {streams.removeAt(index); update();}
+    if (index != -1) {
+      streams.removeAt(index);
+      update();
+    }
   }
-  emptyStreamingProducts(){
+
+  emptyStreamingProducts() {
     tempAllLiveProducts.value = List<ProductsModel>.empty().obs;
     liveProducts.value = List<ProductsModel>.empty().obs;
-    for (var v in products){
-      v.isChecked=false;
+    for (var v in products) {
+      v.isChecked = false;
     }
     update();
   }
-  Future<void> getStreamingViewers({loading,required BuildContext context}) async   {
-    var r = await b.baseGetAPI(APIEndpoints.streamViewers+roomID,loading: loading??true,context: context);
-    if(r!=null){streamingUsers.value = (r['data'] as List).map((data) => User.fromJson(data)).toList();}
-    else{streamingUsers = List<User>.empty().obs;}
+
+  Future<void> getStreamingViewers(
+      {loading, required BuildContext context}) async {
+    var r = await b.baseGetAPI(APIEndpoints.streamViewers + roomID,
+        loading: loading ?? true, context: context);
+    if (r != null) {
+      streamingUsers.value =
+          (r['data'] as List).map((data) => User.fromJson(data)).toList();
+    } else {
+      streamingUsers = List<User>.empty().obs;
+    }
     update();
   }
-  Future<void> saveStreaming(context,{required Function onSuccess,required bool save}) async {
+
+  Future<void> saveStreaming(context,
+      {required Function onSuccess, required bool save}) async {
     FocusManager.instance.primaryFocus?.unfocus();
-    var res =await b.basePostAPI(APIEndpoints.saveStream,{'room_id':roomID,'status':save?'yes':'no'}, loading: true,context: context);
-    if(res['status']==1){
+    var res = await b.basePostAPI(APIEndpoints.saveStream,
+        {'room_id': roomID, 'status': save ? 'yes' : 'no'},
+        loading: true, context: context);
+    if (res['status'] == 1) {
       onSuccess();
-      CustomToast().showToast("Success",res['message'], false);
-    }
-    else{
-      CustomToast().showToast("Error",res['message'], true);
+      CustomToast().showToast("Success", res['message'], false);
+    } else {
+      CustomToast().showToast("Error", res['message'], true);
     }
   }
+
   void getSavedStreamMessages() {
-    SocketService.instance?.socketEmitMethod(eventName: APIEndpoints.streamingComments, eventParamaters: {
-      'user_id':AuthController.i.user.value.id,
-      'room_id':liveStreaming.value.roomId,
-      'type':'recording',
-    });
+    SocketService.instance?.socketEmitMethod(
+        eventName: APIEndpoints.streamingComments,
+        eventParamaters: {
+          'user_id': AuthController.i.user.value.id,
+          'room_id': liveStreaming.value.roomId,
+          'type': 'recording',
+        });
   }
-  getRecordedStreamComments({required dynamic r}){
-    if(r!=null){liveStreaming.value.comments= (r['comments'] as List).map((data) => Chat.fromJson(data)).toList();}
-    update();
-  }
-  getRecordedStream({required StreamModel s}){
-    bool sellerRole =GlobalController.values.userRole.value == UserRole.seller;
-    if(sellerRole){
-      sellerUser.value=AuthController.i.user.value;
+
+  getRecordedStreamComments({required dynamic r}) {
+    if (r != null) {
+      liveStreaming.value.comments =
+          (r['comments'] as List).map((data) => Chat.fromJson(data)).toList();
     }
-    liveStreaming.value= s;
-    sellerUser.value=liveStreaming.value.sellerId??User();
-    influencerUser.value=liveStreaming.value.influencerId??User();
     update();
   }
 
-/// Live Streaming End
+  getRecordedStream({required StreamModel s}) {
+    bool sellerRole = GlobalController.values.userRole.value == UserRole.seller;
+    if (sellerRole) {
+      sellerUser.value = AuthController.i.user.value;
+    }
+    liveStreaming.value = s;
+    sellerUser.value = liveStreaming.value.sellerId ?? User();
+    influencerUser.value = liveStreaming.value.influencerId ?? User();
+    update();
+  }
 
+  /// Live Streaming End
+  ///
+  Future<void> getRides({loading, required BuildContext context}) async {
+    var r = await b.baseGetAPI(APIEndpoints.rides,
+        loading: loading ?? true, context: context);
+    if (r != null) {
+      rides.value =
+          (r['data'] as List).map((data) => RideData.fromJson(data)).toList();
+    } else {
+      rides = List<RideData>.empty().obs;
+    }
+    update();
+  }
+
+  Future<void> getCurrentActiveRide(
+      {loading, required BuildContext context}) async {
+    var r = await b.baseGetAPI('${APIEndpoints.rides}/$currentActiveRideId',
+        loading: loading ?? true, context: context);
+    if (r['data'] != null) {
+      currentActiveRide = RideDetailData.fromJson(r['data']);
+      update();
+
+      // rides.value =
+      //     (r['data'] as List).map((data) => RideData.fromJson(data)).toList();
+    } else {
+      currentActiveRide = null;
+      update();
+      // rides = List<RideData>.empty().obs;
+    }
+    update();
+  }
+
+  RideDetailData? currentActiveRide;
+
+  Future<void> changeRideStatus(
+    context, {
+    required Function onSuccess,
+    required String rideStatus,
+    required String rideId,
+  }) async {
+    FocusManager.instance.primaryFocus?.unfocus();
+    Map<String, String> jsonData = {
+      "status": rideStatus,
+    };
+
+    log(jsonData.toString());
+    var res = await b.basePostAPI('${APIEndpoints.ride}/$rideId', jsonData,
+        loading: true, context: context);
+
+    if (res['success'] == true) {
+      if (res['data'] != null) {
+        currentActiveRide?.driverStatus = res['data']['driver_status'];
+        if (currentActiveRide?.driverStatus == 'end_drive') {
+          currentActiveRide?.amount = res['data']['amount'] != null
+              ? double.parse(res['data']['amount'].toString())
+              : 0.0;
+        } else if (currentActiveRide?.driverStatus == "complete") {
+          currentActiveRide = null;
+        }
+
+        update();
+        onSuccess();
+      }
+    } else {
+      CustomToast().showToast("Error", res['message'], true);
+    }
+  }
 }

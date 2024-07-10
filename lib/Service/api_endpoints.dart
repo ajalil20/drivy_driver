@@ -1,12 +1,13 @@
-
-class APIEndpoints{
+class APIEndpoints {
   ///Local Server URL
   static const baseURL = "https://drivy.lottawins.app/api/";
   static const baseImageURL = "";
+
   ///Local Server Socket URL
   static const socketBaseURL = "https://host2.appsstaging.com:3024/";
 
   static const user = "user/";
+  static const driver = "driver/";
   static const login = "${user}login";
   static const signUp = "${user}register";
   static const forgotPassword = "forgot/password";
@@ -16,6 +17,9 @@ class APIEndpoints{
   static const verifyPhoneOtp = "${user}verify/validate/otp";
   static const editProfile = "${user}updateprofile";
   static const logout = "${user}logout";
+
+  static const rides = "${driver}rides";
+  static const ride = "${driver}ride";
 
   static const resendOTP = "resend-code";
   static const completeProfile = "complete-profile";
@@ -96,5 +100,6 @@ class APIEndpoints{
   static const deleteCommentSocket = "delete_comment";
   static const getComments = "get_comments";
   static const removeUser = "remove_user";
-  static const stripeKey = "pk_test_51H0UoCJELxddsoRYqANwUqQLd24vQYATeVTsN7Sm1xnAD68ARNm6bK0vsdCSqisOhSMNCATShUvDmXdzeyW0Cezz00RbGzoMup";
+  static const stripeKey =
+      "pk_test_51H0UoCJELxddsoRYqANwUqQLd24vQYATeVTsN7Sm1xnAD68ARNm6bK0vsdCSqisOhSMNCATShUvDmXdzeyW0Cezz00RbGzoMup";
 }

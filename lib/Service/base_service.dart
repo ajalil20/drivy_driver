@@ -152,8 +152,7 @@ class BaseService {
       print("Response here");
       print(baseURL + url);
       log(response.body);
-      if(loadingOff==null)
-        EasyLoading.dismiss();
+      if(loadingOff==null) EasyLoading.dismiss();
 
       var jsonData;
       if (response.statusCode == 401) {

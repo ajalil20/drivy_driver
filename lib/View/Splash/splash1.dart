@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'package:drivy_driver/Controller/auth_controller.dart';
 import 'package:drivy_driver/Controller/global_controller.dart';
+import 'package:drivy_driver/Service/navigation_service.dart';
+import 'package:drivy_driver/Utils/app_router_name.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -33,25 +35,37 @@ class _Splash1State extends State<Splash1> {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-          image: DecorationImage(
-              image: AssetImage(ImagePath.splashImage)
-          )
+          image: DecorationImage(image: AssetImage(ImagePath.splashImage))),
+      child: Image.asset(
+        ImagePath.appLogo,
+        scale: 4,
       ),
-      child: Image.asset(ImagePath.appLogo,scale: 4,),
     );
   }
 
-  setNotifications(context) async{
-    await FirebaseMessagingService().initializeNotificationSettings();
+  setNotifications(context) async {
+    // await FirebaseMessagingService().initializeNotificationSettings();
     Timer(const Duration(seconds: 3), () {
-      FirebaseMessagingService().terminateNotification(context);
+      _navigate();
+      // FirebaseMessagingService().terminateNotification(context);
     });
-    DynamicLinkProvider().initDynamicLinks();
-    FirebaseMessagingService().foregroundNotification();
-    FirebaseMessagingService().backgroundTapNotification();
+    // DynamicLinkProvider().initDynamicLinks();
+    // FirebaseMessagingService().foregroundNotification();
+    // FirebaseMessagingService().backgroundTapNotification();
   }
-  saveFCMToken()async{
+
+  saveFCMToken() async {
     await SharedPreference().sharedPreference;
     Utils().saveFCMToken();
+  }
+
+  _navigate() {
+    if (SharedPreference().getUser() != null) {
+      AppNavigation.navigateToRemovingAll(
+          context, AppRouteName.HOME_SCREEN_ROUTE);
+    } else {
+      AppNavigation.navigateToRemovingAll(
+          context, AppRouteName.LOGIN_SCREEN_ROUTE);
+    }
   }
 }

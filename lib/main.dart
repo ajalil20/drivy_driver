@@ -16,25 +16,27 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   // Stripe.publishableKey = APIEndpoints.stripeKey;
   // await Stripe.instance.applySettings();
-  await Firebase.initializeApp();
+  // await Firebase.initializeApp();
   HttpOverrides.global = MyHttpOverrides();
   runApp(MyApp());
 }
+
 void configLoading() {
   EasyLoading.instance
     ..indicatorType = EasyLoadingIndicatorType.ring
     ..backgroundColor = Colors.transparent
     ..indicatorColor = Color(0xffF2951F)
     ..textColor = Colors.transparent
-    ..boxShadow=[BoxShadow(color: Colors.transparent)]
-    ..maskType=EasyLoadingMaskType.custom
-    ..loadingStyle=EasyLoadingStyle.custom
+    ..boxShadow = [BoxShadow(color: Colors.transparent)]
+    ..maskType = EasyLoadingMaskType.custom
+    ..loadingStyle = EasyLoadingStyle.custom
     ..indicatorSize = 35.0
     ..radius = 10.0
-    ..maskColor = Colors.transparent//.withOpacity(0.6)
+    ..maskColor = Colors.transparent //.withOpacity(0.6)
     ..userInteractions = false
     ..dismissOnTap = false;
 }
+
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
@@ -44,25 +46,24 @@ class MyApp extends StatelessWidget {
       DeviceOrientation.portraitUp,
     ]);
     return Sizer(builder: (context, orientation, screenType) {
-        return GetMaterialApp(
-          debugShowCheckedModeBanner: false,
-          theme: lightTheme,
-          navigatorKey: globalkey,
-          darkTheme: lightTheme,
-          themeMode: ThemeMode.system,
-          // localizationsDelegates: [
-          //   MonthYearPickerLocalizations.delegate,
-          // ],
-          title: 'Drivy',
-          locale: const Locale('en', 'US'),
-          builder: EasyLoading.init(),
-          // home: HomePage(),
-          onGenerateRoute: AppRouter.onGenerateRoute,
-        );
-      });
+      return GetMaterialApp(
+        debugShowCheckedModeBanner: false,
+        theme: lightTheme,
+        navigatorKey: globalkey,
+        darkTheme: lightTheme,
+        themeMode: ThemeMode.system,
+        // localizationsDelegates: [
+        //   MonthYearPickerLocalizations.delegate,
+        // ],
+        title: 'Drivy',
+        locale: const Locale('en', 'US'),
+        builder: EasyLoading.init(),
+        // home: HomePage(),
+        onGenerateRoute: AppRouter.onGenerateRoute,
+      );
+    });
   }
 }
-
 
 GlobalKey<NavigatorState> globalkey = GlobalKey();
 
