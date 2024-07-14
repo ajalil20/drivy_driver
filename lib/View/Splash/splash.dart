@@ -1,8 +1,10 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:drivy_driver/Component/custom_text.dart';
 import 'package:drivy_driver/Controller/auth_controller.dart';
 import 'package:drivy_driver/Controller/global_controller.dart';
+import 'package:drivy_driver/Model/user_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -69,6 +71,8 @@ class _SplashScreenState extends State<SplashScreen> {
 
   _navigate() {
     if (SharedPreference().getUser() != null) {
+      AuthController.i.user.value =
+          User.fromJson(jsonDecode(SharedPreference().getUser()!));
       AppNavigation.navigateToRemovingAll(
           context, AppRouteName.HOME_SCREEN_ROUTE);
     } else {

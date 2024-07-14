@@ -19,7 +19,9 @@ class APIEndpoints {
   static const logout = "${user}logout";
 
   static const rides = "${driver}rides";
+  static const myRides = "${driver}myrides";
   static const ride = "${driver}ride";
+  static const trips = "trips";
 
   static const resendOTP = "resend-code";
   static const completeProfile = "complete-profile";

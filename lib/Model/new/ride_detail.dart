@@ -28,9 +28,9 @@ class RideDetailData {
   dynamic deletedAt;
   String? createdAt;
   String? updatedAt;
-  String? pickupAddress;
+  dynamic? pickupAddress;
   dynamic availPromocode;
-  String? dropoffAddress;
+  dynamic? dropoffAddress;
   CarData? car;
   User? user;
   dynamic paymentDetails;
@@ -104,7 +104,7 @@ class RideDetailData {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = Map<String, dynamic>();
+    final Map<String, dynamic> data = <String, dynamic>{};
     data['id'] = id;
     data['user_id'] = userId;
     data['driver_id'] = driverId;
@@ -156,7 +156,7 @@ class CarData {
   dynamic latitude;
   String? licensePlateNumberImage;
   dynamic longitude;
-  int? perDayPrice;
+  // int? perDayPrice;
   double? maximumDistance;
   String? overDistanceFee;
   String? deliveryFee;
@@ -189,7 +189,7 @@ class CarData {
       this.latitude,
       this.licensePlateNumberImage,
       this.longitude,
-      this.perDayPrice,
+      // this.perDayPrice,
       this.maximumDistance,
       this.overDistanceFee,
       this.deliveryFee,
@@ -222,8 +222,8 @@ class CarData {
     latitude = json['latitude'];
     licensePlateNumberImage = json['license_plate_number_image'];
     longitude = json['longitude'];
-    perDayPrice = json['per_day_price'];
-    maximumDistance = json['maximum_distance'];
+    // perDayPrice = json['per_day_price'];
+    // maximumDistance = json['maximum_distance'];
     overDistanceFee = json['over_distance_fee'];
     deliveryFee = json['delivery_fee'];
     rules = json['rules'];
@@ -243,12 +243,12 @@ class CarData {
         images!.add(Images.fromJson(v));
       });
     }
-    if (json['daily_availability'] != null) {
-      dailyAvailability = <Null>[];
-      json['daily_availability'].forEach((v) {
-        dailyAvailability!.add(v);
-      });
-    }
+    // if (json['daily_availability'] != null) {
+    //   dailyAvailability = <Null>[];
+    //   json['daily_availability'].forEach((v) {
+    //     dailyAvailability!.add(v);
+    //   });
+    // }
     owner = json['owner'] != null ? User.fromJson(json['owner']) : null;
     if (json['ratings'] != null) {
       ratings = <Null>[];
@@ -260,7 +260,7 @@ class CarData {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = Map<String, dynamic>();
+    final Map<String, dynamic> data = <String, dynamic>{};
     data['id'] = id;
     data['user_id'] = userId;
     data['brand_id'] = brandId;
@@ -273,7 +273,7 @@ class CarData {
     data['latitude'] = latitude;
     data['license_plate_number_image'] = licensePlateNumberImage;
     data['longitude'] = longitude;
-    data['per_day_price'] = perDayPrice;
+    // data['per_day_price'] = perDayPrice;
     data['maximum_distance'] = maximumDistance;
     data['over_distance_fee'] = overDistanceFee;
     data['delivery_fee'] = deliveryFee;
@@ -317,7 +317,7 @@ class Images {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = Map<String, dynamic>();
+    final Map<String, dynamic> data = <String, dynamic>{};
     data['file_path'] = filePath;
     return data;
   }

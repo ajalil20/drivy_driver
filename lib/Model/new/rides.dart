@@ -97,48 +97,6 @@ class RideData {
     car = json['car'] != null ? Car.fromJson(json['car']) : null;
     user = json['user'] != null ? User.fromJson(json['user']) : null;
   }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['id'] = id;
-    data['user_id'] = userId;
-    data['driver_id'] = driverId;
-    data['car_id'] = carId;
-    data['pickup_id'] = pickupId;
-    data['dropoff_id'] = dropoffId;
-    data['promocode_id'] = promocodeId;
-    data['trip_type'] = tripType;
-    data['amount'] = amount;
-    data['status'] = status;
-    data['driver_status'] = driverStatus;
-    data['payment_status'] = paymentStatus;
-    data['booking_type'] = bookingType;
-    data['total_ride_time'] = totalRideTime;
-    data['pm_type'] = pmType;
-    data['schedule_datetime'] = scheduleDatetime;
-    data['hours'] = hours;
-    data['instruction'] = instruction;
-    data['reason'] = reason;
-    data['start_at'] = startAt;
-    data['completed_at'] = completedAt;
-    data['deleted_at'] = deletedAt;
-    data['created_at'] = createdAt;
-    data['updated_at'] = updatedAt;
-    if (pickupAddress != null) {
-      data['pickup_address'] = pickupAddress!.toJson();
-    }
-    data['avail_promocode'] = availPromocode;
-    if (dropoffAddress != null) {
-      data['dropoff_address'] = dropoffAddress!.toJson();
-    }
-    if (car != null) {
-      data['car'] = car!.toJson();
-    }
-    if (user != null) {
-      data['user'] = user!.toJson();
-    }
-    return data;
-  }
 }
 
 class PickupAddress {
@@ -207,7 +165,7 @@ class Car {
   dynamic latitude;
   String? licensePlateNumberImage;
   dynamic longitude;
-  int? perDayPrice;
+  double? perDayPrice;
   double? maximumDistance;
   String? overDistanceFee;
   String? deliveryFee;
@@ -273,8 +231,8 @@ class Car {
     latitude = json['latitude'];
     licensePlateNumberImage = json['license_plate_number_image'];
     longitude = json['longitude'];
-    perDayPrice = json['per_day_price'];
-    maximumDistance = json['maximum_distance'];
+    // perDayPrice = json['per_day_price'];
+    // maximumDistance = json['maximum_distance'];
     overDistanceFee = json['over_distance_fee'];
     deliveryFee = json['delivery_fee'];
     rules = json['rules'];
@@ -294,12 +252,12 @@ class Car {
         images!.add(Images.fromJson(v));
       });
     }
-    if (json['daily_availability'] != null) {
-      dailyAvailability = <Null>[];
-      json['daily_availability'].forEach((v) {
-        dailyAvailability!.add(v);
-      });
-    }
+    // if (json['daily_availability'] != null) {
+    //   dailyAvailability = <Null>[];
+    //   json['daily_availability'].forEach((v) {
+    //     dailyAvailability!.add(v);
+    //   });
+    // }
     owner = json['owner'] != null ? User.fromJson(json['owner']) : null;
     if (json['ratings'] != null) {
       ratings = <Null>[];
@@ -308,53 +266,6 @@ class Car {
       });
     }
     isFavorite = json['is_favorite'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['id'] = id;
-    data['user_id'] = userId;
-    data['brand_id'] = brandId;
-    data['car_model_year'] = carModelYear;
-    data['car_drive'] = carDrive;
-    data['car_seats'] = carSeats;
-    data['car_fuel'] = carFuel;
-    data['description'] = description;
-    data['address'] = address;
-    data['latitude'] = latitude;
-    data['license_plate_number_image'] = licensePlateNumberImage;
-    data['longitude'] = longitude;
-    data['per_day_price'] = perDayPrice;
-    data['maximum_distance'] = maximumDistance;
-    data['over_distance_fee'] = overDistanceFee;
-    data['delivery_fee'] = deliveryFee;
-    data['rules'] = rules;
-    data['license_plate_number'] = licensePlateNumber;
-    data['vin_number'] = vinNumber;
-    data['status'] = status;
-    data['created_at'] = createdAt;
-    data['updated_at'] = updatedAt;
-    data['vehicle_type_id'] = vehicleTypeId;
-    data['recomended'] = recomended;
-    data['avg_rating'] = avgRating;
-    if (carBrand != null) {
-      data['car_brand'] = carBrand!.toJson();
-    }
-    if (images != null) {
-      data['images'] = images!.map((v) => v.toJson()).toList();
-    }
-    if (dailyAvailability != null) {
-      data['daily_availability'] =
-          dailyAvailability!.map((v) => v.toJson()).toList();
-    }
-    if (owner != null) {
-      data['owner'] = owner!.toJson();
-    }
-    if (ratings != null) {
-      data['ratings'] = ratings!.map((v) => v.toJson()).toList();
-    }
-    data['is_favorite'] = isFavorite;
-    return data;
   }
 }
 

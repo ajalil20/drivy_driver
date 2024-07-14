@@ -2,6 +2,7 @@ import 'dart:developer';
 import 'dart:io';
 import 'dart:convert';
 import 'dart:typed_data';
+import 'package:drivy_driver/Model/new/my_rides.dart';
 import 'package:drivy_driver/Model/new/ride_detail.dart';
 import 'package:drivy_driver/Model/new/rides.dart';
 import 'package:flutter/cupertino.dart';
@@ -30,6 +31,7 @@ import 'package:drivy_driver/Utils/enum.dart';
 import 'package:drivy_driver/Utils/local_shared_preferences.dart';
 import 'package:drivy_driver/View/Products/add_product.dart';
 import 'package:share_plus/share_plus.dart';
+import '../Model/new/booking_detail_model.dart';
 import '../Model/notification_model.dart';
 import '../Model/stream_model.dart';
 import '../Service/navigation_service.dart';
@@ -1880,5 +1882,39 @@ class HomeController extends GetxController {
     } else {
       CustomToast().showToast("Error", res['message'], true);
     }
+  }
+
+  RideDetailData? _tripDataModel;
+  RideDetailData? get tripDataModel => _tripDataModel;
+
+  Future<void> getBookingDetail(
+      {loading, required BuildContext context, required int id}) async {
+    var r = await b.baseGetAPI('${APIEndpoints.trips}/$id',
+        loading: loading ?? true, context: context);
+    if (r['data'] != null) {
+      _tripDataModel = RideDetailData.fromJson(r['data']);
+      update();
+    } else {
+      _tripDataModel = null;
+      update();
+    }
+    update();
+  }
+
+  RxList<MyRideListData> previousTrips = List<MyRideListData>.empty().obs;
+
+  ///Previous Trips
+  Future<void> getPreviousTrips(
+      {loading, required BuildContext context}) async {
+    var r = await b.baseGetAPI(APIEndpoints.myRides,
+        loading: loading ?? true, context: context);
+    if (r != null) {
+      previousTrips.value = (r['data'] as List)
+          .map((data) => MyRideListData.fromJson(data))
+          .toList();
+    } else {
+      previousTrips = List<MyRideListData>.empty().obs;
+    }
+    update();
   }
 }

@@ -80,7 +80,7 @@ class AppRouter {
         switch (routeSettings.name) {
           case AppRouteName.SPLASH_SCREEN_ROUTE:
             return SplashScreen();
-            // return CustomBottomNavigationBar();
+          // return CustomBottomNavigationBar();
           case AppRouteName.PRE_LOGIN_SCREEN_ROUTE:
             return PreLoginScreen();
           case AppRouteName.LOGIN_SCREEN_ROUTE:
@@ -94,46 +94,46 @@ class AppRouter {
           case AppRouteName.CreatePassword:
             ScreenArguments? arg = routeSettings.arguments as ScreenArguments?;
             return CreatePassword(
-              fromForgetPassword: arg?.fromForgetPassword??false,
+              fromForgetPassword: arg?.fromForgetPassword ?? false,
             );
           case AppRouteName.ENTER_OTP_SCREEN_ROUTE:
             ScreenArguments? arg = routeSettings.arguments as ScreenArguments?;
             return EnterOTP(
-              isFirebase: arg?.isFirebase??false,
-              fromForgetPassword: arg?.fromForgetPassword??false,
+              isFirebase: arg?.isFirebase ?? false,
+              fromForgetPassword: arg?.fromForgetPassword ?? false,
               // isFirebase: otpRoutingArgument?.isFirebase,
             );
-        //   case AppRouteName.RESET_PASSWORD_SCREEN_ROUTE:
-        //     return const ResetPasswordScreen();
-        // // case AppRouteName.USER_COMPLETE_PROFILE_SCREEN_ROUTE:
-        // //   return UserCompleteProfile();
+          //   case AppRouteName.RESET_PASSWORD_SCREEN_ROUTE:
+          //     return const ResetPasswordScreen();
+          // // case AppRouteName.USER_COMPLETE_PROFILE_SCREEN_ROUTE:
+          // //   return UserCompleteProfile();
           case AppRouteName.COMPLETE_PROFILE_SCREEN_ROUTE:
-              ScreenArguments? arg = routeSettings.arguments as ScreenArguments?;
+            ScreenArguments? arg = routeSettings.arguments as ScreenArguments?;
             return ProfileSetup(
-              editProfile: arg?.fromEdit??false,
+              editProfile: arg?.fromEdit ?? false,
             );
           case AppRouteName.HOME_SCREEN_ROUTE:
             ScreenArguments? arg = routeSettings.arguments as ScreenArguments?;
-            return HomeView(i: arg?.index??0,);
-            // return CustomBottomNavigationBar();
+            return HomeView(
+              i: arg?.index ?? 0,
+            );
+          // return CustomBottomNavigationBar();
           case AppRouteName.PHONE_LOGIN_SCREEN_ROUTE:
             return PhoneLogin();
           case AppRouteName.PRODUCT_DETAIL_ROUTE:
-            ProductArguments? arg = routeSettings.arguments as ProductArguments?;
+            ProductArguments? arg =
+                routeSettings.arguments as ProductArguments?;
             return ProductDetail(
-              index: arg?.index??0,
-                fromLiveStream: arg?.fromLiveStream??false
-            );
+                index: arg?.index ?? 0,
+                fromLiveStream: arg?.fromLiveStream ?? false);
           case AppRouteName.ADD_PRODUCT_ROUTE:
             ScreenArguments? arg = routeSettings.arguments as ScreenArguments?;
             return AddProduct(
-              fromEdit: arg?.fromEdit??false,
+              fromEdit: arg?.fromEdit ?? false,
             );
           case AppRouteName.PAYMENT_METHOD_ROUTE:
             ScreenArguments? arg = routeSettings.arguments as ScreenArguments?;
-            return SelectPayment(
-                fromLiveStream: arg?.fromLiveStream??false
-            );
+            return SelectPayment(fromLiveStream: arg?.fromLiveStream ?? false);
           case AppRouteName.MyDrivers:
             return MyDrivers();
           case AppRouteName.AccountDetails:
@@ -141,8 +141,8 @@ class AppRouter {
           case AppRouteName.PaymentSettings:
             ScreenArguments? arg = routeSettings.arguments as ScreenArguments?;
             return PaymentSettings(
-              fromRide: arg?.fromRide??false,
-              fromRental: arg?.fromRental??false,
+              fromRide: arg?.fromRide ?? false,
+              fromRental: arg?.fromRental ?? false,
             );
           case AppRouteName.SavedAddress:
             return SavedAddress();
@@ -164,7 +164,9 @@ class AppRouter {
             return SelectCar();
           case AppRouteName.AddCar:
             ScreenArguments? arg = routeSettings.arguments as ScreenArguments?;
-            return AddCar(fromSignup:arg?.fromSignup??false,);
+            return AddCar(
+              fromSignup: arg?.fromSignup ?? false,
+            );
           case AppRouteName.DriverRegister:
             return DriverRegister();
           case AppRouteName.CarRentals:
@@ -185,7 +187,10 @@ class AppRouter {
             return RentalCarCheckout();
           case AppRouteName.RideBookingDetail:
             ScreenArguments? arg = routeSettings.arguments as ScreenArguments?;
-            return RideBookingDetail(fromRide: arg?.fromRide??false,);
+            return RideBookingDetail(
+              fromRide: arg?.fromRide ?? false,
+              bookingId: arg?.bookingId ?? 0,
+            );
           case AppRouteName.RentalBookingDetail:
             return RentalBookingDetail();
           case AppRouteName.CityBookingDetail:
@@ -194,8 +199,6 @@ class AppRouter {
             return ProfileView();
           case AppRouteName.editProfile:
             return EditProfile();
-
-
 
           case AppRouteName.SETTINGS_ROUTE:
             return Settings();
@@ -209,7 +212,9 @@ class AppRouter {
             return AddCard();
           case AppRouteName.CART_ROUTE:
             ScreenArguments? arg = routeSettings.arguments as ScreenArguments?;
-            return Cart(fromLiveStream: arg?.fromLiveStream??false,);
+            return Cart(
+              fromLiveStream: arg?.fromLiveStream ?? false,
+            );
           case AppRouteName.NOTIFICATION_SCREEN_ROUTE:
             return NotificationScreen();
           case AppRouteName.MESSAGE_SCREEN_ROUTE:
@@ -217,7 +222,9 @@ class AppRouter {
           case AppRouteName.CHAT_SCREEN_ROUTE:
             ScreenArguments? arg = routeSettings.arguments as ScreenArguments?;
             // return LiveStream(hasInfluencer: arg?.hasInfluencer??false,);
-            return ChatScreen(u: arg?.u??User(),);
+            return ChatScreen(
+              u: arg?.u ?? User(),
+            );
           case AppRouteName.MY_EARNING_SCREEN:
             return MyEarning();
           case AppRouteName.CONTRACT_HISTORY_SCREEN:
@@ -227,9 +234,13 @@ class AppRouter {
             return ProductCatalog(fromLiveStream: arg?.fromLiveStream);
           case AppRouteName.VIDEO_PLAYER_ROUTE:
             ScreenArguments? arg = routeSettings.arguments as ScreenArguments?;
-            return MyVideoPlayer(url: arg?.url??'',showSellerProfileOnly: arg?.showSellerProfileOnly??false,);
+            return MyVideoPlayer(
+              url: arg?.url ?? '',
+              showSellerProfileOnly: arg?.showSellerProfileOnly ?? false,
+            );
           case AppRouteName.CONTENT_SCREEN:
-            ContentRoutingArgument? contentRoutingArgument = routeSettings.arguments as ContentRoutingArgument?;
+            ContentRoutingArgument? contentRoutingArgument =
+                routeSettings.arguments as ContentRoutingArgument?;
             return ContentScreen(
               url: contentRoutingArgument?.url ?? "",
               contentType: contentRoutingArgument?.contentType,
@@ -249,9 +260,10 @@ class AppRouter {
           case AppRouteName.CREATE_SCHEDULE_ROUTE:
             return CreateSchedule();
           case AppRouteName.USER_PROFILE_ROUTE:
-            ProfileScreenArguments? arg = routeSettings.arguments as ProfileScreenArguments?;
+            ProfileScreenArguments? arg =
+                routeSettings.arguments as ProfileScreenArguments?;
             return More(
-              isMe: arg?.isMe??false,
+              isMe: arg?.isMe ?? false,
               u: arg?.u,
             );
           default:
