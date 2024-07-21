@@ -604,18 +604,19 @@ class AuthController extends GetxController {
   }
 
   listenForPostion() {
-    _geolocatorPlatform.getPositionStream().listen((position) async {
+    _geolocatorPlatform.getCurrentPosition().then((position) async {
       currentPosition = position;
 
       userCurrentPosition.value = "${position.latitude},${position.longitude}";
-      final address = await Utils.getAddressFromLatLong(
-          position.latitude, position.longitude);
 
-      print(address);
+      // final address = await Utils.getAddressFromLatLong(
+      //     position.latitude, position.longitude);
 
-      if (address['complete_address'] != null) {
-        userCurrentPosition.value = address['complete_address'];
-      }
+      // print(address);
+
+      // if (address['complete_address'] != null) {
+      //   userCurrentPosition.value = address['complete_address'];
+      // }
 
       currentPosition = position;
       update();

@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:developer';
 import 'dart:io';
 import 'dart:convert';
@@ -5,9 +6,14 @@ import 'dart:typed_data';
 import 'package:drivy_driver/Model/new/my_rides.dart';
 import 'package:drivy_driver/Model/new/ride_detail.dart';
 import 'package:drivy_driver/Model/new/rides.dart';
+import 'package:drivy_driver/Utils/my_colors.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:flutter_polyline_points/flutter_polyline_points.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:drivy_driver/Component/custom_toast.dart';
@@ -31,6 +37,7 @@ import 'package:drivy_driver/Utils/enum.dart';
 import 'package:drivy_driver/Utils/local_shared_preferences.dart';
 import 'package:drivy_driver/View/Products/add_product.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:widget_to_marker/widget_to_marker.dart';
 import '../Model/new/booking_detail_model.dart';
 import '../Model/notification_model.dart';
 import '../Model/stream_model.dart';
@@ -1832,16 +1839,39 @@ class HomeController extends GetxController {
 
   Future<void> getCurrentActiveRide(
       {loading, required BuildContext context}) async {
+    polylines.clear();
+    markers.clear();
     var r = await b.baseGetAPI('${APIEndpoints.rides}/$currentActiveRideId',
         loading: loading ?? true, context: context);
     if (r['data'] != null) {
       currentActiveRide = RideDetailData.fromJson(r['data']);
+
+      startLatLng = LatLng(
+          double.parse(
+              currentActiveRide?.pickupAddress?.latitude.toString() ?? "0.0"),
+          double.parse(
+              currentActiveRide?.pickupAddress?.longitude.toString() ?? "0.0"));
+      endLatLong = LatLng(
+          double.parse(
+              currentActiveRide?.dropoffAddress?.latitude.toString() ?? "0.0"),
+          double.parse(
+              currentActiveRide?.dropoffAddress?.longitude.toString() ??
+                  "0.0"));
       update();
 
-      // rides.value =
+      // log(startLatLng!.latitude.toString());
+      // log(startLatLng!.longitude.toString());
+
+      // log(endLatLong!.latitude.toString());
+      // log(endLatLong!.longitude.toString());
+
+      await getPolyPoints(true);
+
+      // / rides.value =
       //     (r['data'] as List).map((data) => RideData.fromJson(data)).toList();
     } else {
       currentActiveRide = null;
+
       update();
       // rides = List<RideData>.empty().obs;
     }
@@ -1867,14 +1897,26 @@ class HomeController extends GetxController {
 
     if (res['success'] == true) {
       if (res['data'] != null) {
+        // currentActiveRide = RideDetailData.fromJson(res['data']);
         currentActiveRide?.driverStatus = res['data']['driver_status'];
-        if (currentActiveRide?.driverStatus == 'end_drive') {
-          currentActiveRide?.amount = res['data']['amount'] != null
-              ? double.parse(res['data']['amount'].toString())
-              : 0.0;
-        } else if (currentActiveRide?.driverStatus == "complete") {
-          currentActiveRide = null;
-        }
+
+        currentActiveRide?.subTotal = res['data']['sub_total'] != null
+            ? double.parse(res['data']['sub_total'].toString())
+            : 0.0;
+        currentActiveRide?.platformFee = res['data']['platform_fee'] != null
+            ? double.parse(res['data']['platform_fee'].toString())
+            : 0.0;
+        // if (currentActiveRide?.driverStatus == 'end_drive') {
+        //   // currentActiveRide?.subTotal = res['data']['sub_total'] != null
+        //   //     ? double.parse(res['data']['sub_total'].toString())
+        //   //     : 0.0;
+
+        //   // currentActiveRide?.platformFee = res['data']['platform_fee'] != null
+        //   //     ? double.parse(res['data']['platform_fee'].toString())
+        //   //     : 0.0;
+        // } else if (currentActiveRide?.driverStatus == "complete") {
+        //   currentActiveRide = null;
+        // }
 
         update();
         onSuccess();
@@ -1887,19 +1929,26 @@ class HomeController extends GetxController {
   RideDetailData? _tripDataModel;
   RideDetailData? get tripDataModel => _tripDataModel;
 
+  bool isPickup = true;
+
   Future<void> getBookingDetail(
       {loading, required BuildContext context, required int id}) async {
     var r = await b.baseGetAPI('${APIEndpoints.trips}/$id',
         loading: loading ?? true, context: context);
     if (r['data'] != null) {
       _tripDataModel = RideDetailData.fromJson(r['data']);
+
       update();
     } else {
       _tripDataModel = null;
+      startLatLng = null;
+      endLatLong = null;
       update();
     }
-    update();
+    // update();
   }
+
+  RxMap<MarkerId, Marker> markers = <MarkerId, Marker>{}.obs;
 
   RxList<MyRideListData> previousTrips = List<MyRideListData>.empty().obs;
 
@@ -1916,5 +1965,284 @@ class HomeController extends GetxController {
       previousTrips = List<MyRideListData>.empty().obs;
     }
     update();
+  }
+
+  GoogleMapController? mapController;
+
+  void initMarker({required LatLng l, index}) async {
+    final MarkerId markerId = MarkerId('MyLocation');
+
+    final image = AuthController.i.user.value.userImage;
+
+    final imageWidget = Container(
+      height: 150,
+      width: 150,
+      decoration: BoxDecoration(
+          color: image == null ? MyColors().primaryColor : null,
+          shape: BoxShape.circle,
+          image: image != null
+              ? DecorationImage(
+                  image: NetworkImage(
+                    image,
+                  ),
+                  fit: BoxFit.cover)
+              : null,
+          border: Border.all(color: MyColors().primaryColor, width: 2)),
+      child: image == null
+          ? const Icon(
+              Icons.location_on,
+              size: 100,
+            )
+          : null,
+    );
+
+    final Marker marker = Marker(
+        markerId: markerId,
+        icon: await imageWidget.toBitmapDescriptor(
+            logicalSize: const Size(150, 150), imageSize: const Size(150, 150)),
+        position: l,
+        onTap: () async {});
+    markers[markerId] = marker;
+    markers.refresh();
+    mapController?.animateCamera(CameraUpdate.newLatLng(
+      LatLng(l.latitude, l.longitude),
+    ));
+  }
+
+  Position? currentPosition;
+  LatLng? startLatLng;
+  LatLng? endLatLong;
+
+  Future<void> getPolyPoints(bool pickup) async {
+    polylineCoordinates.clear();
+    streamSubscription?.cancel();
+    markers.clear();
+    await getCurrentUserLocation(true);
+    log(isPickup.toString());
+    log(currentPosition.toString());
+  }
+
+  createPolyLines() async {
+    PolylinePoints polylinePoints = PolylinePoints();
+    polylineCoordinates.clear();
+    polylines.value = [];
+    if (currentPosition != null) {
+      if (currentActiveRide?.pickupAddress?.latitude != null &&
+          currentActiveRide?.dropoffAddress?.latitude != null) {
+        log("CREATING POLYLINE");
+
+        PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
+            AppStrings.GOOGLE_MAP_KEY,
+            PointLatLng(
+              currentPosition!.latitude,
+              currentPosition!.longitude,
+            ),
+
+            // riderToCustomer
+            isPickup
+                ? PointLatLng(
+                    double.parse(
+                        currentActiveRide!.pickupAddress!.latitude.toString()),
+                    double.parse(
+                        currentActiveRide!.pickupAddress!.longitude.toString()),
+                  )
+                : PointLatLng(
+                    double.parse(
+                        currentActiveRide!.dropoffAddress!.latitude.toString()),
+                    double.parse(currentActiveRide!.dropoffAddress!.longitude
+                        .toString()),
+                  ));
+
+        log("POLY LINES ${polylines.length}");
+
+        if (result.points.isNotEmpty) {
+          for (var point in result.points) {
+            polylineCoordinates.add(
+              LatLng(point.latitude, point.longitude),
+            );
+          }
+
+          const MarkerId markerId = MarkerId('EndLocation');
+
+          Polyline newPolyline = Polyline(
+            polylineId: const PolylineId('route'),
+            points: polylineCoordinates,
+            color: MyColors().primaryColor,
+          );
+          polylines.value = [newPolyline];
+
+          if (currentActiveRide != null) {
+            final Marker marker = Marker(
+                markerId: markerId,
+                icon: BitmapDescriptor.defaultMarker,
+                infoWindow: const InfoWindow(title: 'Pickup Point'),
+                position: isPickup
+                    ? LatLng(
+                        double.parse(currentActiveRide!.pickupAddress!.latitude
+                            .toString()),
+                        double.parse(currentActiveRide!.pickupAddress!.longitude
+                            .toString()))
+                    : LatLng(
+                        double.parse(currentActiveRide!.dropoffAddress!.latitude
+                            .toString()),
+                        double.parse(currentActiveRide!
+                            .dropoffAddress!.longitude
+                            .toString())),
+                onTap: () async {});
+            markers[markerId] = marker;
+            markers.refresh();
+          }
+
+          print(polylines.length);
+          // update();
+        }
+      }
+    }
+  }
+
+  RxList<Polyline> polylines = <Polyline>[].obs;
+  List<LatLng> polylineCoordinates = [];
+  final GeolocatorPlatform _geolocatorPlatform = GeolocatorPlatform.instance;
+
+  getCurrentUserLocation(bool getPolyPoints) async {
+    final permission = await _geolocatorPlatform.checkPermission();
+    log(permission.name);
+
+    if (permission == LocationPermission.denied) {
+      final status = await _geolocatorPlatform.requestPermission();
+
+      if (status == LocationPermission.always ||
+          status == LocationPermission.whileInUse) {
+        _permissionGranted();
+      }
+    } else if (permission == LocationPermission.deniedForever) {
+      // settins();
+      _openAppSettings();
+    } else {
+      _permissionGranted(getPolyPpoints: getPolyPoints);
+    }
+  }
+
+  void _openAppSettings() async {
+    final opened = await _geolocatorPlatform.openAppSettings();
+    String displayValue;
+
+    if (opened) {
+      displayValue = 'Opened Application Settings.';
+    } else {
+      displayValue = 'Error opening Application Settings.';
+    }
+
+    // _updatePositionList(
+    //   _PositionItemType.log,
+    //   displayValue,
+    // );
+  }
+
+  StreamSubscription? streamSubscription;
+  Timer? debounceTimer;
+
+  String distanceInKMS = "";
+
+  _permissionGranted({bool getPolyPpoints = false}) async {
+    // EasyLoading.instance.userInteractions = false;
+    // EasyLoading.show(status: 'Please wait...', dismissOnTap: false);
+    log("PermissionGranted");
+    streamSubscription =
+        _geolocatorPlatform.getPositionStream().listen((position) async {
+      // userCurrentPosition.value = "${position.latitude},${position.longitude}";
+
+      currentPosition = position;
+
+      if (isPickup) {
+        final distance = Geolocator.distanceBetween(
+            position.latitude,
+            position.longitude,
+            double.parse(
+                (currentActiveRide?.pickupAddress?.latitude.toString() ??
+                    "0.0")),
+            double.parse(
+                (currentActiveRide?.pickupAddress?.longitude.toString() ??
+                    "0.0")));
+
+        double distanceInKiloMeters = distance / 1000;
+
+        log("Distance: $distanceInKiloMeters");
+
+        distanceInKMS = distanceInKiloMeters.toStringAsFixed(1) + " kms";
+
+        // if (distance < 500) {
+        //   isPickup = false;
+        //   update();
+        // }
+      } else {
+        final distance = Geolocator.distanceBetween(
+            position.latitude,
+            position.longitude,
+            double.parse(
+                (currentActiveRide?.dropoffAddress?.latitude.toString() ??
+                    "0.0")),
+            double.parse(
+                (currentActiveRide?.dropoffAddress?.longitude.toString() ??
+                    "0.0")));
+
+        double distanceInKiloMeters = distance / 1000;
+
+        log("Distance: $distanceInKiloMeters");
+
+        distanceInKMS = "${distanceInKiloMeters.toStringAsFixed(1)} kms";
+      }
+
+      mapController?.animateCamera(CameraUpdate.newLatLng(
+          LatLng(currentPosition!.latitude, currentPosition!.longitude)));
+
+      initMarker(l: LatLng(position.latitude, position.longitude));
+
+      if (getPolyPpoints) {
+        if (debounceTimer?.isActive ?? false) debounceTimer!.cancel();
+        debounceTimer = Timer(const Duration(seconds: 3), () {
+          // polylines.clear();
+          // polylineCoordinates.clear();
+          createPolyLines();
+        });
+      }
+    });
+  }
+
+  void closeStream() {
+    isPickup = true;
+    streamSubscription?.cancel();
+    polylines.clear();
+    polylineCoordinates.clear();
+    markers.clear();
+  }
+
+  Future<void> cancelBooking(
+    context, {
+    required Function onSuccess,
+    required String cancelReason,
+  }) async {
+    FocusManager.instance.primaryFocus?.unfocus();
+    Map<String, String> jsonData = {
+      "status": "cancel",
+      "reason": cancelReason,
+    };
+
+    log(jsonData.toString());
+    var res = await b.basePutApi(
+        '${APIEndpoints.rides}/${tripDataModel?.id}', jsonData,
+        loading: true, context: context);
+
+    if (res['success'] == true) {
+      if (res['data'] != null) {
+        CustomToast()
+            .showToast('Success', 'Trip Cancelled Successfully', false);
+        // setTripNull();
+        closeStream();
+        onSuccess();
+      }
+    } else {
+      CustomToast().showToast("Error", res['message'], true);
+    }
   }
 }

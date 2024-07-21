@@ -1,7 +1,5 @@
 import 'package:drivy_driver/Model/user_model.dart';
 
-import 'rides.dart';
-
 class RideDetailData {
   int? id;
   int? userId;
@@ -14,11 +12,10 @@ class RideDetailData {
   double? amount;
   String? status;
   String? driverStatus;
-  String rideDistance = '';
   String? paymentStatus;
   String? bookingType;
   dynamic totalRideTime;
-  dynamic pmType;
+  String? pmType;
   dynamic scheduleDatetime;
   dynamic hours;
   dynamic instruction;
@@ -28,10 +25,17 @@ class RideDetailData {
   dynamic deletedAt;
   String? createdAt;
   String? updatedAt;
-  dynamic? pickupAddress;
+  double? platformFee;
+  double? subTotal;
+  dynamic schduleTime;
+  dynamic arrivalTime;
+  dynamic departureTime;
+  dynamic serviceType;
+  PickupAddress? pickupAddress;
   dynamic availPromocode;
-  dynamic? dropoffAddress;
-  CarData? car;
+  PickupAddress? dropoffAddress;
+  dynamic carDetails;
+  Car? car;
   User? user;
   dynamic paymentDetails;
 
@@ -43,7 +47,6 @@ class RideDetailData {
       this.pickupId,
       this.dropoffId,
       this.promocodeId,
-      this.rideDistance = '',
       this.tripType,
       this.amount,
       this.status,
@@ -61,9 +64,16 @@ class RideDetailData {
       this.deletedAt,
       this.createdAt,
       this.updatedAt,
+      this.platformFee,
+      this.subTotal,
+      this.schduleTime,
+      this.arrivalTime,
+      this.departureTime,
+      this.serviceType,
       this.pickupAddress,
       this.availPromocode,
       this.dropoffAddress,
+      this.carDetails,
       this.car,
       this.user,
       this.paymentDetails});
@@ -74,12 +84,11 @@ class RideDetailData {
     driverId = json['driver_id'];
     carId = json['car_id'];
     pickupId = json['pickup_id'];
-    rideDistance = json['distance'] ?? '';
     dropoffId = json['dropoff_id'];
     promocodeId = json['promocode_id'];
     tripType = json['trip_type'];
     amount =
-        json['amount'] != null ? double.parse(json['amount'].toString()) : 0.0;
+        json['amount'] != null ? double.parse(json['amount'].toString()) : 0;
     status = json['status'];
     driverStatus = json['driver_status'];
     paymentStatus = json['payment_status'];
@@ -95,10 +104,25 @@ class RideDetailData {
     deletedAt = json['deleted_at'];
     createdAt = json['created_at'];
     updatedAt = json['updated_at'];
-    pickupAddress = json['pickup_address'];
+    platformFee = json['platform_fee'] != null
+        ? double.parse(json['platform_fee'].toString())
+        : 0;
+    subTotal = json['sub_total'] != null
+        ? double.parse(json['sub_total'].toString())
+        : 0;
+    schduleTime = json['schdule_time'];
+    arrivalTime = json['arrival_time'];
+    departureTime = json['departure_time'];
+    serviceType = json['service_type'];
+    pickupAddress = json['pickup_address'] != null
+        ? PickupAddress.fromJson(json['pickup_address'])
+        : null;
     availPromocode = json['avail_promocode'];
-    dropoffAddress = json['dropoff_address'];
-    car = json['car'] != null ? CarData.fromJson(json['car']) : null;
+    dropoffAddress = json['dropoff_address'] != null
+        ? PickupAddress.fromJson(json['dropoff_address'])
+        : null;
+    carDetails = json['car_details'];
+    car = json['car'] != null ? Car.fromJson(json['car']) : null;
     user = json['user'] != null ? User.fromJson(json['user']) : null;
     paymentDetails = json['payment_details'];
   }
@@ -129,9 +153,20 @@ class RideDetailData {
     data['deleted_at'] = deletedAt;
     data['created_at'] = createdAt;
     data['updated_at'] = updatedAt;
-    data['pickup_address'] = pickupAddress;
+    data['platform_fee'] = platformFee;
+    data['sub_total'] = subTotal;
+    data['schdule_time'] = schduleTime;
+    data['arrival_time'] = arrivalTime;
+    data['departure_time'] = departureTime;
+    data['service_type'] = serviceType;
+    if (pickupAddress != null) {
+      data['pickup_address'] = pickupAddress!.toJson();
+    }
     data['avail_promocode'] = availPromocode;
-    data['dropoff_address'] = dropoffAddress;
+    if (dropoffAddress != null) {
+      data['dropoff_address'] = dropoffAddress!.toJson();
+    }
+    data['car_details'] = carDetails;
     if (car != null) {
       data['car'] = car!.toJson();
     }
@@ -143,7 +178,60 @@ class RideDetailData {
   }
 }
 
-class CarData {
+class PickupAddress {
+  int? id;
+  int? userId;
+  String? address;
+  String? latitude;
+  String? longitude;
+  String? type;
+  String? createdAt;
+  String? updatedAt;
+  dynamic deletedAt;
+  dynamic city;
+
+  PickupAddress(
+      {this.id,
+      this.userId,
+      this.address,
+      this.latitude,
+      this.longitude,
+      this.type,
+      this.createdAt,
+      this.updatedAt,
+      this.deletedAt,
+      this.city});
+
+  PickupAddress.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    userId = json['user_id'];
+    address = json['address'];
+    latitude = json['latitude'];
+    longitude = json['longitude'];
+    type = json['type'];
+    createdAt = json['created_at'];
+    updatedAt = json['updated_at'];
+    deletedAt = json['deleted_at'];
+    city = json['city'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    data['user_id'] = userId;
+    data['address'] = address;
+    data['latitude'] = latitude;
+    data['longitude'] = longitude;
+    data['type'] = type;
+    data['created_at'] = createdAt;
+    data['updated_at'] = updatedAt;
+    data['deleted_at'] = deletedAt;
+    data['city'] = city;
+    return data;
+  }
+}
+
+class Car {
   int? id;
   int? userId;
   int? brandId;
@@ -156,7 +244,7 @@ class CarData {
   dynamic latitude;
   String? licensePlateNumberImage;
   dynamic longitude;
-  // int? perDayPrice;
+  dynamic perDayPrice;
   double? maximumDistance;
   String? overDistanceFee;
   String? deliveryFee;
@@ -166,17 +254,17 @@ class CarData {
   String? status;
   String? createdAt;
   String? updatedAt;
-  dynamic vehicleTypeId;
+  dynamic? vehicleTypeId;
   int? recomended;
-  dynamic avgRating;
+  dynamic? avgRating;
   CarBrand? carBrand;
   List<Images>? images;
   List<dynamic>? dailyAvailability;
   User? owner;
-  List<dynamic>? ratings;
+  // List<Null>? ratings;
   bool? isFavorite;
 
-  CarData(
+  Car(
       {this.id,
       this.userId,
       this.brandId,
@@ -189,7 +277,7 @@ class CarData {
       this.latitude,
       this.licensePlateNumberImage,
       this.longitude,
-      // this.perDayPrice,
+      this.perDayPrice,
       this.maximumDistance,
       this.overDistanceFee,
       this.deliveryFee,
@@ -206,10 +294,10 @@ class CarData {
       this.images,
       this.dailyAvailability,
       this.owner,
-      this.ratings,
+      // this.ratings,
       this.isFavorite});
 
-  CarData.fromJson(Map<String, dynamic> json) {
+  Car.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     userId = json['user_id'];
     brandId = json['brand_id'];
@@ -222,10 +310,12 @@ class CarData {
     latitude = json['latitude'];
     licensePlateNumberImage = json['license_plate_number_image'];
     longitude = json['longitude'];
-    // perDayPrice = json['per_day_price'];
-    // maximumDistance = json['maximum_distance'];
-    overDistanceFee = json['over_distance_fee'];
-    deliveryFee = json['delivery_fee'];
+    perDayPrice = json['per_day_price'];
+    maximumDistance = json['maximum_distance'] != null
+        ? double.parse(json['maximum_distance'].toString())
+        : 0;
+    overDistanceFee = json['over_distance_fee'].toString();
+    deliveryFee = json['delivery_fee'].toString();
     rules = json['rules'];
     licensePlateNumber = json['license_plate_number'];
     vinNumber = json['vin_number'];
@@ -246,16 +336,16 @@ class CarData {
     // if (json['daily_availability'] != null) {
     //   dailyAvailability = <Null>[];
     //   json['daily_availability'].forEach((v) {
-    //     dailyAvailability!.add(v);
+    //     dailyAvailability!.add(new Null.fromJson(v));
     //   });
     // }
     owner = json['owner'] != null ? User.fromJson(json['owner']) : null;
-    if (json['ratings'] != null) {
-      ratings = <Null>[];
-      json['ratings'].forEach((v) {
-        ratings!.add(v);
-      });
-    }
+    // if (json['ratings'] != null) {
+    //   ratings = <Null>[];
+    //   json['ratings'].forEach((v) {
+    //     ratings!.add(new Null.fromJson(v));
+    //   });
+    // }
     isFavorite = json['is_favorite'];
   }
 
@@ -273,7 +363,7 @@ class CarData {
     data['latitude'] = latitude;
     data['license_plate_number_image'] = licensePlateNumberImage;
     data['longitude'] = longitude;
-    // data['per_day_price'] = perDayPrice;
+    data['per_day_price'] = perDayPrice;
     data['maximum_distance'] = maximumDistance;
     data['over_distance_fee'] = overDistanceFee;
     data['delivery_fee'] = deliveryFee;
@@ -289,9 +379,9 @@ class CarData {
     if (carBrand != null) {
       data['car_brand'] = carBrand!.toJson();
     }
-    // if (images != null) {
-    //   data['images'] = images!.map((v) => v.toJson()).toList();
-    // }
+    if (images != null) {
+      data['images'] = images!.map((v) => v.toJson()).toList();
+    }
     // if (dailyAvailability != null) {
     //   data['daily_availability'] =
     //       dailyAvailability!.map((v) => v.toJson()).toList();
@@ -303,6 +393,43 @@ class CarData {
     //   data['ratings'] = ratings!.map((v) => v.toJson()).toList();
     // }
     data['is_favorite'] = isFavorite;
+    return data;
+  }
+}
+
+class CarBrand {
+  int? id;
+  String? brandName;
+  String? status;
+  String? createdAt;
+  String? updatedAt;
+  dynamic brandImage;
+
+  CarBrand(
+      {this.id,
+      this.brandName,
+      this.status,
+      this.createdAt,
+      this.updatedAt,
+      this.brandImage});
+
+  CarBrand.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    brandName = json['brand_name'];
+    status = json['status'];
+    createdAt = json['created_at'];
+    updatedAt = json['updated_at'];
+    brandImage = json['brand_image'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    data['brand_name'] = brandName;
+    data['status'] = status;
+    data['created_at'] = createdAt;
+    data['updated_at'] = updatedAt;
+    data['brand_image'] = brandImage;
     return data;
   }
 }

@@ -10,7 +10,6 @@ import '../Component/custom_toast.dart';
 import '../Utils/utils.dart';
 import 'api_endpoints.dart';
 
-
 class BaseService {
   late String baseURL = APIEndpoints.baseURL;
   // late String baseURL = "https://22f5-2400-adc1-125-f500-9407-8bcc-4c70-2154.ngrok.io/api";
@@ -18,31 +17,42 @@ class BaseService {
   int requestTimeout = 20;
 
   Future baseGetAPI(url,
-      {successMsg, loading, status,utfDecoded,bool return404=false,bool errorToast=true,bool direct=false,hasToken=true,required BuildContext context}) async {
-
+      {successMsg,
+      loading,
+      status,
+      utfDecoded,
+      bool return404 = false,
+      bool errorToast = true,
+      bool direct = false,
+      hasToken = true,
+      required BuildContext context}) async {
     if (loading == true && loading != null) {
       EasyLoading.show(status: 'Please wait...');
     }
-    token=SharedPreference().getBearerToken();
+    token = SharedPreference().getBearerToken();
     print("url");
-    print(baseURL+url);
+    print(baseURL + url);
     print(token.toString());
     String bearerAuth = 'Bearer ' + "$token";
     http.Response response;
     try {
-      response = await http.get(
-        Uri.parse(baseURL +url),
-        headers: hasToken==true ?<String, String>{
-          'Content-Type': 'application/json; charset=UTF-8',
-          'Authorization': bearerAuth,
-          'Accept':'application/json'
-        }:null,
-      ).timeout(Duration(seconds: requestTimeout));
+      response = await http
+          .get(
+            Uri.parse(baseURL + url),
+            headers: hasToken == true
+                ? <String, String>{
+                    'Content-Type': 'application/json; charset=UTF-8',
+                    'Authorization': bearerAuth,
+                    'Accept': 'application/json'
+                  }
+                : null,
+          )
+          .timeout(Duration(seconds: requestTimeout));
       log(response.body);
       log("Status code");
       log(response.statusCode.toString());
       EasyLoading.dismiss();
-      if(direct==true){
+      if (direct == true) {
         return response.body;
       }
 
@@ -52,31 +62,27 @@ class BaseService {
 
       var jsonData;
       if (response.statusCode == 200) {
-        if(utfDecoded==true)
-        {
+        if (utfDecoded == true) {
           jsonData = json.decode(utf8.decode(response.bodyBytes));
 
           return jsonData;
         }
         jsonData = json.decode(response.body);
         if (successMsg != null) {
-          CustomToast().showToast("",successMsg, false);
+          CustomToast().showToast("", successMsg, false);
         }
         return jsonData;
-      }
-      else if (response.statusCode == 401) {
-        if (context.mounted)  Utils.logout(c: context);
+      } else if (response.statusCode == 401) {
+        if (context.mounted) Utils.logout(c: context);
+        jsonData = json.decode(response.body);
+        return jsonData;
+      } else {
         jsonData = json.decode(response.body);
         return jsonData;
       }
-      else {
-        jsonData = json.decode(response.body);
-        return jsonData;
-      }
-    }
-    on TimeoutException catch (e) {
+    } on TimeoutException catch (e) {
       onTimeout();
-    }catch (SocketException) {
+    } catch (SocketException) {
       EasyLoading.dismiss();
       AlertDialog(
         content: SingleChildScrollView(
@@ -126,12 +132,12 @@ class BaseService {
   }
 
   Future basePostAPI(url, body,
-      {successMsg, loading,loadingOff,required BuildContext context}) async {
-    EasyLoading.instance.userInteractions=false;
+      {successMsg, loading, loadingOff, required BuildContext context}) async {
+    EasyLoading.instance.userInteractions = false;
     if (loading == true && loading != null) {
-      EasyLoading.show(status: 'Please wait...',dismissOnTap: false);
+      EasyLoading.show(status: 'Please wait...', dismissOnTap: false);
     }
-    token=SharedPreference().getBearerToken();
+    token = SharedPreference().getBearerToken();
     print("url here ");
     print(baseURL + url);
     print(body);
@@ -140,30 +146,28 @@ class BaseService {
 
     http.Response response;
 
-    try
-    {
-      response = await http.post(Uri.parse(baseURL + url),
-          headers: <String, String>{
-            'Accept': 'application/json',
-            'Content-Type': 'application/json; charset=UTF-8',
-            'Authorization': bearerAuth
-          },
-          body: jsonEncode(body)).timeout(Duration(seconds: requestTimeout));
+    try {
+      response = await http
+          .post(Uri.parse(baseURL + url),
+              headers: <String, String>{
+                'Accept': 'application/json',
+                'Content-Type': 'application/json; charset=UTF-8',
+                'Authorization': bearerAuth
+              },
+              body: jsonEncode(body))
+          .timeout(Duration(seconds: requestTimeout));
       print("Response here");
       print(baseURL + url);
       log(response.body);
-      if(loadingOff==null) EasyLoading.dismiss();
+      if (loadingOff == null) EasyLoading.dismiss();
 
       var jsonData;
       if (response.statusCode == 401) {
-        if (context.mounted)  Utils.logout(c: context);
-      }
-      else {
-
+        if (context.mounted) Utils.logout(c: context);
+      } else {
         jsonData = json.decode(response.body);
         return jsonData;
       }
-
 
       // if (response.statusCode == 200) {
       //   jsonData = json.decode(response.body);
@@ -184,9 +188,9 @@ class BaseService {
       //   jsonData = json.decode(response.body);
       //   throw Exception('Failed');
       // }
-    }  on TimeoutException catch (e) {
+    } on TimeoutException catch (e) {
       onTimeout();
-    }catch (SocketException) {
+    } catch (SocketException) {
       print("Catch ma");
       // print(SocketException);
       EasyLoading.dismiss();
@@ -194,23 +198,91 @@ class BaseService {
     }
   }
 
+  Future basePutApi(url, body,
+      {successMsg, loading, loadingOff, required BuildContext context}) async {
+    EasyLoading.instance.userInteractions = false;
+    if (loading == true && loading != null) {
+      EasyLoading.show(status: 'Please wait...', dismissOnTap: false);
+    }
+    token = SharedPreference().getBearerToken();
+    print("url here ");
+    print(baseURL + url);
+    print(body);
+    print(token.toString());
+    String bearerAuth = 'Bearer ' + "$token";
 
+    http.Response response;
+
+    try {
+      response = await http
+          .put(Uri.parse(baseURL + url),
+              headers: <String, String>{
+                'Accept': 'application/json',
+                'Content-Type': 'application/json; charset=UTF-8',
+                'Authorization': bearerAuth
+              },
+              body: jsonEncode(body))
+          .timeout(Duration(seconds: requestTimeout));
+      print("Response here");
+      print(baseURL + url);
+      log(response.body);
+      if (loadingOff == null) EasyLoading.dismiss();
+
+      var jsonData;
+      if (response.statusCode == 401) {
+        if (context.mounted) Utils.logout(c: context);
+      } else {
+        jsonData = json.decode(response.body);
+        return jsonData;
+      }
+
+      // if (response.statusCode == 200) {
+      //   jsonData = json.decode(response.body);
+      //   if (successMsg != null) {
+      //     CustomToast().showToast("Message",successMsg, false);
+      //   }
+      //   return jsonData;
+      // } else if (response.statusCode == 400) {
+      //   jsonData = json.decode(response.body);
+      //   // CustomToast().showToast("Error",jsonData["message"], true);
+      //   // return {};
+      //   return jsonData;
+      // } else if (response.statusCode == 401) {
+      //   jsonData = json.decode(response.body);
+      //
+      //   return {};
+      // } else {
+      //   jsonData = json.decode(response.body);
+      //   throw Exception('Failed');
+      // }
+    } on TimeoutException catch (e) {
+      onTimeout();
+    } catch (SocketException) {
+      print("Catch ma");
+      // print(SocketException);
+      EasyLoading.dismiss();
+      return null;
+    }
+  }
 
   Future baseFormPostAPI(url, Map<String, String> body, files, keys,
-      {successMsg, loading, pop = true,required BuildContext context}) async {
-    EasyLoading.instance.userInteractions=false;
+      {successMsg, loading, pop = true, required BuildContext context}) async {
+    EasyLoading.instance.userInteractions = false;
     if (loading == true && loading != null) {
-      EasyLoading.show(status: 'Please wait...',dismissOnTap: false);
+      EasyLoading.show(status: 'Please wait...', dismissOnTap: false);
     }
-    token=SharedPreference().getBearerToken();
-    log(baseURL +url);
+    token = SharedPreference().getBearerToken();
+    log(baseURL + url);
     log(token.toString());
     String bearerAuth = 'Bearer ' + "$token";
     try {
       var request = http.MultipartRequest('POST', Uri.parse(baseURL + url));
 
-      request.headers.addAll({ 'Accept': 'application/json',
-        'Content-Type': 'application/json; charset=UTF-8',"Authorization": "${bearerAuth}"});
+      request.headers.addAll({
+        'Accept': 'application/json',
+        'Content-Type': 'application/json; charset=UTF-8',
+        "Authorization": "${bearerAuth}"
+      });
       // headers: <String, String>{
       //   'Accept': 'application/json',
       //   'Content-Type': 'application/json; charset=UTF-8',
@@ -220,17 +292,17 @@ class BaseService {
 
       for (int i = 0; i < files.length && files != null; i++) {
         print("File yaha hain ${keys[i]} ${files[i].path}");
-        request.files.add(await http.MultipartFile.fromPath(keys[i], files[i].path));
+        request.files
+            .add(await http.MultipartFile.fromPath(keys[i], files[i].path));
       }
       request.fields.addAll(body);
 
       var response = await request.send();
-      if(loading==true){
+      if (loading == true) {
         EasyLoading.dismiss();
       }
 
-      print(response.statusCode.toString() +"check status");
-
+      print(response.statusCode.toString() + "check status");
 
       if (response.statusCode == 200) {
         if (successMsg != null) {
@@ -244,20 +316,18 @@ class BaseService {
         log(temp);
 
         return json.decode((temp));
-      }
-      else if (response.statusCode == 400) {
+      } else if (response.statusCode == 400) {
         var temp = await response.stream.bytesToString();
         log(temp);
         return json.decode(temp);
       } else if (response.statusCode == 401) {
-        if (context.mounted)  Utils.logout(c: context);
+        if (context.mounted) Utils.logout(c: context);
       } else if (response.statusCode == 500) {
         var temp = await response.stream.bytesToString();
         log(temp);
         CustomToast().showToast('Error', 'Something went wrong.', true);
         return json.decode(temp);
-      }
-      else {
+      } else {
         throw Exception('Failed');
       }
     } on TimeoutException catch (e) {
@@ -271,14 +341,22 @@ class BaseService {
   }
 
   Future baseDeleteAPI(url,
-      {successMsg, loading, status,utfDecoded,bool return404=false,bool errorToast=true,bool direct=false,required BuildContext context,back=false}) async {
-    EasyLoading.instance.userInteractions=false;
+      {successMsg,
+      loading,
+      status,
+      utfDecoded,
+      bool return404 = false,
+      bool errorToast = true,
+      bool direct = false,
+      required BuildContext context,
+      back = false}) async {
+    EasyLoading.instance.userInteractions = false;
     if (loading == true && loading != null) {
-      EasyLoading.show(status: 'Please wait...',dismissOnTap: false);
+      EasyLoading.show(status: 'Please wait...', dismissOnTap: false);
     }
 
-    token=SharedPreference().getBearerToken();
-    log(baseURL +url);
+    token = SharedPreference().getBearerToken();
+    log(baseURL + url);
     log(token.toString());
     String bearerAuth = 'Bearer ' + "$token";
     log(baseURL + url);
@@ -296,7 +374,7 @@ class BaseService {
       if (loading == true && loading != null) {
         EasyLoading.dismiss();
       }
-      if(direct==true){
+      if (direct == true) {
         return response.body;
       }
 
@@ -306,41 +384,36 @@ class BaseService {
 
       var jsonData;
       if (response.statusCode == 200 || response.statusCode == 400) {
-        if(utfDecoded==true)
-        {
+        if (utfDecoded == true) {
           jsonData = json.decode(utf8.decode(response.bodyBytes));
           return jsonData;
         }
         jsonData = json.decode(response.body);
-        if(back==true){
+        if (back == true) {
           Get.back();
         }
         if (successMsg != null) {
-          CustomToast().showToast("",successMsg, false);
+          CustomToast().showToast("", successMsg, false);
         }
         return jsonData;
-      }
-      else if (response.statusCode == 401) {
-        if (context.mounted)  Utils.logout(c: context);
+      } else if (response.statusCode == 401) {
+        if (context.mounted) Utils.logout(c: context);
         return jsonData;
-      }
-      else if (response.statusCode == 404) {
+      } else if (response.statusCode == 404) {
         jsonData = json.decode(response.body);
-        if(return404) {
+        if (return404) {
           return jsonData;
         }
-      }
-      else {
+      } else {
         jsonData = json.decode(response.body);
-
       }
     } catch (socketException) {
-      if (loading == true && loading != null)
-        EasyLoading.dismiss();
+      if (loading == true && loading != null) EasyLoading.dismiss();
       return null;
     }
   }
-  dynamic onTimeout(){
+
+  dynamic onTimeout() {
     CustomToast().showToast('Error', 'Network error', true);
     EasyLoading.dismiss();
     return http.Response('Error', 408);

@@ -33,6 +33,8 @@ dependencies:
   geocoding: ^3.0.0
   geolocator: ^10.1.0
   collection: ^1.18.0
+  widget_to_marker: ^1.0.4
+  flutter_polyline_points: 1.0.0
 
 
 
@@ -98,6 +100,9 @@ dependencies:
   place_picker:
     path: locationpicker
 
+dependency_overrides:
+  http: ^1.0.0
+  
 dev_dependencies:
   flutter_test:
     sdk: flutter
