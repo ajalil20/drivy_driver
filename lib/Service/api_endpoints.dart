@@ -22,6 +22,7 @@ class APIEndpoints {
   static const myRides = "${driver}myrides";
   static const ride = "${driver}ride";
   static const trips = "trips";
+  static const dashbaordStatistics = "dashboard-statistics";
 
   static const resendOTP = "resend-code";
   static const completeProfile = "complete-profile";

@@ -28,13 +28,19 @@ class SignupScreen extends StatelessWidget {
   // TextEditingController phone = TextEditingController();
   String dialCode = "+971";
   String countryCode = "AE";
-  TextEditingController fullName = TextEditingController(),firstName = TextEditingController(),lastName = TextEditingController(),email = TextEditingController(),password = TextEditingController(), confirmPassword = TextEditingController(),dob = TextEditingController();
+  TextEditingController fullName = TextEditingController(),
+      firstName = TextEditingController(),
+      lastName = TextEditingController(),
+      email = TextEditingController(),
+      password = TextEditingController(),
+      confirmPassword = TextEditingController(),
+      dob = TextEditingController();
   // Rx<bool> isVisible = false.obs, isVisibleConfirm = false.obs, rememberMeLogin = false.obs;
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: (){
+      onTap: () {
         FocusManager.instance.primaryFocus?.unfocus();
       },
       child: CustomBackgroundImage(
@@ -47,12 +53,16 @@ class SignupScreen extends StatelessWidget {
                 SizedBox(
                   height: 1.h,
                 ),
-                const MyText(title: 'Enter your details to register on Drivy and enjoy the freedom.',fontWeight: FontWeight.w600  ,),
+                const MyText(
+                  title:
+                      'Enter your details to register on Drivy and enjoy the freedom.',
+                  fontWeight: FontWeight.w600,
+                ),
                 SizedBox(
                   height: 2.h,
                 ),
                 Expanded(
-                  child:  SingleChildScrollView(
+                  child: SingleChildScrollView(
                     physics: const BouncingScrollPhysics(),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -62,15 +72,25 @@ class SignupScreen extends StatelessWidget {
                           hintText: 'First Name',
                           maxLength: 30,
                         ),
-                        SizedBox(height: 1.5.h,),
+                        SizedBox(
+                          height: 1.5.h,
+                        ),
                         MyTextField(
                           controller: lastName,
                           hintText: 'Last Name',
                           maxLength: 30,
                         ),
-                        SizedBox(height: 1.h,),
-                        const MyText(title: 'Make sure it matches the name on your government ID.',size: 11,),
-                        SizedBox(height: 3.h,),
+                        SizedBox(
+                          height: 1.h,
+                        ),
+                        const MyText(
+                          title:
+                              'Make sure it matches the name on your government ID.',
+                          size: 11,
+                        ),
+                        SizedBox(
+                          height: 3.h,
+                        ),
                         MyTextField(
                           controller: dob,
                           hintText: 'Birthday (dd/mm/yyyy)',
@@ -97,11 +117,16 @@ class SignupScreen extends StatelessWidget {
                                   height: size.height * 0.27,
                                   child: CupertinoDatePicker(
                                     mode: CupertinoDatePickerMode.date,
-                                    initialDateTime:   DateTime(DateTime.now().year - 17),
-                                    minimumDate: DateTime(DateTime.now().year - 100),
-                                    maximumDate: DateTime.now(),
+                                    initialDateTime:
+                                        DateTime(DateTime.now().year - 17),
+                                    minimumDate:
+                                        DateTime(DateTime.now().year - 100),
+                                    maximumDate:
+                                        DateTime(DateTime.now().year - 17),
                                     onDateTimeChanged: (value) {
-                                      dob.text= DateFormat('yyyy-MM-dd').format(value).toString();
+                                      dob.text = DateFormat('yyyy-MM-dd')
+                                          .format(value)
+                                          .toString();
                                       // dob.text= DateFormat('dd/MM/yyyy').format(value).toString();
                                     },
                                   ),
@@ -111,17 +136,31 @@ class SignupScreen extends StatelessWidget {
                           },
                           // suffixIcons: Icon(Icons.keyboard_arrow_down_rounded,size: 20,color: Colors.black,),
                         ),
-                        SizedBox(height: 1.h,),
-                        const MyText(title: 'To sign up, you need to be at least 18. Your birthday won’t be shared with other people who use Drivy.',size: 11,),
-                        SizedBox(height: 3.h,),
+                        SizedBox(
+                          height: 1.h,
+                        ),
+                        const MyText(
+                          title:
+                              'To sign up, you need to be at least 18. Your birthday won’t be shared with other people who use Drivy.',
+                          size: 11,
+                        ),
+                        SizedBox(
+                          height: 3.h,
+                        ),
                         MyTextField(
                           controller: email,
                           hintText: 'Email',
                           inputType: TextInputType.emailAddress,
                           maxLength: 35,
                         ),
-                        SizedBox(height: 1.h,),
-                        const MyText(title: 'We’ll email your booking confirmations and receipts.',size: 11,),
+                        SizedBox(
+                          height: 1.h,
+                        ),
+                        const MyText(
+                          title:
+                              'We’ll email your booking confirmations and receipts.',
+                          size: 11,
+                        ),
                         SizedBox(
                           height: 3.h,
                         ),
@@ -133,17 +172,15 @@ class SignupScreen extends StatelessWidget {
                             style: GoogleFonts.inter(
                                 fontWeight: FontWeight.w700,
                                 fontSize: 13,
-                                color: MyColors().black
-                            ),
+                                color: MyColors().black),
                             children: [
                               TextSpan(
                                 text: 'Terms of Service',
                                 style: GoogleFonts.inter(
-                                    decoration:  TextDecoration.underline,
+                                    decoration: TextDecoration.underline,
                                     fontWeight: FontWeight.w700,
                                     fontSize: 13,
-                                    color: MyColors().linkColor
-                                ),
+                                    color: MyColors().linkColor),
                                 recognizer: TapGestureRecognizer()
                                   ..onTap = () {
                                     // FocusManager.instance.primaryFocus?.unfocus();
@@ -155,17 +192,15 @@ class SignupScreen extends StatelessWidget {
                                 style: GoogleFonts.inter(
                                     fontWeight: FontWeight.w700,
                                     fontSize: 13,
-                                    color: MyColors().black
-                                ),
+                                    color: MyColors().black),
                               ),
                               TextSpan(
                                 text: 'Terms of Payments',
                                 style: GoogleFonts.inter(
-                                    decoration:  TextDecoration.underline,
+                                    decoration: TextDecoration.underline,
                                     fontWeight: FontWeight.w700,
                                     fontSize: 13,
-                                    color: MyColors().linkColor
-                                ),
+                                    color: MyColors().linkColor),
                                 recognizer: TapGestureRecognizer()
                                   ..onTap = () {
                                     // FocusManager.instance.primaryFocus?.unfocus();
@@ -177,17 +212,15 @@ class SignupScreen extends StatelessWidget {
                                 style: GoogleFonts.inter(
                                     fontWeight: FontWeight.w700,
                                     fontSize: 13,
-                                    color: MyColors().black
-                                ),
+                                    color: MyColors().black),
                               ),
                               TextSpan(
                                 text: 'Privacy Policy',
                                 style: GoogleFonts.inter(
-                                    decoration:  TextDecoration.underline,
+                                    decoration: TextDecoration.underline,
                                     fontWeight: FontWeight.w700,
                                     fontSize: 13,
-                                    color: MyColors().linkColor
-                                ),
+                                    color: MyColors().linkColor),
                                 recognizer: TapGestureRecognizer()
                                   ..onTap = () {
                                     // FocusManager.instance.primaryFocus?.unfocus();
@@ -199,8 +232,7 @@ class SignupScreen extends StatelessWidget {
                                 style: GoogleFonts.inter(
                                     fontWeight: FontWeight.w700,
                                     fontSize: 13,
-                                    color: MyColors().black
-                                ),
+                                    color: MyColors().black),
                               ),
                             ],
                           ),
@@ -208,12 +240,10 @@ class SignupScreen extends StatelessWidget {
                         SizedBox(
                           height: 3.h,
                         ),
-
                       ],
                     ),
                   ),
                 ),
-
                 MyButton(
                     title: 'Continue',
                     onTap: () {
@@ -235,17 +265,15 @@ class SignupScreen extends StatelessWidget {
                         style: GoogleFonts.inter(
                             fontWeight: FontWeight.w700,
                             fontSize: 12,
-                            color: MyColors().black
-                        ),
+                            color: MyColors().black),
                         children: [
                           TextSpan(
                             text: 'Login',
                             style: GoogleFonts.inter(
-                                decoration:  TextDecoration.underline,
+                                decoration: TextDecoration.underline,
                                 fontWeight: FontWeight.w700,
                                 fontSize: 12,
-                                color: MyColors().linkColor
-                            ),
+                                color: MyColors().linkColor),
                             recognizer: TapGestureRecognizer()
                               ..onTap = () {
                                 FocusManager.instance.primaryFocus?.unfocus();
@@ -259,17 +287,16 @@ class SignupScreen extends StatelessWidget {
                 ),
                 SizedBox(height: 2.h),
               ],
-            )
-        ),
+            )),
       ),
     );
   }
 
   onSubmit(context) {
     // AuthController.i.phone=phone.text;
-    AuthController.i.dialCode=dialCode;
-    AuthController.i.countryCode=countryCode;
-    AuthController.i.dob=dob.text;
+    AuthController.i.dialCode = dialCode;
+    AuthController.i.countryCode = countryCode;
+    AuthController.i.dob = dob.text;
 
     AuthController.i.firstName = firstName.text;
     AuthController.i.lastName = lastName.text;

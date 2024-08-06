@@ -16,6 +16,7 @@ class RideDetailData {
   String? bookingType;
   dynamic totalRideTime;
   String? pmType;
+  String? mainType;
   dynamic scheduleDatetime;
   dynamic hours;
   dynamic instruction;
@@ -37,6 +38,7 @@ class RideDetailData {
   dynamic carDetails;
   Car? car;
   User? user;
+  User? chaufferDetails;
   dynamic paymentDetails;
 
   RideDetailData(
@@ -46,7 +48,9 @@ class RideDetailData {
       this.carId,
       this.pickupId,
       this.dropoffId,
+      this.mainType,
       this.promocodeId,
+      this.chaufferDetails,
       this.tripType,
       this.amount,
       this.status,
@@ -96,9 +100,13 @@ class RideDetailData {
     totalRideTime = json['total_ride_time'];
     pmType = json['pm_type'];
     scheduleDatetime = json['schedule_datetime'];
+    chaufferDetails = json['chauffeur_details'] != null
+        ? User.fromJson(json['chauffeur_details'])
+        : null;
     hours = json['hours'];
     instruction = json['instruction'];
     reason = json['reason'];
+    mainType = json['main_type'] ?? "chaufiuer";
     startAt = json['start_at'];
     completedAt = json['completed_at'];
     deletedAt = json['deleted_at'];
@@ -140,6 +148,7 @@ class RideDetailData {
     data['amount'] = amount;
     data['status'] = status;
     data['driver_status'] = driverStatus;
+    data['chauffeur_details'] = chaufferDetails?.toJson();
     data['payment_status'] = paymentStatus;
     data['booking_type'] = bookingType;
     data['total_ride_time'] = totalRideTime;
@@ -149,6 +158,7 @@ class RideDetailData {
     data['instruction'] = instruction;
     data['reason'] = reason;
     data['start_at'] = startAt;
+    data['main_type'] = mainType;
     data['completed_at'] = completedAt;
     data['deleted_at'] = deletedAt;
     data['created_at'] = createdAt;

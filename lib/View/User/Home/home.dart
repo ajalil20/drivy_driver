@@ -77,6 +77,7 @@ class _HomeState extends State<Home> {
     // TODO: implement initState
     super.initState();
     AuthController.i.getCurrentUserLocation();
+    HomeController.i.getDashboardData(context: context);
     HomeController.i.getRides(context: context);
     getData();
   }
@@ -184,6 +185,7 @@ class _HomeState extends State<Home> {
                     ),
                     SizedBox(height: 2.h),
                     Container(
+                      width: 100.w,
                       decoration: BoxDecoration(
                         border: Border.all(
                           color: Color(0xffDAE1F1),
@@ -208,43 +210,47 @@ class _HomeState extends State<Home> {
                             size: 15,
                           ),
                           SizedBox(height: 1.h),
-                          MyText(
-                            title: 'AED 699,996',
-                            size: 28,
-                            clr: MyColors().black,
-                            fontWeight: FontWeight.w600,
+                          Obx(
+                            () => MyText(
+                              title:
+                                  'AED ${HomeController.i.allEarnings.value}',
+                              size: 28,
+                              clr: MyColors().black,
+                              fontWeight: FontWeight.w600,
+                            ),
                           ),
                           SizedBox(height: 1.h),
-                          Row(
-                            children: [
-                              Image.asset(ImagePath.triangle),
-                              RichText(
-                                textAlign: TextAlign.center,
-                                textScaleFactor: 1.03,
-                                text: TextSpan(
-                                  text: "  0.4%  ",
-                                  style: GoogleFonts.inter(
-                                      fontWeight: FontWeight.w600,
-                                      fontSize: 13,
-                                      color: MyColors().greenColor),
-                                  children: [
-                                    TextSpan(
-                                      text: 'AED 78.21',
-                                      style: GoogleFonts.inter(
-                                          fontWeight: FontWeight.w500,
-                                          fontSize: 13,
-                                          color: MyColors().greyColor),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
+                          // Row(
+                          //   children: [
+                          //     Image.asset(ImagePath.triangle),
+                          //     // RichText(
+                          //     //   textAlign: TextAlign.center,
+                          //     //   textScaleFactor: 1.03,
+                          //     //   text: TextSpan(
+                          //     //     text: "  0.4%  ",
+                          //     //     style: GoogleFonts.inter(
+                          //     //         fontWeight: FontWeight.w600,
+                          //     //         fontSize: 13,
+                          //     //         color: MyColors().greenColor),
+                          //     //     children: [
+                          //     //       TextSpan(
+                          //     //         text: 'AED 78.21',
+                          //     //         style: GoogleFonts.inter(
+                          //     //             fontWeight: FontWeight.w500,
+                          //     //             fontSize: 13,
+                          //     //             color: MyColors().greyColor),
+                          //     //       ),
+                          //     //     ],
+                          //     //   ),
+                          //     // ),
+                          //   ],
+                          // ),
                         ],
                       ),
                     ),
                     SizedBox(height: 2.h),
                     Container(
+                      width: 100.w,
                       decoration: BoxDecoration(
                         border: Border.all(
                           color: Color(0xffDAE1F1),
@@ -269,38 +275,41 @@ class _HomeState extends State<Home> {
                             size: 15,
                           ),
                           SizedBox(height: 1.h),
-                          MyText(
-                            title: '75 Rides ',
-                            size: 28,
-                            clr: MyColors().black,
-                            fontWeight: FontWeight.w600,
+                          Obx(
+                            () => MyText(
+                              title:
+                                  '${HomeController.i.totalRide.value} Rides ',
+                              size: 28,
+                              clr: MyColors().black,
+                              fontWeight: FontWeight.w600,
+                            ),
                           ),
                           SizedBox(height: 1.h),
-                          Row(
-                            children: [
-                              Image.asset(ImagePath.triangle),
-                              RichText(
-                                textAlign: TextAlign.center,
-                                textScaleFactor: 1.03,
-                                text: TextSpan(
-                                  text: "  0.4%  ",
-                                  style: GoogleFonts.inter(
-                                      fontWeight: FontWeight.w600,
-                                      fontSize: 13,
-                                      color: MyColors().greenColor),
-                                  children: [
-                                    TextSpan(
-                                      text: '4 Rides',
-                                      style: GoogleFonts.inter(
-                                          fontWeight: FontWeight.w500,
-                                          fontSize: 13,
-                                          color: MyColors().greyColor),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
+                          // Row(
+                          //   children: [
+                          //     Image.asset(ImagePath.triangle),
+                          //     RichText(
+                          //       textAlign: TextAlign.center,
+                          //       textScaleFactor: 1.03,
+                          //       text: TextSpan(
+                          //         text: "  0.4%  ",
+                          //         style: GoogleFonts.inter(
+                          //             fontWeight: FontWeight.w600,
+                          //             fontSize: 13,
+                          //             color: MyColors().greenColor),
+                          //         children: [
+                          //           TextSpan(
+                          //             text: '4 Rides',
+                          //             style: GoogleFonts.inter(
+                          //                 fontWeight: FontWeight.w500,
+                          //                 fontSize: 13,
+                          //                 color: MyColors().greyColor),
+                          //           ),
+                          //         ],
+                          //       ),
+                          //     ),
+                          //   ],
+                          // ),
                         ],
                       ),
                     ),
@@ -515,7 +524,8 @@ class _HomeState extends State<Home> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               MyText(
-                title: 'Ride Now ',
+                title:
+                    rideData.mainType == "chaufiuer" ? "Chauffer" : 'Ride Now ',
                 size: 15,
               ),
 

@@ -9,7 +9,7 @@ class RideData {
   int? dropoffId;
   int? promocodeId;
   String? tripType;
-  int? amount;
+  double? amount;
   String? status;
   String? driverStatus;
   String? paymentStatus;
@@ -22,6 +22,7 @@ class RideData {
   dynamic reason;
   dynamic startAt;
   dynamic completedAt;
+  String? mainType;
   dynamic deletedAt;
   String? createdAt;
   String? updatedAt;
@@ -39,6 +40,7 @@ class RideData {
       this.pickupId,
       this.dropoffId,
       this.promocodeId,
+      this.mainType,
       this.tripType,
       this.amount,
       this.status,
@@ -69,9 +71,11 @@ class RideData {
     carId = json['car_id'];
     pickupId = json['pickup_id'];
     dropoffId = json['dropoff_id'];
+    mainType = json['main_type'] ?? "chaufiuer";
     promocodeId = json['promocode_id'];
     tripType = json['trip_type'];
-    amount = json['amount'];
+    amount =
+        json['amount'] != null ? double.parse(json['amount'].toString()) : 0.0;
     status = json['status'];
     driverStatus = json['driver_status'];
     paymentStatus = json['payment_status'];
@@ -276,12 +280,14 @@ class CarBrand {
   String? createdAt;
   String? updatedAt;
   dynamic brandImage;
+  CarBrand? carBrand;
 
   CarBrand(
       {this.id,
       this.brandName,
       this.status,
       this.createdAt,
+      this.carBrand,
       this.updatedAt,
       this.brandImage});
 
@@ -290,6 +296,8 @@ class CarBrand {
     brandName = json['brand_name'];
     status = json['status'];
     createdAt = json['created_at'];
+    carBrand =
+        json['car_brand'] != null ? CarBrand.fromJson(json['car_brand']) : null;
     updatedAt = json['updated_at'];
     brandImage = json['brand_image'];
   }
@@ -302,6 +310,7 @@ class CarBrand {
     data['created_at'] = createdAt;
     data['updated_at'] = updatedAt;
     data['brand_image'] = brandImage;
+    data['car_brand'] = carBrand?.toJson();
     return data;
   }
 }

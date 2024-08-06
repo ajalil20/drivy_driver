@@ -225,7 +225,11 @@ class _RideState extends State<Ride> {
                   height: 50,
                   width: 50,
                   child: CustomImage(
-                    url: HomeController.i.currentActiveRide?.user?.userImage,
+                    url: HomeController.i.currentActiveRide?.mainType ==
+                            "chaufiuer"
+                        ? HomeController
+                            .i.currentActiveRide?.chaufferDetails?.userImage
+                        : HomeController.i.currentActiveRide?.user?.userImage,
                   ),
                 ),
                 // CircleAvatar(
@@ -824,7 +828,7 @@ class _RideState extends State<Ride> {
                 const MyText(title: 'Total', fontWeight: FontWeight.w600),
                 MyText(
                     title:
-                        'AED ${(HomeController.i.currentActiveRide?.subTotal ?? 0.0) * (HomeController.i.currentActiveRide?.platformFee ?? 0.0)}',
+                        'AED ${(HomeController.i.currentActiveRide?.subTotal ?? 0.0) + (HomeController.i.currentActiveRide?.platformFee ?? 0.0)}',
                     fontWeight: FontWeight.w600),
               ],
             ),

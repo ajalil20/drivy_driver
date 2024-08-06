@@ -127,8 +127,8 @@ class _RideBookingDetailState extends State<RideBookingDetail> {
                             ),
                             MyText(
                               title: widget.fromRide
-                                  ? 'Standard car'
-                                  : 'Pay per minute',
+                                  ? '${HomeController.i.currentActiveRide?.serviceType ?? ""}'
+                                  : '${HomeController.i.currentActiveRide?.serviceType ?? ""}',
                               fontWeight: FontWeight.w600,
                             ),
                           ],
@@ -189,8 +189,13 @@ class _RideBookingDetailState extends State<RideBookingDetail> {
                               width: 6.h,
                               isProfile: true,
                               photoView: false,
-                              url:
-                                  AuthController.i.user.value.userImage ?? null,
+                              url: HomeController
+                                          .i.currentActiveRide?.mainType ==
+                                      "chaufiuer"
+                                  ? HomeController.i.currentActiveRide
+                                      ?.chaufferDetails?.userImage
+                                  : AuthController.i.user.value.userImage ??
+                                      null,
                               radius: 100,
                             ),
                           ),
@@ -204,9 +209,13 @@ class _RideBookingDetailState extends State<RideBookingDetail> {
                                   children: [
                                     Expanded(
                                         child: MyText(
-                                      title: HomeController.i.tripDataModel
-                                              ?.user?.firstName ??
-                                          '',
+                                      title: HomeController.i.currentActiveRide
+                                                  ?.mainType ==
+                                              "chaufiuer"
+                                          ? "${HomeController.i.currentActiveRide?.chaufferDetails?.firstName ?? ""} ${HomeController.i.currentActiveRide?.chaufferDetails?.lastName ?? ""}"
+                                          : HomeController.i.tripDataModel?.user
+                                                  ?.firstName ??
+                                              '',
                                       fontWeight: FontWeight.w700,
                                       line: 1,
                                     )),
@@ -240,7 +249,7 @@ class _RideBookingDetailState extends State<RideBookingDetail> {
                                     MyText(
                                       title: widget.fromRide
                                           ? '${HomeController.i.tripDataModel?.car?.carBrand?.brandName ?? ''}'
-                                          : 'Chauffeur',
+                                          : '${HomeController.i.tripDataModel?.car?.carBrand?.brandName ?? ''}',
                                       size: 12,
                                       clr: MyColors().greyColor,
                                       line: 1,
@@ -505,78 +514,86 @@ class _RideBookingDetailState extends State<RideBookingDetail> {
                   SizedBox(
                     height: 2.h,
                   ),
-                  MyText(
-                    title: 'Order Summary',
-                    size: 15,
-                    clr: MyColors().textColor,
-                    fontWeight: FontWeight.w600,
-                  ),
-                  SizedBox(
-                    height: 1.h,
-                  ),
-                  SizedBox(
-                    height: .8.h,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      MyText(
-                        title: 'Platform Fee',
-                        clr: MyColors().hintColor,
-                      ),
-                      MyText(
-                        title:
-                            'AED ${HomeController.i.tripDataModel?.platformFee}',
-                        clr: MyColors().hintColor,
-                      ),
-                    ],
-                  ),
-                  SizedBox(
-                    height: .8.h,
-                  ),
-                  // Row(
-                  //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  //   children: [
-                  //     MyText(
-                  //       title: 'Sales tax',
-                  //       clr: MyColors().hintColor,
-                  //     ),
-                  //     MyText(
-                  //       title: 'AED 1.96',
-                  //       clr: MyColors().hintColor,
-                  //     ),
-                  //   ],
-                  // ),
-                  SizedBox(
-                    height: .8.h,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      MyText(
-                        title: 'Subtotal',
-                        clr: MyColors().hintColor,
-                      ),
-                      MyText(
-                        title:
-                            'AED ${HomeController.i.tripDataModel?.subTotal}',
-                        clr: MyColors().hintColor,
-                      ),
-                    ],
-                  ),
-                  SizedBox(
-                    height: .8.h,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      const MyText(title: 'Total', fontWeight: FontWeight.w600),
-                      MyText(
-                          title:
-                              'AED ${(HomeController.i.tripDataModel?.subTotal ?? 0) + (HomeController.i.tripDataModel?.subTotal ?? 0.0)}',
-                          fontWeight: FontWeight.w600),
-                    ],
-                  ),
+                  if (HomeController.i.tripDataModel?.status != "cancel")
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        MyText(
+                          title: 'Order Summary',
+                          size: 15,
+                          clr: MyColors().textColor,
+                          fontWeight: FontWeight.w600,
+                        ),
+                        SizedBox(
+                          height: 1.h,
+                        ),
+                        SizedBox(
+                          height: .8.h,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            MyText(
+                              title: 'Platform Fee',
+                              clr: MyColors().hintColor,
+                            ),
+                            MyText(
+                              title:
+                                  'AED ${HomeController.i.tripDataModel?.platformFee ?? ""}',
+                              clr: MyColors().hintColor,
+                            ),
+                          ],
+                        ),
+                        SizedBox(
+                          height: .8.h,
+                        ),
+                        // Row(
+                        //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        //   children: [
+                        //     MyText(
+                        //       title: 'Sales tax',
+                        //       clr: MyColors().hintColor,
+                        //     ),
+                        //     MyText(
+                        //       title: 'AED 1.96',
+                        //       clr: MyColors().hintColor,
+                        //     ),
+                        //   ],
+                        // ),
+                        SizedBox(
+                          height: .8.h,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            MyText(
+                              title: 'Subtotal',
+                              clr: MyColors().hintColor,
+                            ),
+                            MyText(
+                              title:
+                                  'AED ${HomeController.i.tripDataModel?.subTotal ?? ""}',
+                              clr: MyColors().hintColor,
+                            ),
+                          ],
+                        ),
+                        SizedBox(
+                          height: .8.h,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            const MyText(
+                                title: 'Total', fontWeight: FontWeight.w600),
+                            MyText(
+                                title:
+                                    'AED ${(HomeController.i.tripDataModel?.platformFee ?? 0) + (HomeController.i.tripDataModel?.subTotal ?? 0.0)}',
+                                fontWeight: FontWeight.w600),
+                          ],
+                        ),
+                      ],
+                    ),
+
                   SizedBox(
                     height: 2.h,
                   ),

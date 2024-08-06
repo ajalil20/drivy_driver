@@ -120,13 +120,14 @@ class _BookingsState extends State<Bookings>
                             ),
                           )),
                           unselectedLabelStyle: GoogleFonts.poppins(
-                            color: MyColors().lightGreyColor.withOpacity(.1),
+                            color: MyColors().lightGreyColor,
                           ),
                           labelColor: MyColors().black,
                           labelStyle: GoogleFonts.inter(
                               fontWeight: FontWeight.w700, fontSize: 16),
                           tabs: _tabs,
                           onTap: (v) {
+                            HomeController.i.getPreviousTrips(context: context, isChauffer: v==1);
                             setState(() {});
                           },
                         ),
@@ -150,7 +151,7 @@ class _BookingsState extends State<Bookings>
   }
 
   Widget rideList() {
-    final groupedTrips = groupBy(
+    var groupedTrips = groupBy(
         HomeController.i.previousTrips, (MyRideListData trip) => trip.status);
 
     return ListView(
@@ -161,8 +162,19 @@ class _BookingsState extends State<Bookings>
         final status = entry.key;
         final trips = entry.value;
 
+        final isExpanded = _expandedTileStatus.value == status!;
+
         return ExpansionTile(
-          initiallyExpanded: true,
+          key: Key(status),
+          initiallyExpanded: isExpanded,
+          onExpansionChanged: (value) {
+            if (value) {
+              _expandedTileStatus.value = status;
+            } else {
+              _expandedTileStatus.value = '';
+            }
+            // setState(() {});
+          },
           title: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -182,6 +194,8 @@ class _BookingsState extends State<Bookings>
     );
   }
 
+  RxString _expandedTileStatus = ''.obs;
+
   Widget rideItem({required MyRideListData t}) {
     print(AuthController.i.user.value.userImage);
     return GestureDetector(
@@ -191,6 +205,7 @@ class _BookingsState extends State<Bookings>
                 fromRide: _tabController.index == 0, bookingId: t.id));
       },
       child: Container(
+        margin: EdgeInsets.only(bottom: 10),
         decoration: BoxDecoration(
           border: Border.all(
             color: Color(0xffDAE1F1),

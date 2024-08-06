@@ -1837,6 +1837,31 @@ class HomeController extends GetxController {
     update();
   }
 
+  Future<void> getDashboardData(
+      {loading, required BuildContext context}) async {
+    var r = await b.baseGetAPI(APIEndpoints.dashbaordStatistics,
+        loading: loading ?? true, context: context);
+    if (r != null) {
+      if (r['data']['earning'] != null) {
+        allEarnings.value = double.parse(r['data']['earning'].toString());
+      } else {
+        allEarnings.value = 0.0;
+      }
+
+      if (r['data']['totalRide'] != null) {
+        totalRide.value = int.parse(r['data']['total_ride'].toString());
+      } else {
+        totalRide.value = 0;
+      }
+    } else {
+      rides = List<RideData>.empty().obs;
+    }
+    update();
+  }
+
+  RxDouble allEarnings = 0.0.obs;
+  RxInt totalRide = 0.obs;
+
   Future<void> getCurrentActiveRide(
       {loading, required BuildContext context}) async {
     polylines.clear();
@@ -1954,9 +1979,12 @@ class HomeController extends GetxController {
 
   ///Previous Trips
   Future<void> getPreviousTrips(
-      {loading, required BuildContext context}) async {
-    var r = await b.baseGetAPI(APIEndpoints.myRides,
-        loading: loading ?? true, context: context);
+      {loading, required BuildContext context, bool isChauffer = false}) async {
+    previousTrips.clear();
+    var r = await b.baseGetAPI(
+        isChauffer ? 'chauffeur-driver/myrides' : APIEndpoints.myRides,
+        loading: loading ?? true,
+        context: context);
     if (r != null) {
       previousTrips.value = (r['data'] as List)
           .map((data) => MyRideListData.fromJson(data))
@@ -2230,7 +2258,7 @@ class HomeController extends GetxController {
 
     log(jsonData.toString());
     var res = await b.basePutApi(
-        '${APIEndpoints.rides}/${tripDataModel?.id}', jsonData,
+        '${APIEndpoints.trips}/${tripDataModel?.id}', jsonData,
         loading: true, context: context);
 
     if (res['success'] == true) {
