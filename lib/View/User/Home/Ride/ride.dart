@@ -36,7 +36,7 @@ class _RideState extends State<Ride> {
     HomeController.i.debounceTimer = null;
     HomeController.i.currentActiveRide = null;
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      HomeController.i.getCurrentActiveRide(context: context);
+      HomeController.i.getCurrentActiveRide(context: context, loading: false);
     });
     // AuthController.i.listenForPostion();
     super.initState();
